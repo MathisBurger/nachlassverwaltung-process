@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ee46cs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <bpmn:collaboration id="Collaboration_0mai67a">
+    <bpmn:participant id="Participant_03lmtam" name="Notar-Dokumente-Prozess" processRef="notardokumenteprozess" />
+  </bpmn:collaboration>
+  <bpmn:process id="notardokumenteprozess" name="Notar-Dokumente-Prozess" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:laneSet id="LaneSet_137o5em">
+      <bpmn:lane id="Lane_0deq9rt" name="Verwaltung">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0go60ul</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_00fctjs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0zpaeh7</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_12l3cy8" name="Notar">
+        <bpmn:flowNodeRef>Activity_1dfynls</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1s9wtq5</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Dokument steht zur Unterschrift bereit">
+      <bpmn:outgoing>Flow_1t543rk</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1t543rk" sourceRef="StartEvent_1" targetRef="Activity_0go60ul" />
+    <bpmn:sequenceFlow id="Flow_0ezbtak" sourceRef="Activity_0go60ul" targetRef="Activity_1dfynls" />
+    <bpmn:sequenceFlow id="Flow_0oqgx80" sourceRef="Activity_1dfynls" targetRef="Activity_1s9wtq5" />
+    <bpmn:serviceTask id="Activity_0go60ul" name="Dokument an den Notar senden">
+      <bpmn:incoming>Flow_1t543rk</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ezbtak</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_1dfynls" name="Dokument drucken und verwahren">
+      <bpmn:incoming>Flow_0ezbtak</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oqgx80</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_1s9wtq5" name="Verwahrung bestätigen">
+      <bpmn:incoming>Flow_0oqgx80</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q736am</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0q736am" sourceRef="Activity_1s9wtq5" targetRef="Activity_00fctjs" />
+    <bpmn:serviceTask id="Activity_00fctjs" name="Dokument als &#34;verwahrt&#34; markieren">
+      <bpmn:incoming>Flow_0q736am</bpmn:incoming>
+      <bpmn:outgoing>Flow_132mxq2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0zpaeh7" name="Dokument erfolgreich verwahrt">
+      <bpmn:incoming>Flow_132mxq2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_132mxq2" sourceRef="Activity_00fctjs" targetRef="Event_0zpaeh7" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0mai67a">
+      <bpmndi:BPMNShape id="Participant_03lmtam_di" bpmnElement="Participant_03lmtam" isHorizontal="true">
+        <dc:Bounds x="132" y="70" width="1128" height="420" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_12l3cy8_di" bpmnElement="Lane_12l3cy8" isHorizontal="true">
+        <dc:Bounds x="162" y="70" width="1098" height="125" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0deq9rt_di" bpmnElement="Lane_0deq9rt" isHorizontal="true">
+        <dc:Bounds x="162" y="195" width="1098" height="295" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="232" y="312" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="212" y="355" width="78" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_170oc2b_di" bpmnElement="Activity_0go60ul">
+        <dc:Bounds x="320" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1j5pynj_di" bpmnElement="Activity_1dfynls">
+        <dc:Bounds x="480" y="90" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sweo7u_di" bpmnElement="Activity_1s9wtq5">
+        <dc:Bounds x="640" y="90" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v1avan_di" bpmnElement="Activity_00fctjs">
+        <dc:Bounds x="790" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zpaeh7_di" bpmnElement="Event_0zpaeh7">
+        <dc:Bounds x="942" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="934" y="345" width="52" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1t543rk_di" bpmnElement="Flow_1t543rk">
+        <di:waypoint x="268" y="330" />
+        <di:waypoint x="320" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ezbtak_di" bpmnElement="Flow_0ezbtak">
+        <di:waypoint x="420" y="330" />
+        <di:waypoint x="450" y="330" />
+        <di:waypoint x="450" y="130" />
+        <di:waypoint x="480" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oqgx80_di" bpmnElement="Flow_0oqgx80">
+        <di:waypoint x="580" y="130" />
+        <di:waypoint x="640" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q736am_di" bpmnElement="Flow_0q736am">
+        <di:waypoint x="740" y="130" />
+        <di:waypoint x="765" y="130" />
+        <di:waypoint x="765" y="320" />
+        <di:waypoint x="790" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_132mxq2_di" bpmnElement="Flow_132mxq2">
+        <di:waypoint x="890" y="320" />
+        <di:waypoint x="942" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
