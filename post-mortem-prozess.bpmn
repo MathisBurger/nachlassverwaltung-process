@@ -8,17 +8,17 @@
     <bpmn:endEvent id="Event_1uvxjus" name="Bestattung und Nachlass Verwaltung abgeschlossen">
       <bpmn:incoming>Flow_1ueaige</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:subProcess id="Activity_1phgrtk" name="Bestattungsprozess">
-      <bpmn:incoming>Flow_0lfattj</bpmn:incoming>
-      <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
-    </bpmn:subProcess>
-    <bpmn:subProcess id="Activity_0e92b8h" name="Nachlass-Freigabeprozess">
-      <bpmn:incoming>Flow_10a685s</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ueaige</bpmn:outgoing>
-    </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_1ueaige" sourceRef="Activity_0e92b8h" targetRef="Event_1uvxjus" />
     <bpmn:sequenceFlow id="Flow_10a685s" sourceRef="Activity_1phgrtk" targetRef="Activity_0e92b8h" />
     <bpmn:sequenceFlow id="Flow_0lfattj" sourceRef="StartEvent_1" targetRef="Activity_1phgrtk" />
+    <bpmn:callActivity id="Activity_1phgrtk" name="Bestattungsprozess">
+      <bpmn:incoming>Flow_0lfattj</bpmn:incoming>
+      <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="Activity_0e92b8h" name="Nachlass-Freigabeprozess">
+      <bpmn:incoming>Flow_10a685s</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ueaige</bpmn:outgoing>
+    </bpmn:callActivity>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1t378x1">
@@ -34,10 +34,10 @@
           <dc:Bounds x="813" y="145" width="75" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1s17aha_di" bpmnElement="Activity_1phgrtk">
+      <bpmndi:BPMNShape id="Activity_1hu0myb_di" bpmnElement="Activity_1phgrtk">
         <dc:Bounds x="340" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05im44g_di" bpmnElement="Activity_0e92b8h">
+      <bpmndi:BPMNShape id="Activity_0wphsje_di" bpmnElement="Activity_0e92b8h">
         <dc:Bounds x="570" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ueaige_di" bpmnElement="Flow_1ueaige">
@@ -53,11 +53,5 @@
         <di:waypoint x="340" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_1ucjbf6">
-    <bpmndi:BPMNPlane id="BPMNPlane_083e9mj" bpmnElement="Activity_1phgrtk" />
-  </bpmndi:BPMNDiagram>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_0zyhh5j">
-    <bpmndi:BPMNPlane id="BPMNPlane_08aps43" bpmnElement="Activity_0e92b8h" />
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
