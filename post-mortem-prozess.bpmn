@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_077lff8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:process id="Process_1t378x1" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" name="Vererbender ist verstorben">
+    <bpmn:startEvent id="StartEvent_1" name="Auf Tod des Verstorbenden Warten">
       <bpmn:outgoing>Flow_0lfattj</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1fsscvy" />
     </bpmn:startEvent>
@@ -25,7 +25,7 @@
       <bpmndi:BPMNShape id="Event_19tzfty_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="182" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="163" y="145" width="75" height="27" />
+          <dc:Bounds x="165" y="145" width="72" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uvxjus_di" bpmnElement="Event_1uvxjus">
