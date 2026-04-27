@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <bpmn:collaboration id="Collaboration_Beerdigung">
+    <bpmn:participant id="Participant_Angehoerige" name="Angehörige / Hinterbliebene" processRef="Process_Beerdigung_Planen" />
+    <bpmn:participant id="Participant_Dienstleister" name="Bestattungsinstitut" processRef="Process_Dienstleister_Extern" />
+    <bpmn:messageFlow id="Flow_Msg_Anfrage" name="Anfrage" sourceRef="Activity_Typ_Festlegen" targetRef="Participant_Dienstleister" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_Beerdigung_Planen" name="Beerdigung Planen" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_Trauerfall" name="Trauerfall eingetreten">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:userTask id="Activity_Typ_Festlegen" name="Bestattungsart festlegen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gateway_Split" name="Welche Art?">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Erde</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Feuer</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Activity_Grab_Waehlen" name="Grabstätte auf Friedhof auswählen">
+      <bpmn:incoming>Flow_Erde</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_1</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Activity_Krematorium" name="Krematorium beauftragen">
+      <bpmn:incoming>Flow_Feuer</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gateway_Join">
+      <bpmn:incoming>Flow_Join_1</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Activity_Behaeltnis" name="Sarg oder Urne auswählen">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:serviceTask id="Activity_Termin" name="Termin mit Friedhofsamt abstimmen" camunda:delegateExpression="${coordinationDelegate}">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:userTask id="Activity_Feier" name="Trauerfeier organisieren">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:endEvent id="EndEvent_Fertig" name="Beerdigung fertig geplant">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_Trauerfall" targetRef="Activity_Typ_Festlegen" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Activity_Typ_Festlegen" targetRef="Gateway_Split" />
+    <bpmn:sequenceFlow id="Flow_Erde" name="Erdbestattung" sourceRef="Gateway_Split" targetRef="Activity_Grab_Waehlen" />
+    <bpmn:sequenceFlow id="Flow_Feuer" name="Feuerbestattung" sourceRef="Gateway_Split" targetRef="Activity_Krematorium" />
+    <bpmn:sequenceFlow id="Flow_Join_1" sourceRef="Activity_Grab_Waehlen" targetRef="Gateway_Join" />
+    <bpmn:sequenceFlow id="Flow_Join_2" sourceRef="Activity_Krematorium" targetRef="Gateway_Join" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Gateway_Join" targetRef="Activity_Behaeltnis" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Activity_Behaeltnis" targetRef="Activity_Termin" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Activity_Termin" targetRef="Activity_Feier" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Activity_Feier" targetRef="EndEvent_Fertig" />
+  </bpmn:process>
+
+  <bpmn:process id="Process_Dienstleister_Extern" isExecutable="false" />
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_Beerdigung">
+      <bpmndi:BPMNShape id="Participant_Angehoerige_di" bpmnElement="Participant_Angehoerige" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="1250" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_Trauerfall_di" bpmnElement="StartEvent_Trauerfall">
+        <dc:Bounds x="180" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Typ_Festlegen_di" bpmnElement="Activity_Typ_Festlegen">
+        <dc:Bounds x="270" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Split_di" bpmnElement="Gateway_Split" isMarkerVisible="true">
+        <dc:Bounds x="425" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Grab_Waehlen_di" bpmnElement="Activity_Grab_Waehlen">
+        <dc:Bounds x="530" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Krematorium_di" bpmnElement="Activity_Krematorium">
+        <dc:Bounds x="530" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Join_di" bpmnElement="Gateway_Join" isMarkerVisible="true">
+        <dc:Bounds x="685" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Behaeltnis_di" bpmnElement="Activity_Behaeltnis">
+        <dc:Bounds x="780" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Termin_di" bpmnElement="Activity_Termin">
+        <dc:Bounds x="940" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Feier_di" bpmnElement="Activity_Feier">
+        <dc:Bounds x="1100" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
+        <dc:Bounds x="1272" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="216" y="230" />
+        <di:waypoint x="270" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="370" y="230" />
+        <di:waypoint x="425" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Erde_di" bpmnElement="Flow_Erde">
+        <di:waypoint x="450" y="205" />
+        <di:waypoint x="450" y="150" />
+        <di:waypoint x="530" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Feuer_di" bpmnElement="Flow_Feuer">
+        <di:waypoint x="450" y="255" />
+        <di:waypoint x="450" y="310" />
+        <di:waypoint x="530" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_1_di" bpmnElement="Flow_Join_1">
+        <di:waypoint x="630" y="150" />
+        <di:waypoint x="710" y="150" />
+        <di:waypoint x="710" y="205" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Join_2_di" bpmnElement="Flow_Join_2">
+        <di:waypoint x="630" y="310" />
+        <di:waypoint x="710" y="310" />
+        <di:waypoint x="710" y="255" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="735" y="230" />
+        <di:waypoint x="780" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="880" y="230" />
+        <di:waypoint x="940" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="1040" y="230" />
+        <di:waypoint x="1100" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1200" y="230" />
+        <di:waypoint x="1272" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_Dienstleister_di" bpmnElement="Participant_Dienstleister" isHorizontal="true">
+        <dc:Bounds x="270" y="450" width="300" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Msg_Anfrage_di" bpmnElement="Flow_Msg_Anfrage">
+        <di:waypoint x="320" y="270" />
+        <di:waypoint x="320" y="450" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
