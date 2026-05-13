@@ -40,7 +40,7 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:dataObjectReference id="DataObjectReference_17g3ke5" name="Testament" dataObjectRef="DataObject_101e2id" />
     <bpmn:dataObject id="DataObject_101e2id" />
-    <bpmn:sendTask id="Activity_05cwkwo" name="Testament an Nachlassgericht senden">
+    <bpmn:sendTask id="Activity_05cwkwo" name="Testament  senden">
       <bpmn:incoming>Flow_17woj1z</bpmn:incoming>
       <bpmn:outgoing>Flow_1sz6972</bpmn:outgoing>
       <bpmn:property id="Property_0fto5sy" name="__targetRef_placeholder" />
@@ -338,10 +338,6 @@
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0jyybsi" sourceRef="Gateway_16dxmid" targetRef="Event_1ttx7yc" />
       <bpmn:subProcess id="Activity_0hbc2hz" triggeredByEvent="true">
-        <bpmn:startEvent id="Event_0i1moen" name="Auszahlung hat nicht funktioniert">
-          <bpmn:outgoing>Flow_1q2vzr8</bpmn:outgoing>
-          <bpmn:errorEventDefinition id="ErrorEventDefinition_06xl8e3" />
-        </bpmn:startEvent>
         <bpmn:sequenceFlow id="Flow_1q2vzr8" sourceRef="Event_0i1moen" targetRef="Activity_1pg76uz" />
         <bpmn:manualTask id="Activity_1pg76uz" name="Sachverhalt mit entsprechender Bank klären">
           <bpmn:incoming>Flow_1q2vzr8</bpmn:incoming>
@@ -351,6 +347,10 @@
           <bpmn:incoming>Flow_0lteq3b</bpmn:incoming>
         </bpmn:endEvent>
         <bpmn:sequenceFlow id="Flow_0lteq3b" sourceRef="Activity_1pg76uz" targetRef="Event_071k12x" />
+        <bpmn:startEvent id="Event_0i1moen" name="Auszahlung hat nicht funktioniert" isInterrupting="false">
+          <bpmn:outgoing>Flow_1q2vzr8</bpmn:outgoing>
+          <bpmn:escalationEventDefinition id="EscalationEventDefinition_00e5gwi" />
+        </bpmn:startEvent>
       </bpmn:subProcess>
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="Event_00loc8w" name="Erben sind sich uneinig" attachedToRef="Activity_1hbx0a9">
@@ -485,6 +485,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_161uxe4_di" bpmnElement="Activity_05cwkwo">
         <dc:Bounds x="360" y="480" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0yxaee2_di" bpmnElement="Event_0yxaee2">
         <dc:Bounds x="872" y="622" width="36" height="36" />
@@ -526,12 +527,12 @@
         <dc:Bounds x="1040" y="600" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0h1oj1s" bpmnElement="Activity_1hbx0a9">
-        <dc:Bounds x="1740" y="480" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1bp71l5_di" bpmnElement="Activity_0jtqmt6">
         <dc:Bounds x="2420" y="480" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0h1oj1s" bpmnElement="Activity_1hbx0a9">
+        <dc:Bounds x="1740" y="480" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1h1e37s" bpmnElement="Event_00loc8w">
@@ -632,7 +633,7 @@
         <di:waypoint x="410" y="560" />
         <di:waypoint x="410" y="760" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="400" y="657" width="51" height="14" />
+          <dc:Bounds x="434" y="657" width="51" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1fr3nhy_di" bpmnElement="Flow_1fr3nhy">
@@ -1007,18 +1008,18 @@
       <bpmndi:BPMNShape id="Activity_0nennlk_di" bpmnElement="Activity_0hbc2hz" isExpanded="true">
         <dc:Bounds x="480" y="400" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_09jnemy_di" bpmnElement="Event_0i1moen">
-        <dc:Bounds x="520" y="482" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="498" y="525" width="81" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1yyzvb7_di" bpmnElement="Activity_1pg76uz">
         <dc:Bounds x="610" y="460" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_071k12x_di" bpmnElement="Event_071k12x">
         <dc:Bounds x="772" y="482" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1d7qmbk_di" bpmnElement="Event_0i1moen">
+        <dc:Bounds x="520" y="482" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="498" y="525" width="81" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1q2vzr8_di" bpmnElement="Flow_1q2vzr8">
         <di:waypoint x="556" y="500" />
