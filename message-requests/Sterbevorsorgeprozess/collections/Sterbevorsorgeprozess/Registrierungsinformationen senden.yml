@@ -1,0 +1,32 @@
+info:
+  name: Registrierungsinformationen senden
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({
+          "messageName": "registrierungsinformationen",
+          "processVariables": {
+            "registerInformation": {
+              "value": JSON.stringify({"username": "Demo User", "password": "Super safe password", "email": "user@demo.org", "birthday": "01.01.1970"}),
+              "type": "Json"
+            }
+          }
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

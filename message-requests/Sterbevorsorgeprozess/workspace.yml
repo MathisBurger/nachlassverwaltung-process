@@ -4,6 +4,10 @@ info:
   type: workspace
 
 collections:
+  - name: "Sterbevorsorgeprozess"
+    path: "collections/Sterbevorsorgeprozess"
+  - name: "Registrierungsprozess"
+    path: "collections/Registrierungsprozess"
 
 specs:
 

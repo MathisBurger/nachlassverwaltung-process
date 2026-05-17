@@ -1,0 +1,25 @@
+info:
+  name: Personalstammurkunden
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "personalstammurkunden",
+        "processVariables": {
+          "ausweis": {"value": "Ausweiscode", "type": "String"},
+          "geburtsurkunde": {"value": "Geburtsurkunde", "type": "String"}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
