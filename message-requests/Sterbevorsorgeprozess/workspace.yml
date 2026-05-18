@@ -8,6 +8,8 @@ collections:
     path: "collections/Sterbevorsorgeprozess"
   - name: "Registrierungsprozess"
     path: "collections/Registrierungsprozess"
+  - name: "Nachlassverwaltungsprozess"
+    path: "collections/Nachlassverwaltungsprozess"
 
 specs:
 

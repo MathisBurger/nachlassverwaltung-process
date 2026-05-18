@@ -1,0 +1,22 @@
+info:
+  name: Sterbeurkunde
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "sterbrurkunde",
+        "processVariables": {}
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

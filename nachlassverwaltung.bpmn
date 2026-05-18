@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ctkbel" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0coxuzx">
-    <bpmn:participant id="Participant_01k12kj" name="Nachlassverwaltungsprozess" processRef="Process_07txayo" />
+    <bpmn:participant id="Participant_01k12kj" name="Nachlassverwaltungsprozess" processRef="nachlassverwaltungsprozess" />
     <bpmn:participant id="Participant_0ejx3ng" name="Erblasser" />
     <bpmn:messageFlow id="Flow_16fp6ie" name="Sterbeurkunde" sourceRef="Participant_0ejx3ng" targetRef="Activity_18sq7t3" />
     <bpmn:messageFlow id="Flow_0q7d1m9" name="Neuer Erbschaftsgegenstand" sourceRef="Participant_0ejx3ng" targetRef="Activity_18sq7t3" />
@@ -18,17 +18,10 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0pze6hh" associationDirection="None" sourceRef="Event_1brr8ch" targetRef="TextAnnotation_0bw923c" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_07txayo" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="Event_10tujlv" name="Nachlass muss verwaltet werden">
+  <bpmn:process id="nachlassverwaltungsprozess" name="Nachlassverwaltungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="Event_10tujlv" name="Nachlassverwaltung notwendig">
       <bpmn:outgoing>Flow_0h8ew10</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:callActivity id="Activity_1vavw6o" name="Angehörigenanlageprozess">
-      <bpmn:incoming>Flow_0h8ew10</bpmn:incoming>
-      <bpmn:outgoing>Flow_0j0wvk0</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">10000000000000</bpmn:loopCardinality>
-      </bpmn:multiInstanceLoopCharacteristics>
-    </bpmn:callActivity>
     <bpmn:parallelGateway id="Gateway_1en2sy5">
       <bpmn:incoming>Flow_1ax10xa</bpmn:incoming>
       <bpmn:incoming>Flow_0tg98by</bpmn:incoming>
@@ -43,22 +36,7 @@
       <bpmn:outgoing>Flow_12j0i5v</bpmn:outgoing>
       <bpmn:outgoing>Flow_10491i3</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:callActivity id="Activity_1pqq75n" name="Beerdigungsplanungsprozess">
-      <bpmn:incoming>Flow_10491i3</bpmn:incoming>
-      <bpmn:outgoing>Flow_0tg98by</bpmn:outgoing>
-    </bpmn:callActivity>
-    <bpmn:callActivity id="Activity_1x1aepy" name="Nachlassanlageprozess">
-      <bpmn:incoming>Flow_12j0i5v</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ax10xa</bpmn:outgoing>
-    </bpmn:callActivity>
     <bpmn:subProcess id="Activity_16s1fmg" name="Angehörigen Ergänzungsprozess" triggeredByEvent="true">
-      <bpmn:callActivity id="Activity_1eyrfwi" name="Angehörigenanlageprozess">
-        <bpmn:incoming>Flow_1pvmfpp</bpmn:incoming>
-        <bpmn:outgoing>Flow_1clffq4</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">10000000000000</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
-      </bpmn:callActivity>
       <bpmn:startEvent id="Event_0ujy1dt" name="Angehöriger Ergänzung erhalten" isInterrupting="false">
         <bpmn:outgoing>Flow_1pvmfpp</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_0m78l0k" />
@@ -73,16 +51,19 @@
         <bpmn:incoming>Flow_1y9dsi1</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1y9dsi1" sourceRef="Activity_0k85c20" targetRef="Event_1ndbk7r" />
+      <bpmn:task id="Activity_1eyrfwi" name="Angehörigenanlageprozess">
+        <bpmn:incoming>Flow_1pvmfpp</bpmn:incoming>
+        <bpmn:outgoing>Flow_1clffq4</bpmn:outgoing>
+        <bpmn:multiInstanceLoopCharacteristics isSequential="true">
+          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">10000000000000</bpmn:loopCardinality>
+        </bpmn:multiInstanceLoopCharacteristics>
+      </bpmn:task>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_0q0knlo" name="Letzte Worte Änderungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0dp5iv8" name="Letze Worte Änderung erhalten" isInterrupting="false">
         <bpmn:outgoing>Flow_0v2xrum</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_02xk96p" />
       </bpmn:startEvent>
-      <bpmn:callActivity id="Activity_1fdxhu4" name="Letzte Worte Prozess">
-        <bpmn:incoming>Flow_0v2xrum</bpmn:incoming>
-        <bpmn:outgoing>Flow_1j8sitj</bpmn:outgoing>
-      </bpmn:callActivity>
       <bpmn:sendTask id="Activity_099sb4q" name="Bestätigung senden">
         <bpmn:incoming>Flow_1j8sitj</bpmn:incoming>
         <bpmn:outgoing>Flow_0bsyf6g</bpmn:outgoing>
@@ -93,11 +74,15 @@
       <bpmn:sequenceFlow id="Flow_0v2xrum" sourceRef="Event_0dp5iv8" targetRef="Activity_1fdxhu4" />
       <bpmn:sequenceFlow id="Flow_1j8sitj" sourceRef="Activity_1fdxhu4" targetRef="Activity_099sb4q" />
       <bpmn:sequenceFlow id="Flow_0bsyf6g" sourceRef="Activity_099sb4q" targetRef="Event_08v168v" />
+      <bpmn:task id="Activity_1fdxhu4" name="Letzte Worte Prozess">
+        <bpmn:incoming>Flow_0v2xrum</bpmn:incoming>
+        <bpmn:outgoing>Flow_1j8sitj</bpmn:outgoing>
+      </bpmn:task>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_18sq7t3" name="Testament bis Sterbenachweis verwalten">
       <bpmn:incoming>Flow_0szakk7</bpmn:incoming>
       <bpmn:outgoing>Flow_10jt4bt</bpmn:outgoing>
-      <bpmn:receiveTask id="Activity_17m6k59" name="Sterbeurkunde empfangen">
+      <bpmn:receiveTask id="Activity_17m6k59" name="Sterbeurkunde empfangen" messageRef="Message_0oqp41o">
         <bpmn:incoming>Flow_1g6kou7</bpmn:incoming>
         <bpmn:outgoing>Flow_1s9326j</bpmn:outgoing>
       </bpmn:receiveTask>
@@ -111,16 +96,7 @@
         <bpmn:terminateEventDefinition id="TerminateEventDefinition_1q8k692" />
       </bpmn:endEvent>
       <bpmn:subProcess id="Activity_0aa69ul" name="Erbschaftsgegenstandsergängungsprozess" triggeredByEvent="true">
-        <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen">
-          <bpmn:incoming>Flow_08e5ab1</bpmn:incoming>
-          <bpmn:outgoing>Flow_1g9889d</bpmn:outgoing>
-          <bpmn:standardLoopCharacteristics />
-        </bpmn:callActivity>
         <bpmn:sequenceFlow id="Flow_08e5ab1" sourceRef="Event_0zis8vm" targetRef="Activity_10dt71o" />
-        <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen">
-          <bpmn:incoming>Flow_1g9889d</bpmn:incoming>
-          <bpmn:outgoing>Flow_02c6mq3</bpmn:outgoing>
-        </bpmn:callActivity>
         <bpmn:sequenceFlow id="Flow_1g9889d" sourceRef="Activity_10dt71o" targetRef="Activity_1iz454v" />
         <bpmn:endEvent id="Event_1amjsfm">
           <bpmn:incoming>Flow_02c6mq3</bpmn:incoming>
@@ -130,6 +106,15 @@
           <bpmn:outgoing>Flow_08e5ab1</bpmn:outgoing>
           <bpmn:messageEventDefinition id="MessageEventDefinition_13tna37" />
         </bpmn:startEvent>
+        <bpmn:task id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen">
+          <bpmn:incoming>Flow_08e5ab1</bpmn:incoming>
+          <bpmn:outgoing>Flow_1g9889d</bpmn:outgoing>
+          <bpmn:standardLoopCharacteristics />
+        </bpmn:task>
+        <bpmn:task id="Activity_1iz454v" name="Testament erstellen">
+          <bpmn:incoming>Flow_1g9889d</bpmn:incoming>
+          <bpmn:outgoing>Flow_02c6mq3</bpmn:outgoing>
+        </bpmn:task>
       </bpmn:subProcess>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0h8ew10" sourceRef="Event_10tujlv" targetRef="Activity_1vavw6o" />
@@ -145,10 +130,6 @@
         <bpmn:outgoing>Flow_1kk435u</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_0mpiyow" />
       </bpmn:startEvent>
-      <bpmn:callActivity id="Activity_1o1v49c" name="Beerdigungsplanungsprozess">
-        <bpmn:incoming>Flow_1kk435u</bpmn:incoming>
-        <bpmn:outgoing>Flow_0adpmjr</bpmn:outgoing>
-      </bpmn:callActivity>
       <bpmn:sequenceFlow id="Flow_1kk435u" sourceRef="Event_1inr6fy" targetRef="Activity_1o1v49c" />
       <bpmn:sequenceFlow id="Flow_0adpmjr" sourceRef="Activity_1o1v49c" targetRef="Activity_1c5l92s" />
       <bpmn:sendTask id="Activity_1c5l92s" name="Bestätigung senden">
@@ -159,16 +140,16 @@
         <bpmn:incoming>Flow_0kr6pww</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0kr6pww" sourceRef="Activity_1c5l92s" targetRef="Event_0dyturh" />
+      <bpmn:task id="Activity_1o1v49c" name="Beerdigungsplanungsprozess">
+        <bpmn:incoming>Flow_1kk435u</bpmn:incoming>
+        <bpmn:outgoing>Flow_0adpmjr</bpmn:outgoing>
+      </bpmn:task>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_0n6i6vr" name="Vorsorgedokumentänderungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0i4i23g" name="Vorsorgedokumenteänderung erhalten" isInterrupting="false">
         <bpmn:outgoing>Flow_0u4rx65</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_1qjqkio" />
       </bpmn:startEvent>
-      <bpmn:callActivity id="Activity_0mbohb5" name="Vorsorgedokument verarbeiten">
-        <bpmn:incoming>Flow_0u4rx65</bpmn:incoming>
-        <bpmn:outgoing>Flow_0ld124p</bpmn:outgoing>
-      </bpmn:callActivity>
       <bpmn:sendTask id="Activity_0f0f26s" name="Bestätigung senden">
         <bpmn:incoming>Flow_0ld124p</bpmn:incoming>
         <bpmn:outgoing>Flow_1xccn2q</bpmn:outgoing>
@@ -179,8 +160,28 @@
       <bpmn:sequenceFlow id="Flow_0u4rx65" sourceRef="Event_0i4i23g" targetRef="Activity_0mbohb5" />
       <bpmn:sequenceFlow id="Flow_0ld124p" sourceRef="Activity_0mbohb5" targetRef="Activity_0f0f26s" />
       <bpmn:sequenceFlow id="Flow_1xccn2q" sourceRef="Activity_0f0f26s" targetRef="Event_0n8waag" />
+      <bpmn:task id="Activity_0mbohb5" name="Vorsorgedokument verarbeiten">
+        <bpmn:incoming>Flow_0u4rx65</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ld124p</bpmn:outgoing>
+      </bpmn:task>
     </bpmn:subProcess>
+    <bpmn:task id="Activity_1pqq75n" name="Beerdigungsplanungsprozess">
+      <bpmn:incoming>Flow_10491i3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tg98by</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_1x1aepy" name="Nachlassanlageprozess">
+      <bpmn:incoming>Flow_12j0i5v</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ax10xa</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_1vavw6o" name="Angehörige anlegen">
+      <bpmn:incoming>Flow_0h8ew10</bpmn:incoming>
+      <bpmn:outgoing>Flow_0j0wvk0</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true">
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">10000000000000</bpmn:loopCardinality>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:task>
   </bpmn:process>
+  <bpmn:message id="Message_0oqp41o" name="sterbeurkunde" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0coxuzx">
       <bpmndi:BPMNShape id="Participant_01k12kj_di" bpmnElement="Participant_01k12kj" isHorizontal="true">
@@ -190,12 +191,8 @@
       <bpmndi:BPMNShape id="Event_10tujlv_di" bpmnElement="Event_10tujlv">
         <dc:Bounds x="472" y="242" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="448" y="285" width="84" height="27" />
+          <dc:Bounds x="447" y="285" width="87" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1g6ffsc" bpmnElement="Activity_1vavw6o">
-        <dc:Bounds x="570" y="220" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0os3brw" bpmnElement="Gateway_1en2sy5">
         <dc:Bounds x="1035" y="205" width="50" height="50" />
@@ -209,19 +206,17 @@
       <bpmndi:BPMNShape id="BPMNShape_15jfiir" bpmnElement="Gateway_1rodzsp">
         <dc:Bounds x="725" y="235" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1dwx4yj" bpmnElement="Activity_1pqq75n">
+      <bpmndi:BPMNShape id="Activity_01xe9l1_di" bpmnElement="Activity_1pqq75n">
         <dc:Bounds x="830" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0q6nt1i" bpmnElement="Activity_1x1aepy">
+      <bpmndi:BPMNShape id="Activity_1y133zv_di" bpmnElement="Activity_1x1aepy">
         <dc:Bounds x="830" y="100" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xodduw_di" bpmnElement="Activity_1vavw6o">
+        <dc:Bounds x="570" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0efcm7m_di" bpmnElement="Activity_16s1fmg" isExpanded="true">
         <dc:Bounds x="920" y="460" width="560" height="200" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1tmaup3" bpmnElement="Activity_1eyrfwi">
-        <dc:Bounds x="1050" y="520" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ry5mk6_di" bpmnElement="Event_0ujy1dt">
@@ -236,6 +231,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ndbk7r_di" bpmnElement="Event_1ndbk7r">
         <dc:Bounds x="1402" y="542" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0c8n5uf_di" bpmnElement="Activity_1eyrfwi">
+        <dc:Bounds x="1050" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1pvmfpp_di" bpmnElement="Flow_1pvmfpp">
         <di:waypoint x="996" y="560" />
@@ -259,16 +257,15 @@
           <dc:Bounds x="948" y="732" width="60" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1lqzf6s" bpmnElement="Activity_1fdxhu4">
-        <dc:Bounds x="1060" y="760" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_18see98" bpmnElement="Activity_099sb4q">
         <dc:Bounds x="1230" y="760" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_025xmjm" bpmnElement="Event_08v168v">
         <dc:Bounds x="1402" y="782" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_082emum_di" bpmnElement="Activity_1fdxhu4">
+        <dc:Bounds x="1060" y="760" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_1ptb31w" bpmnElement="Flow_0v2xrum">
         <di:waypoint x="996" y="800" />
@@ -296,15 +293,15 @@
           <dc:Bounds x="324" y="505" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1jv3xiy" bpmnElement="Activity_1o1v49c">
-        <dc:Bounds x="450" y="520" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19ygmkk_di" bpmnElement="Activity_1c5l92s">
         <dc:Bounds x="620" y="520" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0dyturh_di" bpmnElement="Event_0dyturh">
         <dc:Bounds x="792" y="542" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0d9rt3w_di" bpmnElement="Activity_1o1v49c">
+        <dc:Bounds x="450" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1kk435u_di" bpmnElement="Flow_1kk435u">
         <di:waypoint x="386" y="560" />
@@ -328,16 +325,15 @@
           <dc:Bounds x="323" y="732" width="90" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0moxtv6" bpmnElement="Activity_0mbohb5">
-        <dc:Bounds x="450" y="760" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0dxtcch" bpmnElement="Activity_0f0f26s">
         <dc:Bounds x="620" y="760" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_05dj49r" bpmnElement="Event_0n8waag">
         <dc:Bounds x="792" y="782" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k4ah4w_di" bpmnElement="Activity_0mbohb5">
+        <dc:Bounds x="450" y="760" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_1op7wzd" bpmnElement="Flow_0u4rx65">
         <di:waypoint x="386" y="800" />
@@ -391,15 +387,15 @@
         <dc:Bounds x="280" y="1000" width="1220" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0pze6hh_di" bpmnElement="Association_0pze6hh">
-        <di:waypoint x="1362" y="217" />
-        <di:waypoint x="1393" y="185" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0bw923c_di" bpmnElement="TextAnnotation_0bw923c">
+        <dc:Bounds x="1380" y="130" width="100" height="55" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_16fp6ie_di" bpmnElement="Flow_16fp6ie">
         <di:waypoint x="1200" y="1000" />
         <di:waypoint x="1200" y="270" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1123" y="489" width="73" height="14" />
+          <dc:Bounds x="1203" y="393" width="73" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0q7d1m9_di" bpmnElement="Flow_0q7d1m9">
@@ -471,10 +467,10 @@
           <dc:Bounds x="1198" y="855" width="84" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_0bw923c_di" bpmnElement="TextAnnotation_0bw923c">
-        <dc:Bounds x="1380" y="130" width="100" height="55" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0pze6hh_di" bpmnElement="Association_0pze6hh">
+        <di:waypoint x="1362" y="217" />
+        <di:waypoint x="1393" y="185" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1o0f0hk">
@@ -492,13 +488,6 @@
         <dc:Bounds x="160" y="230" width="590" height="200" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0thkxat_di" bpmnElement="Activity_10dt71o">
-        <dc:Bounds x="290" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0xw3r2k_di" bpmnElement="Activity_1iz454v">
-        <dc:Bounds x="450" y="290" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1amjsfm_di" bpmnElement="Event_1amjsfm">
         <dc:Bounds x="612" y="312" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -507,6 +496,12 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="174" y="355" width="89" height="40" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rcro6d_di" bpmnElement="Activity_10dt71o">
+        <dc:Bounds x="290" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00brxzv_di" bpmnElement="Activity_1iz454v">
+        <dc:Bounds x="450" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_08e5ab1_di" bpmnElement="Flow_08e5ab1">
         <di:waypoint x="236" y="330" />
