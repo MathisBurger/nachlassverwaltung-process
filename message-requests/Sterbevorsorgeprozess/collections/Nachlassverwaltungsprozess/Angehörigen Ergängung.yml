@@ -1,0 +1,28 @@
+info:
+  name: Angehörigen Ergängung
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "relativeAddition",
+        "businessKey": "user@demo.org",
+        "processVariables": {
+          "firstName": {"value": "Susi", "type": "String"},
+          "lastName": {"value": "Sorglos", "type": "String"},
+          "email": {"value": "sugi.sorglos@demomail.org", "type": "String"},
+          "birthday": {"value": "01.01.1990", "type": "String"}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -8,22 +8,18 @@ http:
   url: http://localhost:8080/engine-rest/message
   body:
     type: json
-    data: ""
+    data: |-
+      {
+        "messageName": "initialRegistrationInformation",
+        "businessKey": "user@demo.org",
+        "processVariables": {
+          "username": {"value": "Demo User", "type": "String"},
+          "password": {"value": "Supersecret password", "type": "String"},
+          "email": {"value": "user@demo.org", "type": "String"},
+          "birthday": {"value": "01.01.1970", "type": "String"}
+        }
+      }
   auth: inherit
-
-runtime:
-  scripts:
-    - type: before-request
-      code: |-
-        req.setBody({
-          "messageName": "registrierungsinformationen",
-          "processVariables": {
-            "registerInformation": {
-              "value": JSON.stringify({"username": "Demo User", "password": "Super safe password", "email": "user@demo.org", "birthday": "01.01.1970"}),
-              "type": "Json"
-            }
-          }
-        })
 
 settings:
   encodeUrl: true

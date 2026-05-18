@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1qwlczi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1bqzlhf">
-    <bpmn:participant id="Participant_0dd0tdg" name="Registrierungprozess" processRef="registrierungsprozess" />
+    <bpmn:participant id="Participant_0dd0tdg" name="Registrierungprozess" processRef="registrationProcess" />
     <bpmn:participant id="Participant_0jlko7g" name="Einwohnermeldeamt" />
     <bpmn:participant id="Participant_09nou9v" name="Strafverfolgungsbehörden" />
     <bpmn:participant id="Participant_1h8gyvy" name="Erblasser" />
@@ -13,7 +13,7 @@
     <bpmn:messageFlow id="Flow_1lhy6qu" name="Registrierungsbestätigung" sourceRef="Activity_14hs9pc" targetRef="Participant_1h8gyvy" />
     <bpmn:messageFlow id="Flow_057mzy8" name="Erinnerung" sourceRef="Activity_07fkpg6" targetRef="Participant_1h8gyvy" />
   </bpmn:collaboration>
-  <bpmn:process id="registrierungsprozess" name="Registrierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="registrationProcess" name="Registrierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0dg1zx1">
       <bpmn:lane id="Lane_19jrqrc">
         <bpmn:flowNodeRef>Event_07ktm1q</bpmn:flowNodeRef>
@@ -64,7 +64,7 @@
     <bpmn:sequenceFlow id="Flow_1tttzoc" sourceRef="Activity_1r49j42" targetRef="Activity_1ex7j68" />
     <bpmn:sequenceFlow id="Flow_1q9nfog" sourceRef="Activity_1ex7j68" targetRef="Gateway_0a9m63a" />
     <bpmn:sequenceFlow id="Flow_0yu201o" name="Ja" sourceRef="Gateway_0a9m63a" targetRef="Activity_14hs9pc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${identitaetValide}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${identityValid}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0qlsrx8" name="Nein" sourceRef="Gateway_0a9m63a" targetRef="Activity_0pi1wj9" />
     <bpmn:sequenceFlow id="Flow_0wbm9f0" sourceRef="Activity_14hs9pc" targetRef="Event_14pip2o" />
@@ -98,9 +98,9 @@
       </bpmn:sendTask>
     </bpmn:subProcess>
   </bpmn:process>
-  <bpmn:message id="Message_1kohvqv" name="personalstammurkunden" />
-  <bpmn:message id="Message_2kaen0c" name="identitätsantwort" />
-  <bpmn:escalation id="Escalation_0npharp" name="stornierungErforderlich" escalationCode="400" />
+  <bpmn:message id="Message_1kohvqv" name="personalSummaryRecord" />
+  <bpmn:message id="Message_2kaen0c" name="identifyCheckResponse" />
+  <bpmn:escalation id="Escalation_0npharp" name="cancelationRequired" escalationCode="400" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1bqzlhf">
       <bpmndi:BPMNShape id="Participant_0dd0tdg_di" bpmnElement="Participant_0dd0tdg" isHorizontal="true">
@@ -173,13 +173,13 @@
       <bpmndi:BPMNShape id="Activity_08ykajj_di" bpmnElement="Activity_07fkpg6">
         <dc:Bounds x="320" y="610" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_123vmhj_di" bpmnElement="Flow_123vmhj">
-        <di:waypoint x="420" y="650" />
-        <di:waypoint x="482" y="650" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01w0iqr_di" bpmnElement="Flow_01w0iqr">
         <di:waypoint x="268" y="650" />
         <di:waypoint x="320" y="650" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_123vmhj_di" bpmnElement="Flow_123vmhj">
+        <di:waypoint x="420" y="650" />
+        <di:waypoint x="482" y="650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0nycjp4_di" bpmnElement="Flow_0nycjp4">
         <di:waypoint x="278" y="450" />

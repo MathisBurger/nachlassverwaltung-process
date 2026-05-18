@@ -10,9 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "identitätsantwort",
+        "messageName": "identifyCheckResponse",
+        "businessKey": "user@demo.org",
         "processVariables": {
-          "identitaetValide": {"value": false, "type": "Boolean"}
+          "identityValid": {"value": true, "type": "Boolean"}
         }
       }
   auth: inherit

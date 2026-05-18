@@ -1,7 +1,7 @@
 info:
-  name: Personalstammurkunden
+  name: Personendaten Prüfstatus
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
@@ -10,11 +10,13 @@ http:
     type: json
     data: |-
       {
-        "messageName": "personalSummaryRecord",
+        "messageName": "citizenDataCheckResponse",
         "businessKey": "user@demo.org",
+        "correlationKeys": {
+          "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
+        },
         "processVariables": {
-          "idCardCode": {"value": "Ausweiscode", "type": "String"},
-          "birthCertificate": {"value": "Geburtsurkunde", "type": "String"}
+          "citizenIsValid": {"value": true, "type": "Boolean"}
         }
       }
   auth: inherit

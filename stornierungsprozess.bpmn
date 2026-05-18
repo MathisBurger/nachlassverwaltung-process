@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0jldkcx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1e373k8">
-    <bpmn:participant id="Participant_02bvmao" name="Stornierungsprozess" processRef="stornierungsprozess" />
+    <bpmn:participant id="Participant_02bvmao" name="Stornierungsprozess" processRef="cancelationProcess" />
     <bpmn:participant id="Participant_07cgsys" name="Erblasser" />
     <bpmn:messageFlow id="Flow_0db7xkt" name="Stornierungsbestätigung" sourceRef="Activity_1frwmc5" targetRef="Participant_07cgsys" />
   </bpmn:collaboration>
-  <bpmn:process id="stornierungsprozess" name="Stornierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="cancelationProcess" name="Stornierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Stornierung angestossen">
       <bpmn:outgoing>Flow_1j3qbf7</bpmn:outgoing>
     </bpmn:startEvent>

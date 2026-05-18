@@ -10,7 +10,8 @@ http:
     type: json
     data: |-
       {
-        "messageName": "stornierungsanfrage",
+        "messageName": "globalCancelRequest",
+        "businessKey": "user@demo.org",
         "processVariables": {}
       }
   auth: inherit

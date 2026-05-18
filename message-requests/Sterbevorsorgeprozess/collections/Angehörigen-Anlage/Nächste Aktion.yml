@@ -1,7 +1,7 @@
 info:
-  name: Personalstammurkunden
+  name: Nächste Aktion
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: POST
@@ -10,11 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "personalSummaryRecord",
+        "messageName": "relativeCreationNextAction",
         "businessKey": "user@demo.org",
         "processVariables": {
-          "idCardCode": {"value": "Ausweiscode", "type": "String"},
-          "birthCertificate": {"value": "Geburtsurkunde", "type": "String"}
+          "createNewRelative": {"value": true, "type": "Boolean"}
         }
       }
   auth: inherit

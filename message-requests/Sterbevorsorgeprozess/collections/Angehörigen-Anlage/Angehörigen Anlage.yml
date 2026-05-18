@@ -1,0 +1,28 @@
+info:
+  name: Angehörigen Anlage
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "relativeCreation",
+        "businessKey": "user@demo.org",
+        "processVariables": {
+          "firstName": {"value": "Hugo", "type": "String"},
+          "lastName": {"value": "Habicht", "type": "String"},
+          "email": {"value": "hugo.habicht@demomail.org", "type": "String"},
+          "birthday": {"value": "01.01.2000", "type": "String"}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

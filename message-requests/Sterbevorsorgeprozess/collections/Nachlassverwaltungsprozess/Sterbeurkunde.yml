@@ -10,7 +10,8 @@ http:
     type: json
     data: |-
       {
-        "messageName": "sterbrurkunde",
+        "messageName": "deathCertificate",
+        "businessKey": "user@demo.org",
         "processVariables": {}
       }
   auth: inherit
