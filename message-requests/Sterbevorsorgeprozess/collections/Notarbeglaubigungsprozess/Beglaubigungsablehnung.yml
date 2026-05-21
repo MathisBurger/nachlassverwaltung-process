@@ -1,0 +1,28 @@
+info:
+  name: Beglaubigungsablehnung
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "documentNotNotarized",
+        "businessKey": "user@demo.org",
+        "correlationKeys": {
+          "documentId": {"value": "hugo.habicht@demomail.org", "type": "String"}
+        },
+        "processVariables": {
+          "reason": {"value": "Gefällt mir nicht", "type". "String"}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

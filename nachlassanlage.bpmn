@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_17gqaml" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_17gqaml" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_04n5tom">
-    <bpmn:participant id="Participant_0xvzoah" name="Nachlassanlageprozess" processRef="Process_0au6oko" />
+    <bpmn:participant id="Participant_0xvzoah" name="Nachlassanlageprozess" processRef="estateRegistrationProzess" />
     <bpmn:participant id="Participant_18jmyqt" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1suyvps" name="Dokumentenauswahlanfrage" sourceRef="Activity_0rdll59" targetRef="Participant_18jmyqt" />
     <bpmn:messageFlow id="Flow_0jp9f2y" name="Dokumentauswahl" sourceRef="Participant_18jmyqt" targetRef="Activity_0rdll59" />
+    <bpmn:textAnnotation id="TextAnnotation_1wc4uk8">
+      <bpmn:text>Hier nächstes Mal weiter @Mathis</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0ty9t1b" associationDirection="None" sourceRef="Activity_10dt71o" targetRef="TextAnnotation_1wc4uk8" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0au6oko" isExecutable="true">
-    <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen">
-      <bpmn:incoming>Flow_04lk7uk</bpmn:incoming>
-      <bpmn:outgoing>Flow_1njoiod</bpmn:outgoing>
-      <bpmn:standardLoopCharacteristics />
-    </bpmn:callActivity>
+  <bpmn:process id="estateRegistrationProzess" name="Nachlassanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:parallelGateway id="Gateway_0tpxrg1">
       <bpmn:incoming>Flow_1kejuho</bpmn:incoming>
       <bpmn:outgoing>Flow_1p6pr4e</bpmn:outgoing>
@@ -22,6 +21,11 @@
       <bpmn:incoming>Flow_1p6pr4e</bpmn:incoming>
       <bpmn:outgoing>Flow_0ftg1vr</bpmn:outgoing>
       <bpmn:startEvent id="Event_0mgg4f4" name="Vorsorgedokumente müssen gepflegt werden">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="end">
+            <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})))</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0ou1j6c</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_0va1d63" name="Vorsorgedokumente erfolgreich hinterlegt">
@@ -30,20 +34,32 @@
       <bpmn:endEvent id="Event_1e3zoix" name="Keine Dokumente hinterlegt">
         <bpmn:incoming>Flow_1oz0edi</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:exclusiveGateway id="Gateway_0nyr33z" name="mindestens ein Dokument gewählt">
+      <bpmn:exclusiveGateway id="Gateway_0nyr33z" name="mindestens ein Dokument gewählt?" default="Flow_1oz0edi">
         <bpmn:incoming>Flow_1nhec1g</bpmn:incoming>
         <bpmn:outgoing>Flow_0lllva9</bpmn:outgoing>
         <bpmn:outgoing>Flow_1oz0edi</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_0lllva9" name="Ja" sourceRef="Gateway_0nyr33z" targetRef="Activity_127njpj" />
+      <bpmn:sequenceFlow id="Flow_0lllva9" name="Ja" sourceRef="Gateway_0nyr33z" targetRef="Activity_127njpj">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${selectedAdvanceDirectives.size() &gt; 0}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1oz0edi" sourceRef="Gateway_0nyr33z" targetRef="Event_1e3zoix" />
       <bpmn:sequenceFlow id="Flow_0ou1j6c" sourceRef="Event_0mgg4f4" targetRef="Activity_193rmu7" />
-      <bpmn:sendTask id="Activity_193rmu7" name="Auswahl Dokumente anfragen">
+      <bpmn:sendTask id="Activity_193rmu7" name="Auswahl Dokumente anfragen" camunda:expression="${1}">
         <bpmn:incoming>Flow_0ou1j6c</bpmn:incoming>
         <bpmn:outgoing>Flow_1wcxwna</bpmn:outgoing>
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_1wcxwna" sourceRef="Activity_193rmu7" targetRef="Activity_1e8jhen" />
-      <bpmn:receiveTask id="Activity_1e8jhen" name="Auswahl empfangen">
+      <bpmn:receiveTask id="Activity_1e8jhen" name="Auswahl empfangen" messageRef="Message_0efs2mf">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="end">
+            <camunda:script scriptFormat="JavaScript">const list = [];
+if (advanceDecisionToRefuseTreatment) list.push("advanceDecisionToRefuseTreatment");
+if (powerOfAttorney) list.push("powerOfAttorney");
+if (nominationOfGuardian) list.push("nominationOfGuardian");
+
+execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1wcxwna</bpmn:incoming>
         <bpmn:outgoing>Flow_1nhec1g</bpmn:outgoing>
       </bpmn:receiveTask>
@@ -51,19 +67,32 @@
       <bpmn:subProcess id="Activity_127njpj">
         <bpmn:incoming>Flow_0lllva9</bpmn:incoming>
         <bpmn:outgoing>Flow_0asulu5</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${selectedAdvanceDirectives.elements()}" camunda:elementVariable="documentId" />
         <bpmn:startEvent id="Event_1v1mkjz">
           <bpmn:outgoing>Flow_0ftxxot</bpmn:outgoing>
         </bpmn:startEvent>
         <bpmn:sequenceFlow id="Flow_0ftxxot" sourceRef="Event_1v1mkjz" targetRef="Activity_0s8h49w" />
-        <bpmn:callActivity id="Activity_0s8h49w" name="Vorsorgedokument verarbeiten">
-          <bpmn:incoming>Flow_0ftxxot</bpmn:incoming>
-          <bpmn:outgoing>Flow_1ri2gut</bpmn:outgoing>
-        </bpmn:callActivity>
         <bpmn:endEvent id="Event_01jufgh">
+          <bpmn:extensionElements>
+            <camunda:executionListener event="end">
+              <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = JSON.parse(advanceDirectiveContents.toString());
+advanceDirectiveContentsRaw[documentId] = documentContent;
+
+execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirectiveContentsRaw)));</camunda:script>
+            </camunda:executionListener>
+          </bpmn:extensionElements>
           <bpmn:incoming>Flow_1ri2gut</bpmn:incoming>
         </bpmn:endEvent>
         <bpmn:sequenceFlow id="Flow_1ri2gut" sourceRef="Activity_0s8h49w" targetRef="Event_01jufgh" />
+        <bpmn:callActivity id="Activity_0s8h49w" name="Vorsorgedokument verarbeiten" calledElement="advanceDirectiveDocumentProcess">
+          <bpmn:extensionElements>
+            <camunda:in businessKey="#{execution.processBusinessKey}" />
+            <camunda:in source="documentId" target="documentId" />
+            <camunda:out source="documentContent" target="documentContent" local="true" />
+          </bpmn:extensionElements>
+          <bpmn:incoming>Flow_0ftxxot</bpmn:incoming>
+          <bpmn:outgoing>Flow_1ri2gut</bpmn:outgoing>
+        </bpmn:callActivity>
       </bpmn:subProcess>
       <bpmn:sequenceFlow id="Flow_0asulu5" sourceRef="Activity_127njpj" targetRef="Event_0va1d63" />
       <bpmn:textAnnotation id="TextAnnotation_0bdxduo">
@@ -74,6 +103,14 @@
         <bpmn:text>Dokumentenauswahl von Erblasser</bpmn:text>
       </bpmn:textAnnotation>
       <bpmn:association id="Association_13mm2fa" associationDirection="None" sourceRef="TextAnnotation_0m5mmi3" targetRef="Activity_1e8jhen" />
+      <bpmn:textAnnotation id="TextAnnotation_19dt1c8">
+        <bpmn:text>Gibt es hier ggf. eine Race Condition?</bpmn:text>
+      </bpmn:textAnnotation>
+      <bpmn:association id="Association_1sgxlep" associationDirection="None" sourceRef="Activity_127njpj" targetRef="TextAnnotation_19dt1c8" />
+      <bpmn:textAnnotation id="TextAnnotation_10qztgg">
+        <bpmn:text>Bubbeln hier explizit gewünscht</bpmn:text>
+      </bpmn:textAnnotation>
+      <bpmn:association id="Association_1qoufcc" associationDirection="None" sourceRef="Event_0mgg4f4" targetRef="TextAnnotation_10qztgg" />
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_1kejuho" sourceRef="StartEvent_1" targetRef="Gateway_0tpxrg1" />
     <bpmn:sequenceFlow id="Flow_04lk7uk" sourceRef="Gateway_0tpxrg1" targetRef="Activity_10dt71o" />
@@ -82,10 +119,6 @@
     <bpmn:sequenceFlow id="Flow_0ftg1vr" sourceRef="Activity_0rdll59" targetRef="Gateway_1l9vi6w" />
     <bpmn:sequenceFlow id="Flow_1opkkd5" sourceRef="Gateway_1l9vi6w" targetRef="Event_0ndoprd" />
     <bpmn:sequenceFlow id="Flow_1p6pr4e" sourceRef="Gateway_0tpxrg1" targetRef="Activity_0rdll59" />
-    <bpmn:callActivity id="Activity_17pu7b7" name="Letze Worte aufnehmen">
-      <bpmn:incoming>Flow_0faompi</bpmn:incoming>
-      <bpmn:outgoing>Flow_147sc7n</bpmn:outgoing>
-    </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_1njoiod" sourceRef="Activity_10dt71o" targetRef="Activity_1xluz0f" />
     <bpmn:subProcess id="Activity_1xluz0f" name="Testament erstellen und beglaubigen">
       <bpmn:incoming>Flow_1njoiod</bpmn:incoming>
@@ -98,7 +131,7 @@
       </bpmn:endEvent>
       <bpmn:intermediateCatchEvent id="Event_0y0rbsf" name="Testament erneut erstellen">
         <bpmn:outgoing>Flow_1tpsrn3</bpmn:outgoing>
-        <bpmn:linkEventDefinition id="LinkEventDefinition_1oxxqdn" name="" />
+        <bpmn:linkEventDefinition id="LinkEventDefinition_1oxxqdn" name="recreateLastWll" />
       </bpmn:intermediateCatchEvent>
       <bpmn:exclusiveGateway id="Gateway_1111kav">
         <bpmn:incoming>Flow_0pyypfc</bpmn:incoming>
@@ -108,25 +141,25 @@
       <bpmn:sequenceFlow id="Flow_0pyypfc" sourceRef="Event_19aajiv" targetRef="Gateway_1111kav" />
       <bpmn:sequenceFlow id="Flow_1tpsrn3" sourceRef="Event_0y0rbsf" targetRef="Gateway_1111kav" />
       <bpmn:sequenceFlow id="Flow_1fu699j" sourceRef="Gateway_1111kav" targetRef="Activity_1iz454v" />
-      <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen">
-        <bpmn:incoming>Flow_1fu699j</bpmn:incoming>
-        <bpmn:outgoing>Flow_0ezfsme</bpmn:outgoing>
-      </bpmn:callActivity>
       <bpmn:sequenceFlow id="Flow_0ezfsme" sourceRef="Activity_1iz454v" targetRef="Event_0w17oox" />
       <bpmn:boundaryEvent id="Event_1045693" attachedToRef="Activity_1iz454v">
         <bpmn:outgoing>Flow_0cryo7q</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_02jxdup" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_02jxdup" messageRef="Message_3qnnv9q" />
       </bpmn:boundaryEvent>
-      <bpmn:callActivity id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen">
-        <bpmn:incoming>Flow_0cryo7q</bpmn:incoming>
-        <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
-      </bpmn:callActivity>
       <bpmn:intermediateThrowEvent id="Event_0iw4e6g" name="Testament erneut erstellen">
         <bpmn:incoming>Flow_1u65ct3</bpmn:incoming>
-        <bpmn:linkEventDefinition id="LinkEventDefinition_09xpudw" name="" />
+        <bpmn:linkEventDefinition id="LinkEventDefinition_09xpudw" name="recreateLastWll" />
       </bpmn:intermediateThrowEvent>
       <bpmn:sequenceFlow id="Flow_0cryo7q" sourceRef="Event_1045693" targetRef="Activity_0e0sca8" />
       <bpmn:sequenceFlow id="Flow_1u65ct3" sourceRef="Activity_0e0sca8" targetRef="Event_0iw4e6g" />
+      <bpmn:task id="Activity_1iz454v" name="Testament erstellen">
+        <bpmn:incoming>Flow_1fu699j</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ezfsme</bpmn:outgoing>
+      </bpmn:task>
+      <bpmn:task id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen">
+        <bpmn:incoming>Flow_0cryo7q</bpmn:incoming>
+        <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
+      </bpmn:task>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_1m1luy0" sourceRef="Activity_1xluz0f" targetRef="Gateway_1l9vi6w" />
     <bpmn:parallelGateway id="Gateway_1l9vi6w">
@@ -141,19 +174,43 @@
     <bpmn:endEvent id="Event_0ndoprd" name="Nachlass erfolgreich angelegt">
       <bpmn:incoming>Flow_1opkkd5</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:task id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen">
+      <bpmn:incoming>Flow_04lk7uk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1njoiod</bpmn:outgoing>
+      <bpmn:standardLoopCharacteristics />
+    </bpmn:task>
+    <bpmn:task id="Activity_17pu7b7" name="Letze Worte aufnehmen">
+      <bpmn:incoming>Flow_0faompi</bpmn:incoming>
+      <bpmn:outgoing>Flow_147sc7n</bpmn:outgoing>
+    </bpmn:task>
   </bpmn:process>
+  <bpmn:message id="Message_3qnnv9q" name="estateUpdate" />
+  <bpmn:message id="Message_0efs2mf" name="selectedAdvanceDirectives" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_04n5tom">
       <bpmndi:BPMNShape id="Participant_0xvzoah_di" bpmnElement="Participant_0xvzoah" isHorizontal="true">
         <dc:Bounds x="130" y="230" width="980" height="490" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0thkxat_di" bpmnElement="Activity_10dt71o">
-        <dc:Bounds x="460" y="400" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1i23lle_di" bpmnElement="Gateway_0tpxrg1">
         <dc:Bounds x="335" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ri4tim_di" bpmnElement="Activity_10dt71o">
+        <dc:Bounds x="460" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0980guz_di" bpmnElement="Activity_17pu7b7">
+        <dc:Bounds x="460" y="540" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mgoisn_di" bpmnElement="Activity_0rdll59">
+        <dc:Bounds x="450" y="250" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0svl5cd_di" bpmnElement="Activity_1xluz0f">
+        <dc:Bounds x="640" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0h5upny_di" bpmnElement="Gateway_1l9vi6w">
+        <dc:Bounds x="835" y="415" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="192" y="422" width="36" height="36" />
@@ -166,20 +223,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1004" y="465" width="52" height="40" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mgoisn_di" bpmnElement="Activity_0rdll59">
-        <dc:Bounds x="450" y="250" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1543k21_di" bpmnElement="Activity_17pu7b7">
-        <dc:Bounds x="460" y="540" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0svl5cd_di" bpmnElement="Activity_1xluz0f">
-        <dc:Bounds x="640" y="400" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0h5upny_di" bpmnElement="Gateway_1l9vi6w">
-        <dc:Bounds x="835" y="415" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1kejuho_di" bpmnElement="Flow_1kejuho">
         <di:waypoint x="228" y="440" />
@@ -225,6 +268,10 @@
         <dc:Bounds x="410" y="80" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0ty9t1b_di" bpmnElement="Association_0ty9t1b">
+        <di:waypoint x="548" y="400" />
+        <di:waypoint x="572" y="375" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1suyvps_di" bpmnElement="Flow_1suyvps">
         <di:waypoint x="470" y="250" />
         <di:waypoint x="470" y="140" />
@@ -239,6 +286,10 @@
           <dc:Bounds x="545" y="173" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1wc4uk8_di" bpmnElement="TextAnnotation_1wc4uk8">
+        <dc:Bounds x="560" y="320" width="99.99596600688469" height="55.077452667814114" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1ej6n29">
@@ -281,12 +332,11 @@
       <bpmndi:BPMNShape id="Event_1v1mkjz_di" bpmnElement="Event_1v1mkjz">
         <dc:Bounds x="812" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1xwo338_di" bpmnElement="Activity_0s8h49w">
-        <dc:Bounds x="900" y="190" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_01jufgh_di" bpmnElement="Event_01jufgh">
         <dc:Bounds x="1052" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tvkm1l_di" bpmnElement="Activity_0s8h49w">
+        <dc:Bounds x="900" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0ftxxot_di" bpmnElement="Flow_0ftxxot">
         <di:waypoint x="848" y="230" />
@@ -295,6 +345,14 @@
       <bpmndi:BPMNEdge id="Flow_1ri2gut_di" bpmnElement="Flow_1ri2gut">
         <di:waypoint x="1000" y="230" />
         <di:waypoint x="1052" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1sgxlep_di" bpmnElement="Association_1sgxlep">
+        <di:waypoint x="1115" y="130" />
+        <di:waypoint x="1160" y="99" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1qoufcc_di" bpmnElement="Association_1qoufcc">
+        <di:waypoint x="174" y="213" />
+        <di:waypoint x="182" y="185" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_0bdxduo_di" bpmnElement="TextAnnotation_0bdxduo">
         <dc:Bounds x="260" y="80" width="100" height="55" />
@@ -340,6 +398,14 @@
         <di:waypoint x="450" y="136" />
         <di:waypoint x="450" y="190" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_19dt1c8_di" bpmnElement="TextAnnotation_19dt1c8">
+        <dc:Bounds x="1160" y="50" width="100" height="55" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_10qztgg_di" bpmnElement="TextAnnotation_10qztgg">
+        <dc:Bounds x="140" y="130" width="102" height="55" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_0cj1nk0">
@@ -348,6 +414,12 @@
         <dc:Bounds x="152" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="145" y="255" width="51" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0w17oox_di" bpmnElement="Event_0w17oox">
+        <dc:Bounds x="792" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="767" y="255" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ufxc0e_di" bpmnElement="Event_0y0rbsf">
@@ -359,24 +431,17 @@
       <bpmndi:BPMNShape id="Gateway_1111kav_di" bpmnElement="Gateway_1111kav" isMarkerVisible="true">
         <dc:Bounds x="275" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0xw3r2k_di" bpmnElement="Activity_1iz454v">
-        <dc:Bounds x="420" y="190" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1oq7hb3" bpmnElement="Activity_0e0sca8">
-        <dc:Bounds x="620" y="280" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0chbsc5" bpmnElement="Event_0iw4e6g">
         <dc:Bounds x="792" y="302" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="768" y="345" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0w17oox_di" bpmnElement="Event_0w17oox">
-        <dc:Bounds x="792" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="767" y="255" width="87" height="27" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_0xc39ws_di" bpmnElement="Activity_1iz454v">
+        <dc:Bounds x="420" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qhlthw_di" bpmnElement="Activity_0e0sca8">
+        <dc:Bounds x="620" y="280" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1k2bl1a_di" bpmnElement="Event_1045693">
         <dc:Bounds x="502" y="252" width="36" height="36" />

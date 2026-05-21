@@ -14,6 +14,12 @@ collections:
     path: "collections/Angehörigen-Anlage"
   - name: "Beerdigungsplanungsprozess"
     path: "collections/Beerdigungsplanungsprozess"
+  - name: "Nachlassanlageprozess"
+    path: "collections/Nachlassanlageprozess"
+  - name: "Notarbeglaubigungsprozess"
+    path: "collections/Notarbeglaubigungsprozess"
+  - name: "Vorsorgedokumenteverarbeitungsprozess"
+    path: "collections/Vorsorgedokumenteverarbeitungsprozess"
 
 specs:
 

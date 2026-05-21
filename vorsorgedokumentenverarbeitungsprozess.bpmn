@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_164pdsl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_164pdsl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0aukgm2">
-    <bpmn:participant id="Participant_03t2a00" name="Vorsorgedokumentenverarbeitungsprozess" processRef="Process_0a0asop" />
+    <bpmn:participant id="Participant_03t2a00" name="Vorsorgedokumentenverarbeitungsprozess" processRef="advanceDirectiveDocumentProcess" />
     <bpmn:participant id="Participant_1wcxv6a" name="Erblasser" />
     <bpmn:messageFlow id="Flow_18lchom" name="Upload Anfrage" sourceRef="Activity_0dl58r3" targetRef="Participant_1wcxv6a" />
     <bpmn:messageFlow id="Flow_1rk6h9n" name="Vorsorgedokument" sourceRef="Participant_1wcxv6a" targetRef="Activity_0n6ferf" />
-    <bpmn:textAnnotation id="TextAnnotation_1veskat">
-      <bpmn:text>Benachrichtigung senden</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_18oo3lt" associationDirection="None" sourceRef="Event_0mj5k47" targetRef="TextAnnotation_1veskat" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0a0asop" isExecutable="true">
+  <bpmn:process id="advanceDirectiveDocumentProcess" name="Vorsorgedokumentenverarbeitungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:exclusiveGateway id="Gateway_1i6k7hh">
       <bpmn:incoming>Flow_0jp2ryj</bpmn:incoming>
       <bpmn:incoming>Flow_1whjc1v</bpmn:incoming>
       <bpmn:outgoing>Flow_1olke9e</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:startEvent id="Event_09wbm5t">
+    <bpmn:startEvent id="Event_09wbm5t" name="Vorsorgedokument ist zu verarbeiten">
       <bpmn:outgoing>Flow_1whjc1v</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:endEvent id="Event_1p3ad0i">
-      <bpmn:incoming>Flow_13g8zz3</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:callActivity id="Activity_06mh516" name="Dokument beglaubigen" calledElement="notardokumenteprozess">
+    <bpmn:callActivity id="Activity_06mh516" name="Dokument beglaubigen" calledElement="notaryDocumentProcess">
+      <bpmn:extensionElements>
+        <camunda:in source="documentContent" target="documentContent" />
+        <camunda:in source="documentId" target="documentId" />
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1kdgm09</bpmn:incoming>
       <bpmn:outgoing>Flow_13g8zz3</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen">
+    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${1}">
       <bpmn:incoming>Flow_1olke9e</bpmn:incoming>
       <bpmn:outgoing>Flow_0d8fp2n</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:receiveTask id="Activity_0n6ferf" name="Dokument erhalten">
+    <bpmn:receiveTask id="Activity_0n6ferf" name="Dokument erhalten" messageRef="Message_255gest">
       <bpmn:incoming>Flow_0d8fp2n</bpmn:incoming>
       <bpmn:outgoing>Flow_1kdgm09</bpmn:outgoing>
     </bpmn:receiveTask>
     <bpmn:boundaryEvent id="Event_0mj5k47" name="Dokumente invalide" attachedToRef="Activity_06mh516">
       <bpmn:outgoing>Flow_0jp2ryj</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_1sw07uu" />
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_1sw07uu" escalationRef="Escalation_1bau1ge" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0jp2ryj" sourceRef="Event_0mj5k47" targetRef="Gateway_1i6k7hh" />
     <bpmn:sequenceFlow id="Flow_1whjc1v" sourceRef="Event_09wbm5t" targetRef="Gateway_1i6k7hh" />
@@ -44,11 +42,16 @@
     <bpmn:sequenceFlow id="Flow_13g8zz3" sourceRef="Activity_06mh516" targetRef="Event_1p3ad0i" />
     <bpmn:sequenceFlow id="Flow_1kdgm09" sourceRef="Activity_0n6ferf" targetRef="Activity_06mh516" />
     <bpmn:sequenceFlow id="Flow_0d8fp2n" sourceRef="Activity_0dl58r3" targetRef="Activity_0n6ferf" />
+    <bpmn:endEvent id="Event_1p3ad0i" name="Vorsorgedokument verarbeitet">
+      <bpmn:incoming>Flow_13g8zz3</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
+  <bpmn:message id="Message_255gest" name="advanceDirectiveContent" />
+  <bpmn:escalation id="Escalation_1bau1ge" name="documentCannotBeNotarized" escalationCode="400" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0aukgm2">
       <bpmndi:BPMNShape id="Participant_03t2a00_di" bpmnElement="Participant_03t2a00" isHorizontal="true">
-        <dc:Bounds x="152" y="165" width="770" height="250" />
+        <dc:Bounds x="120" y="165" width="918" height="250" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0udlnyz" bpmnElement="Gateway_1i6k7hh" isMarkerVisible="true">
@@ -56,9 +59,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_09wbm5t_di" bpmnElement="Event_09wbm5t">
         <dc:Bounds x="205" y="272" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1p3ad0i_di" bpmnElement="Event_1p3ad0i">
-        <dc:Bounds x="862" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="179" y="315" width="90" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1bqiuzp" bpmnElement="Activity_06mh516">
         <dc:Bounds x="710" y="250" width="100" height="80" />
@@ -69,6 +72,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1yo42xc_di" bpmnElement="Activity_0n6ferf">
         <dc:Bounds x="560" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1p3ad0i_di" bpmnElement="Event_1p3ad0i">
+        <dc:Bounds x="952" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="925" y="315" width="90" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0t4ju51" bpmnElement="Event_0mj5k47">
         <dc:Bounds x="792" y="312" width="36" height="36" />
@@ -92,7 +101,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13g8zz3_di" bpmnElement="Flow_13g8zz3">
         <di:waypoint x="810" y="290" />
-        <di:waypoint x="862" y="290" />
+        <di:waypoint x="952" y="290" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kdgm09_di" bpmnElement="Flow_1kdgm09">
         <di:waypoint x="660" y="290" />
@@ -106,10 +115,6 @@
         <dc:Bounds x="290" y="80" width="600" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_18oo3lt_di" bpmnElement="Association_18oo3lt">
-        <di:waypoint x="821" y="316" />
-        <di:waypoint x="859" y="271" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18lchom_di" bpmnElement="Flow_18lchom">
         <di:waypoint x="450" y="250" />
         <di:waypoint x="450" y="140" />
@@ -124,10 +129,6 @@
           <dc:Bounds x="615" y="185" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1veskat_di" bpmnElement="TextAnnotation_1veskat">
-        <dc:Bounds x="830" y="230" width="100" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

@@ -1,0 +1,27 @@
+info:
+  name: Vorsorge Dokumente auswählen
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "selectedAdvanceDirectives",
+        "businessKey": "user@demo.org",
+        "processVariables": {
+          "advanceDecisionToRefuseTreatment": {"value": true, "type": "Boolean", "valueInfo": {"transient": true}},
+          "powerOfAttorney": {"value": true, "type": "Boolean", "valueInfo": {"transient": true}},
+          "nominationOfGuardian": {"value": true, "type": "Boolean", "valueInfo": {"transient": true}}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

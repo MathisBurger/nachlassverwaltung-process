@@ -13,10 +13,10 @@ http:
         "messageName": "funeralUpdate",
         "businessKey": "user@demo.org",
         "processVariables": {
-          "funeralType": {"value": "sea", "type": "String"},
-          "funeralObject": {"value": "urn", "type": "String"},
-          "maxAmountGuests": {"value": 12, "type": "Integer"},
-          "budget": {"value": 1000, "type": "Integer"}
+          "funeralType": {"value": "sea", "type": "String", "valueInfo": {"transient": true}},
+          "funeralObject": {"value": "urn", "type": "String", "valueInfo": {"transient": true}},
+          "maxAmountGuests": {"value": 12, "type": "Integer", "valueInfo": {"transient": true}},
+          "budget": {"value": 1000, "type": "Integer", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit
