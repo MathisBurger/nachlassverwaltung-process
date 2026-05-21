@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_Beerdigung">
-    <bpmn:participant id="Participant_Angehoerige" name="Beerdigungsplanungsprozess" processRef="Process_Beerdigung_Planen" />
+    <bpmn:participant id="Participant_Angehoerige" name="Beerdigungsplanungsprozess" processRef="funeralPlanningProcess" />
     <bpmn:participant id="Participant_09uh32h" name="Bestattungsinstitut" />
     <bpmn:participant id="Participant_11qf0vh" name="Erblasser" />
     <bpmn:messageFlow id="Flow_16seaio" name="Zukünftige Beauftragung" sourceRef="Activity_Feier" targetRef="Participant_09uh32h" />
@@ -15,23 +15,39 @@
       <bpmn:text>Bestattungsart, max Personenanzahl, Präferenzen für Sarg / Urne</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_05h9u77" associationDirection="None" sourceRef="TextAnnotation_1q8og4b" targetRef="Activity_1ciygxm" />
+    <bpmn:textAnnotation id="TextAnnotation_03xtiv3">
+      <bpmn:text>Hier später noch Logik ergänzen</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_05h56vw" associationDirection="None" sourceRef="Activity_0mtezji" targetRef="TextAnnotation_03xtiv3" />
+    <bpmn:textAnnotation id="TextAnnotation_0ycjj6i">
+      <bpmn:text>Hier später noch Logik ergänzen</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_00ejbfy" associationDirection="None" sourceRef="Activity_0oetiel" targetRef="TextAnnotation_0ycjj6i" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_Beerdigung_Planen" name="Beerdigung Planen" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="funeralPlanningProcess" name="Beerdigungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_Trauerfall" name="Beerdigung soll geplant werden">
+      <bpmn:extensionElements />
       <bpmn:outgoing>Flow_0tqufez</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1qmwy1u" sourceRef="Activity_0mtezji" targetRef="Activity_Feier" />
     <bpmn:sequenceFlow id="Flow_0cgx0e2" sourceRef="Activity_0dcyj4j" targetRef="Activity_1ciygxm" />
     <bpmn:sequenceFlow id="Flow_6" sourceRef="Activity_Feier" targetRef="EndEvent_Fertig" />
-    <bpmn:receiveTask id="Activity_1ciygxm" name="Bestattungspräferenzen empfangen">
+    <bpmn:receiveTask id="Activity_1ciygxm" name="Bestattungspräferenzen empfangen" messageRef="Message_1vjje9l">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="end">
+          <camunda:script scriptFormat="JavaScript">const funeralPreference = S(JSON.stringify({funeralType, funeralObject, maxAmountGuests, budget}), "application/json");
+
+execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0cgx0e2</bpmn:incoming>
       <bpmn:outgoing>Flow_1tdnw2y</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:sendTask id="Activity_0dcyj4j" name="Beedigungspräferenzen anfragen">
+    <bpmn:sendTask id="Activity_0dcyj4j" name="Beedigungspräferenzen anfragen" camunda:expression="${1}">
       <bpmn:incoming>Flow_0n20skx</bpmn:incoming>
       <bpmn:outgoing>Flow_0cgx0e2</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Gateway_0eoijma">
+    <bpmn:exclusiveGateway id="Gateway_0eoijma" name="Präferenz schon bekannt?" default="Flow_0n20skx">
       <bpmn:incoming>Flow_0tqufez</bpmn:incoming>
       <bpmn:outgoing>Flow_0n20skx</bpmn:outgoing>
       <bpmn:outgoing>Flow_1em2fq1</bpmn:outgoing>
@@ -41,16 +57,27 @@
     <bpmn:subProcess id="Activity_02rauh0">
       <bpmn:incoming>Flow_1qcmghw</bpmn:incoming>
       <bpmn:outgoing>Flow_17zo3ui</bpmn:outgoing>
-      <bpmn:standardLoopCharacteristics />
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true">
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">10000000</bpmn:loopCardinality>
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${funeralAccepted}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_0ig7wes">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("funeralType", funeralPreference.prop("funeralType").stringValue());
+execution.setVariableLocal("funeralObject", funeralPreference.prop("funeralObject").stringValue());
+execution.setVariableLocal("maxAmountGuests", funeralPreference.prop("maxAmountGuests").numberValue());
+execution.setVariableLocal("budget", funeralPreference.prop("budget").numberValue());</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:outgoing>Flow_13jktrk</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:businessRuleTask id="Activity_0tzjd5f" name="Bestattungsobjekt entscheiden">
+      <bpmn:businessRuleTask id="Activity_0tzjd5f" name="Bestattungsoption entscheiden" camunda:decisionRef="finalFuneralDecision">
         <bpmn:incoming>Flow_13jktrk</bpmn:incoming>
         <bpmn:outgoing>Flow_053h3mg</bpmn:outgoing>
       </bpmn:businessRuleTask>
       <bpmn:sequenceFlow id="Flow_053h3mg" sourceRef="Activity_0tzjd5f" targetRef="Activity_1uepr93" />
-      <bpmn:sendTask id="Activity_1uepr93" name="Entscheidung senden">
+      <bpmn:sendTask id="Activity_1uepr93" name="Entscheidung senden" camunda:expression="${1}">
         <bpmn:incoming>Flow_053h3mg</bpmn:incoming>
         <bpmn:outgoing>Flow_03kzg1f</bpmn:outgoing>
       </bpmn:sendTask>
@@ -64,20 +91,26 @@
       <bpmn:intermediateCatchEvent id="Event_19c9atk" name="Änderungswunsch empfangen">
         <bpmn:incoming>Flow_1va1h17</bpmn:incoming>
         <bpmn:outgoing>Flow_1jkx75d</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_18ahjp7" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_18ahjp7" messageRef="Message_3viufsu" />
       </bpmn:intermediateCatchEvent>
       <bpmn:sequenceFlow id="Flow_1va1h17" sourceRef="Gateway_0timu5e" targetRef="Event_19c9atk" />
       <bpmn:intermediateCatchEvent id="Event_07j6aif" name="Bestätigung empfangen">
         <bpmn:incoming>Flow_0uhi1kx</bpmn:incoming>
         <bpmn:outgoing>Flow_0lp8bi5</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_0tklm91" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_0tklm91" messageRef="Message_09b6d8c" />
       </bpmn:intermediateCatchEvent>
       <bpmn:sequenceFlow id="Flow_0uhi1kx" sourceRef="Gateway_0timu5e" targetRef="Event_07j6aif" />
       <bpmn:endEvent id="Event_1o3pjjb" name="Änderungen gewünscht">
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariable(&#34;funeralAccepted&#34;, false)}" event="start" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1jkx75d</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1jkx75d" sourceRef="Event_19c9atk" targetRef="Event_1o3pjjb" />
       <bpmn:endEvent id="Event_1jnl29z" name="Entscheidung bestätigt">
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariable(&#34;funeralAccepted&#34;, true)}" event="start" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0lp8bi5</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0lp8bi5" sourceRef="Event_07j6aif" targetRef="Event_1jnl29z" />
@@ -89,26 +122,29 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_1tdnw2y" sourceRef="Activity_1ciygxm" targetRef="Gateway_0z5zshj" />
     <bpmn:sequenceFlow id="Flow_1qcmghw" sourceRef="Gateway_0z5zshj" targetRef="Activity_02rauh0" />
-    <bpmn:sequenceFlow id="Flow_1em2fq1" sourceRef="Gateway_0eoijma" targetRef="Gateway_0z5zshj" />
-    <bpmn:sequenceFlow id="Flow_17zo3ui" sourceRef="Activity_02rauh0" targetRef="Activity_1dy58fl" />
-    <bpmn:scriptTask id="Activity_1dy58fl" name="Prüfen ob Bestattungsauftrag bereits vorhanden">
-      <bpmn:incoming>Flow_17zo3ui</bpmn:incoming>
-      <bpmn:outgoing>Flow_1bcpt7u</bpmn:outgoing>
-    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_1em2fq1" name="Ja" sourceRef="Gateway_0eoijma" targetRef="Gateway_0z5zshj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${funeralPreference != null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_17zo3ui" sourceRef="Activity_02rauh0" targetRef="Gateway_0x41rwn" />
     <bpmn:exclusiveGateway id="Gateway_0x41rwn" name="Bestattungsauftrag vorhanden?">
-      <bpmn:incoming>Flow_1bcpt7u</bpmn:incoming>
+      <bpmn:incoming>Flow_17zo3ui</bpmn:incoming>
       <bpmn:outgoing>Flow_0i2ybvh</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ycqyhw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1bcpt7u" sourceRef="Activity_1dy58fl" targetRef="Gateway_0x41rwn" />
-    <bpmn:sequenceFlow id="Flow_0i2ybvh" sourceRef="Gateway_0x41rwn" targetRef="Activity_0mtezji" />
-    <bpmn:sequenceFlow id="Flow_0ycqyhw" sourceRef="Gateway_0x41rwn" targetRef="Activity_0oetiel" />
-    <bpmn:scriptTask id="Activity_0oetiel" name="Bestattungsauftrag aktualisieren">
+    <bpmn:sequenceFlow id="Flow_0i2ybvh" name="Nein" sourceRef="Gateway_0x41rwn" targetRef="Activity_0mtezji">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${funeralOrder == null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ycqyhw" name="Ja" sourceRef="Gateway_0x41rwn" targetRef="Activity_0oetiel">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${funeralOrder != null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:scriptTask id="Activity_0oetiel" name="Bestattungsauftrag aktualisieren" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
       <bpmn:outgoing>Flow_0ok1czf</bpmn:outgoing>
+      <bpmn:script>const funeralPlanning = S(JSON.stringify({}), "application/json");
+execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0ok1czf" sourceRef="Activity_0oetiel" targetRef="Activity_0ooshf6" />
-    <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern">
+    <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
       <bpmn:incoming>Flow_0ok1czf</bpmn:incoming>
       <bpmn:outgoing>Flow_025f80p</bpmn:outgoing>
     </bpmn:sendTask>
@@ -116,11 +152,13 @@
     <bpmn:endEvent id="Event_0vhxvz3" name="Änderung erfolgreich durchgeführt">
       <bpmn:incoming>Flow_025f80p</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:scriptTask id="Activity_0mtezji" name="Bestattungsauftrag verfassen">
+    <bpmn:scriptTask id="Activity_0mtezji" name="Bestattungsauftrag verfassen" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
       <bpmn:outgoing>Flow_1qmwy1u</bpmn:outgoing>
+      <bpmn:script>const funeralPlanning = S(JSON.stringify({}), "application/json");
+execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen">
+    <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:incoming>Flow_1qmwy1u</bpmn:incoming>
       <bpmn:outgoing>Flow_6</bpmn:outgoing>
     </bpmn:sendTask>
@@ -128,10 +166,13 @@
       <bpmn:incoming>Flow_6</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
+  <bpmn:message id="Message_1vjje9l" name="funeralPreference" />
+  <bpmn:message id="Message_3viufsu" name="funeralPlanningChange" />
+  <bpmn:message id="Message_09b6d8c" name="funeralAcceptedByTestator" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_Beerdigung">
       <bpmndi:BPMNShape id="Participant_Angehoerige_di" bpmnElement="Participant_Angehoerige" isHorizontal="true">
-        <dc:Bounds x="120" y="180" width="2648" height="410" />
+        <dc:Bounds x="120" y="180" width="2530" height="410" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_Trauerfall_di" bpmnElement="StartEvent_Trauerfall">
@@ -150,43 +191,8 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0eoijma_di" bpmnElement="Gateway_0eoijma" isMarkerVisible="true">
         <dc:Bounds x="295" y="355" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0z5zshj_di" bpmnElement="Gateway_0z5zshj" isMarkerVisible="true">
-        <dc:Bounds x="725" y="355" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_04lm724_di" bpmnElement="Activity_1dy58fl">
-        <dc:Bounds x="1730" y="340" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0x41rwn_di" bpmnElement="Gateway_0x41rwn" isMarkerVisible="true">
-        <dc:Bounds x="1915" y="355" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1974.5" y="366.5" width="81" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0orjo0p_di" bpmnElement="Activity_0oetiel">
-        <dc:Bounds x="2050" y="450" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_16a7q4q_di" bpmnElement="Activity_0ooshf6">
-        <dc:Bounds x="2340" y="450" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0vhxvz3_di" bpmnElement="Event_0vhxvz3">
-        <dc:Bounds x="2542" y="472" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2529" y="515" width="62" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ask77i_di" bpmnElement="Activity_0mtezji">
-        <dc:Bounds x="2050" y="260" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mbih4a_di" bpmnElement="Activity_Feier">
-        <dc:Bounds x="2200" y="260" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
-        <dc:Bounds x="2542" y="282" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2518" y="318" width="84" height="27" />
+          <dc:Bounds x="280" y="325" width="81" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02rauh0_di" bpmnElement="Activity_02rauh0" isExpanded="true">
@@ -259,6 +265,40 @@
         <di:waypoint x="1498" y="430" />
         <di:waypoint x="1572" y="430" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_0z5zshj_di" bpmnElement="Gateway_0z5zshj" isMarkerVisible="true">
+        <dc:Bounds x="725" y="355" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0x41rwn_di" bpmnElement="Gateway_0x41rwn" isMarkerVisible="true">
+        <dc:Bounds x="1915" y="355" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1974.5" y="366.5" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0orjo0p_di" bpmnElement="Activity_0oetiel">
+        <dc:Bounds x="2050" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16a7q4q_di" bpmnElement="Activity_0ooshf6">
+        <dc:Bounds x="2340" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vhxvz3_di" bpmnElement="Event_0vhxvz3">
+        <dc:Bounds x="2542" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2529" y="515" width="62" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ask77i_di" bpmnElement="Activity_0mtezji">
+        <dc:Bounds x="2050" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mbih4a_di" bpmnElement="Activity_Feier">
+        <dc:Bounds x="2200" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
+        <dc:Bounds x="2542" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2518" y="318" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1qmwy1u_di" bpmnElement="Flow_1qmwy1u">
         <di:waypoint x="2150" y="300" />
         <di:waypoint x="2200" y="300" />
@@ -292,24 +332,29 @@
         <di:waypoint x="320" y="480" />
         <di:waypoint x="750" y="480" />
         <di:waypoint x="750" y="405" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="324" y="423" width="12" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17zo3ui_di" bpmnElement="Flow_17zo3ui">
         <di:waypoint x="1650" y="380" />
-        <di:waypoint x="1730" y="380" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1bcpt7u_di" bpmnElement="Flow_1bcpt7u">
-        <di:waypoint x="1830" y="380" />
         <di:waypoint x="1915" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0i2ybvh_di" bpmnElement="Flow_0i2ybvh">
         <di:waypoint x="1940" y="355" />
         <di:waypoint x="1940" y="300" />
         <di:waypoint x="2050" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1944" y="325" width="23" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ycqyhw_di" bpmnElement="Flow_0ycqyhw">
         <di:waypoint x="1940" y="405" />
         <di:waypoint x="1940" y="490" />
         <di:waypoint x="2050" y="490" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1949" y="445" width="12" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ok1czf_di" bpmnElement="Flow_0ok1czf">
         <di:waypoint x="2150" y="490" />
@@ -319,17 +364,25 @@
         <di:waypoint x="2440" y="490" />
         <di:waypoint x="2542" y="490" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_0hdn5vd_di" bpmnElement="Participant_11qf0vh" isHorizontal="true">
-        <dc:Bounds x="120" y="80" width="1510" height="60" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_05h5wb4_di" bpmnElement="Participant_09uh32h" isHorizontal="true">
         <dc:Bounds x="1990" y="620" width="500" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_0hdn5vd_di" bpmnElement="Participant_11qf0vh" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="1510" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_05h9u77_di" bpmnElement="Association_05h9u77">
-        <di:waypoint x="642" y="520" />
-        <di:waypoint x="613" y="420" />
+        <di:waypoint x="705" y="500" />
+        <di:waypoint x="636" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_05h56vw_di" bpmnElement="Association_05h56vw">
+        <di:waypoint x="2138" y="260" />
+        <di:waypoint x="2162" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_00ejbfy_di" bpmnElement="Association_00ejbfy">
+        <di:waypoint x="2138" y="450" />
+        <di:waypoint x="2162" y="425" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16seaio_di" bpmnElement="Flow_16seaio">
         <di:waypoint x="2250" y="340" />
@@ -373,10 +426,6 @@
           <dc:Bounds x="1490" y="369" width="59" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1q8og4b_di" bpmnElement="TextAnnotation_1q8og4b">
-        <dc:Bounds x="560" y="520" width="180" height="57" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0wp1dnd_di" bpmnElement="Flow_0wp1dnd">
         <di:waypoint x="2390" y="530" />
         <di:waypoint x="2390" y="620" />
@@ -384,6 +433,18 @@
           <dc:Bounds x="2396" y="553" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1q8og4b_di" bpmnElement="TextAnnotation_1q8og4b">
+        <dc:Bounds x="640" y="500" width="180" height="57" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03xtiv3_di" bpmnElement="TextAnnotation_03xtiv3">
+        <dc:Bounds x="2150" y="180" width="99.9959660068847" height="55.077452667814114" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0ycjj6i_di" bpmnElement="TextAnnotation_0ycjj6i">
+        <dc:Bounds x="2150" y="370" width="99.9959660068847" height="55.077452667814114" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

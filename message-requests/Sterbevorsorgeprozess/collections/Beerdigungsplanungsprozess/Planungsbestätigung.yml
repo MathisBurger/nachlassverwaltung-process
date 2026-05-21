@@ -1,0 +1,22 @@
+info:
+  name: Planungsbestätigung
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "funeralAcceptedByTestator",
+        "businessKey": "user@demo.org"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

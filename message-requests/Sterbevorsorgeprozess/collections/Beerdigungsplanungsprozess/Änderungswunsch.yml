@@ -1,5 +1,5 @@
 info:
-  name: Personendaten Prüfstatus
+  name: Änderungswunsch
   type: http
   seq: 2
 
@@ -10,13 +10,13 @@ http:
     type: json
     data: |-
       {
-        "messageName": "citizenDataCheckResponse",
+        "messageName": "funeralPlanningChange",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
-        },
         "processVariables": {
-          "citizenIsValid": {"value": true, "type": "Boolean"}
+          "funeralType": {"value": "burial", "type": "String"},
+          "funeralObject": {"value": "urn", "type": "String"},
+          "maxAmountGuests": {"value": 12, "type": "Integer"},
+          "budget": {"value": 1000, "type": "Integer"}
         }
       }
   auth: inherit

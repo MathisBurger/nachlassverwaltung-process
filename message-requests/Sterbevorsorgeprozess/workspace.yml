@@ -12,6 +12,8 @@ collections:
     path: "collections/Nachlassverwaltungsprozess"
   - name: "Angehörigen-Anlage"
     path: "collections/Angehörigen-Anlage"
+  - name: "Beerdigungsplanungsprozess"
+    path: "collections/Beerdigungsplanungsprozess"
 
 specs:
 
