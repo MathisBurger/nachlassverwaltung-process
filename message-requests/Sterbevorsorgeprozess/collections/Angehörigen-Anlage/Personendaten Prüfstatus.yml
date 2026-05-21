@@ -13,7 +13,7 @@ http:
         "messageName": "citizenDataCheckResponse",
         "businessKey": "user@demo.org",
         "correlationKeys": {
-          "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
+          "email": {"value": "sugi.sorglos@demomail.org", "type": "String"}
         },
         "processVariables": {
           "citizenIsValid": {"value": true, "type": "Boolean"}

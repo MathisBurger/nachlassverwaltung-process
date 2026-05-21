@@ -98,6 +98,7 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
       <bpmn:outgoing>Flow_1xdpxh7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:subProcess id="Activity_0m9xh4y" name="Personendaten prüfen">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1xdpxh7</bpmn:incoming>
       <bpmn:outgoing>Flow_0tejzsf</bpmn:outgoing>
       <bpmn:startEvent id="Event_1ptkss1">
@@ -110,10 +111,14 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1v6f3z2" sourceRef="Activity_1u5vtu2" targetRef="Event_18v5trf" />
       <bpmn:sendTask id="Activity_0ug0am1" name="Personendaten senden" camunda:expression="${1}">
+        <bpmn:extensionElements />
         <bpmn:incoming>Flow_1h1gikj</bpmn:incoming>
         <bpmn:outgoing>Flow_18pfc0t</bpmn:outgoing>
       </bpmn:sendTask>
       <bpmn:receiveTask id="Activity_1u5vtu2" name="Prüfstatus empfangen" messageRef="Message_3j15d54">
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, desiredRelativeData.prop(&#34;email&#34;).stringValue())}" event="start" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_18pfc0t</bpmn:incoming>
         <bpmn:outgoing>Flow_1v6f3z2</bpmn:outgoing>
       </bpmn:receiveTask>

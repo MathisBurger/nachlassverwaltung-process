@@ -44,12 +44,6 @@
     <bpmn:subProcess id="Activity_16s1fmg" name="Angehörigen Ergänzungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0ujy1dt" name="Angehöriger Ergänzung erhalten" isInterrupting="false">
         <bpmn:extensionElements>
-          <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("firstName", "");
-execution.setVariableLocal("lastName", "");
-execution.setVariableLocal("email", "");
-execution.setVariableLocal("birthday", "");</camunda:script>
-          </camunda:executionListener>
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("desiredRelativeData", S(JSON.stringify({firstName, lastName, email, birthday})));</camunda:script>
           </camunda:executionListener>
