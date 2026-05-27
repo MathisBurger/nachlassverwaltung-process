@@ -1,0 +1,44 @@
+{
+  "components": [
+    {
+      "label": "Dokumenteninhalt",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_015491m",
+        "columns": null
+      },
+      "id": "Field_0kluu7z",
+      "key": "documentContent",
+      "readonly": true
+    },
+    {
+      "label": "Dokument valide?",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_02e7gz6",
+        "columns": null
+      },
+      "id": "Field_0hhefnf",
+      "key": "isDocuentValid"
+    },
+    {
+      "label": "Zugriffsdaten benötigt?",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_1rnqilf",
+        "columns": null
+      },
+      "id": "Field_13hl4j3",
+      "key": "isAccessInformationRequired"
+    }
+  ],
+  "type": "default",
+  "id": "validateEstateDocumentForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

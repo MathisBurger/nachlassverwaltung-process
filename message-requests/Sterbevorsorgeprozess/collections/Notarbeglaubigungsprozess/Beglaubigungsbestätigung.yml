@@ -13,7 +13,8 @@ http:
         "messageName": "documentNotarized",
         "businessKey": "user@demo.org",
         "correlationKeys": {
-          "documentId": {"value": "hugo.habicht@demomail.org", "type": "String"}
+          "documentId": {"value": "advanceDecisionToRefuseTreatment", "type": "String"}
+        }
       }
   auth: inherit
 

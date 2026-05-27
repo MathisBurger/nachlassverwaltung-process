@@ -1,7 +1,7 @@
 info:
-  name: Beglaubigungsablehnung
+  name: Erbschaftsgegenstandsdokument
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: POST
@@ -10,13 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "documentNotNotarized",
+        "messageName": "estateUpdate",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "documentId": {"value": "nominationOfGuardian", "type": "String"}
-        },
         "processVariables": {
-          "reason": {"value": "Gefällt mir nicht", "type": "String"}
+          "estateDocument": {"value": "Hier mein Millionen Depot", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit

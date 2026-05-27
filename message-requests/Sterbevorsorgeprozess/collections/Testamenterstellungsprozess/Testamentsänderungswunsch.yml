@@ -1,0 +1,31 @@
+info:
+  name: Testamentsänderungswunsch
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        req.setBody({
+          "messageName": "lastWillSplitChange",
+          "businessKey": "user@demo.org",
+          "processVariables": {
+            "estateSplit": {"value": JSON.stringify({
+            "estateObj1": {
+                "hugo.habicht@demo.org": 100
+            }
+        }), "type": "Json"}
+          }
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

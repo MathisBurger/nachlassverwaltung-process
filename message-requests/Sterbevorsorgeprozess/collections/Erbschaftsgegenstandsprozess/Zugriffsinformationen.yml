@@ -1,5 +1,5 @@
 info:
-  name: Beglaubigungsablehnung
+  name: Zugriffsinformationen
   type: http
   seq: 2
 
@@ -10,13 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "documentNotNotarized",
+        "messageName": "accessInformation",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "documentId": {"value": "nominationOfGuardian", "type": "String"}
-        },
         "processVariables": {
-          "reason": {"value": "Gefällt mir nicht", "type": "String"}
+          "accessInformation": {"value": "Hier meine Bank Zugangsdaten", "type": "String"}
         }
       }
   auth: inherit

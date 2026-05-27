@@ -1,7 +1,7 @@
 info:
-  name: Beglaubigungsablehnung
+  name: Nächste Aktion
   type: http
-  seq: 2
+  seq: 3
 
 http:
   method: POST
@@ -10,13 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "documentNotNotarized",
+        "messageName": "estateProcessNextAction",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "documentId": {"value": "nominationOfGuardian", "type": "String"}
-        },
         "processVariables": {
-          "reason": {"value": "Gefällt mir nicht", "type": "String"}
+          "continueCreateNewEstate": {"value": false, "type": "Boolean"}
         }
       }
   auth: inherit

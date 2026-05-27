@@ -20,6 +20,10 @@ collections:
     path: "collections/Notarbeglaubigungsprozess"
   - name: "Vorsorgedokumenteverarbeitungsprozess"
     path: "collections/Vorsorgedokumenteverarbeitungsprozess"
+  - name: "Erbschaftsgegenstandsprozess"
+    path: "collections/Erbschaftsgegenstandsprozess"
+  - name: "Testamenterstellungsprozess"
+    path: "collections/Testamenterstellungsprozess"
 
 specs:
 

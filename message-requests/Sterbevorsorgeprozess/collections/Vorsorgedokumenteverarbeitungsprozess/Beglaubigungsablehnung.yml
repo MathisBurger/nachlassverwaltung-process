@@ -13,10 +13,10 @@ http:
         "messageName": "advanceDirectiveContent",
         "businessKey": "user@demo.org",
         "correlationKeys": {
-          "documentId": {"value": "hugo.habicht@demomail.org", "type": "String"}
+          "documentId": {"value": "advanceDecisionToRefuseTreatment", "type": "String"}
         },
         "processVariables": {
-          "documentContent": {"value": "Gefällt mir nicht", "type". "String"}
+          "documentContent": {"value": "1234 Hier gibt es coolen Inhalt, der auch valide ist", "type": "String"}
         }
       }
   auth: inherit
