@@ -1,7 +1,7 @@
 info:
-  name: Beglaubigungsbestätigung
+  name: Erbschaftsgegenstand hinzufügen
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "documentNotarized",
+        "messageName": "estateUpdate",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "documentId": {"value": "lastWill", "type": "String"}
+        "processVariables": {
+          "estateDocument": {"value": "Hier mein Millionen Depot mit 80 Mio", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit
