@@ -5,10 +5,6 @@
     <bpmn:participant id="Participant_18jmyqt" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1suyvps" name="Dokumentenauswahlanfrage" sourceRef="Activity_0rdll59" targetRef="Participant_18jmyqt" />
     <bpmn:messageFlow id="Flow_0jp9f2y" name="Dokumentauswahl" sourceRef="Participant_18jmyqt" targetRef="Activity_0rdll59" />
-    <bpmn:textAnnotation id="TextAnnotation_1ixmtkb">
-      <bpmn:text>Hier implementieren</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1mti0ki" associationDirection="None" sourceRef="Activity_17pu7b7" targetRef="TextAnnotation_1ixmtkb" />
   </bpmn:collaboration>
   <bpmn:process id="estateRegistrationProzess" name="Nachlassanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:parallelGateway id="Gateway_0tpxrg1">
@@ -23,7 +19,9 @@
       <bpmn:startEvent id="Event_0mgg4f4" name="Vorsorgedokumente müssen gepflegt werden">
         <bpmn:extensionElements>
           <camunda:executionListener event="end">
-            <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})))</camunda:script>
+            <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})));
+
+execution.setVariableLocal("documentIdRaw", null);</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0ou1j6c</bpmn:outgoing>
@@ -70,9 +68,9 @@ execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</ca
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${selectedAdvanceDirectives.elements()}" camunda:elementVariable="documentIdRaw" />
         <bpmn:startEvent id="Event_1v1mkjz">
           <bpmn:extensionElements>
-            <camunda:executionListener event="end">
+            <camunda:executionListener event="start">
               <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("documentId", documentIdRaw.stringValue());
-execution.setVariableLocal("documentContent", "");</camunda:script>
+execution.setVariableLocal("documentContent", null);</camunda:script>
             </camunda:executionListener>
           </bpmn:extensionElements>
           <bpmn:outgoing>Flow_0ftxxot</bpmn:outgoing>
@@ -165,6 +163,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen" calledElement="lastWillCreationProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
+          <camunda:out source="signedLastWill" target="signedLastWill" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1fu699j</bpmn:incoming>
         <bpmn:outgoing>Flow_0ezfsme</bpmn:outgoing>
@@ -198,10 +197,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
     <bpmn:endEvent id="Event_0ndoprd" name="Nachlass erfolgreich angelegt">
       <bpmn:incoming>Flow_1opkkd5</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:task id="Activity_17pu7b7" name="Letze Worte aufnehmen">
-      <bpmn:incoming>Flow_0faompi</bpmn:incoming>
-      <bpmn:outgoing>Flow_147sc7n</bpmn:outgoing>
-    </bpmn:task>
     <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen" calledElement="estateCreationProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
@@ -217,6 +212,16 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${false == continueCreateNewEstate}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:callActivity>
+    <bpmn:callActivity id="Activity_17pu7b7" name="Letze Worte aufnehmen" calledElement="lastWordsProcess">
+      <bpmn:extensionElements>
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in sourceExpression="${null}" target="preference" />
+        <camunda:in sourceExpression="${null}" target="lastWords" />
+        <camunda:out sourceExpression="lastWords" target="lastWords" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0faompi</bpmn:incoming>
+      <bpmn:outgoing>Flow_147sc7n</bpmn:outgoing>
+    </bpmn:callActivity>
   </bpmn:process>
   <bpmn:message id="Message_3qnnv9q" name="estateUpdate" />
   <bpmn:message id="Message_0efs2mf" name="selectedAdvanceDirectives" />
@@ -228,6 +233,9 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1i23lle_di" bpmnElement="Gateway_0tpxrg1">
         <dc:Bounds x="335" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0l9bkpc_di" bpmnElement="Activity_17pu7b7">
+        <dc:Bounds x="460" y="540" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1mgoisn_di" bpmnElement="Activity_0rdll59">
         <dc:Bounds x="450" y="250" width="100" height="80" />
@@ -251,9 +259,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1004" y="465" width="52" height="40" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0980guz_di" bpmnElement="Activity_17pu7b7">
-        <dc:Bounds x="460" y="540" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02vsh3e_di" bpmnElement="Activity_10dt71o">
         <dc:Bounds x="460" y="400" width="100" height="80" />
@@ -302,10 +307,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <dc:Bounds x="410" y="80" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1mti0ki_di" bpmnElement="Association_1mti0ki">
-        <di:waypoint x="560" y="605" />
-        <di:waypoint x="630" y="640" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1suyvps_di" bpmnElement="Flow_1suyvps">
         <di:waypoint x="470" y="250" />
         <di:waypoint x="470" y="140" />
@@ -320,10 +321,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
           <dc:Bounds x="545" y="173" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1ixmtkb_di" bpmnElement="TextAnnotation_1ixmtkb">
-        <dc:Bounds x="610" y="640" width="100" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1ej6n29">

@@ -24,6 +24,8 @@ collections:
     path: "collections/Erbschaftsgegenstandsprozess"
   - name: "Testamenterstellungsprozess"
     path: "collections/Testamenterstellungsprozess"
+  - name: "Letzte Worte Prozess"
+    path: "collections/Letzte Worte Prozess"
 
 specs:
 

@@ -1,7 +1,7 @@
 info:
-  name: Beglaubigungsbestätigung
+  name: Präferenz (1)
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "documentNotarized",
+        "messageName": "lastWords",
         "businessKey": "user@demo.org",
-        "correlationKeys": {
-          "documentId": {"value": "powerOfAttorney", "type": "String"}
+        "processVariables": {
+          "lastWords": {"value": "Meine letzten Worte!", "type": "String"}
         }
       }
   auth: inherit
