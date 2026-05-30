@@ -55,6 +55,7 @@
       <bpmn:outgoing>Flow_1c9tx7d</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:endEvent id="Event_07f5jre" name="Dokument invalide">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1c9tx7d</bpmn:incoming>
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_03qf2gy" escalationRef="Escalation_2bstv34" />
     </bpmn:endEvent>

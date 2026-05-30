@@ -10,11 +10,8 @@ http:
     type: json
     data: |-
       {
-        "messageName": "estateDocument",
-        "businessKey": "user@demo.org",
-        "processVariables": {
-          "documentContent": {"value": "Hier mein Millionen Depot", "type": "String"}
-        }
+        "messageName": "lastWillConfirmation",
+        "businessKey": "user@demo.org"
       }
   auth: inherit
 

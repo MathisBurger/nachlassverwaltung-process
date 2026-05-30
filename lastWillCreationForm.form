@@ -1,0 +1,62 @@
+{
+  "components": [
+    {
+      "label": "Testamentsinhalt",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1merydb",
+        "columns": null
+      },
+      "id": "Field_0v5dj7e",
+      "key": "lastWillContent",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "table",
+      "layout": {
+        "row": "Row_1r6ea67",
+        "columns": null
+      },
+      "label": "Table",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Objekt",
+          "key": "object"
+        },
+        {
+          "label": "Erbe",
+          "key": "owner"
+        },
+        {
+          "label": "Anteil",
+          "key": "percentage"
+        }
+      ],
+      "id": "Field_1gp2gf7",
+      "dataSource": "=normalizedEstateSplit"
+    },
+    {
+      "label": "Ablehnungsgrund Notar",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_10c5m2q",
+        "columns": null
+      },
+      "id": "Field_1gl94ug",
+      "key": "notaryRejectionReason",
+      "disabled": true
+    }
+  ],
+  "type": "default",
+  "id": "lastWillForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

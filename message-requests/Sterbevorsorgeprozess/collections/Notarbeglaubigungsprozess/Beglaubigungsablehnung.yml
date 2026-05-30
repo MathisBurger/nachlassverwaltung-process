@@ -13,7 +13,7 @@ http:
         "messageName": "documentNotNotarized",
         "businessKey": "user@demo.org",
         "correlationKeys": {
-          "documentId": {"value": "nominationOfGuardian", "type": "String"}
+          "documentId": {"value": "lastWill", "type": "String"}
         },
         "processVariables": {
           "reason": {"value": "Gefällt mir nicht", "type": "String"}

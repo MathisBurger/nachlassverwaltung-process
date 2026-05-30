@@ -6,6 +6,9 @@ info:
 http:
   method: POST
   url: http://localhost:8080/engine-rest/message
+  headers:
+    - name: Content-Type
+      value: application/json
   auth: inherit
 
 runtime:
@@ -18,7 +21,8 @@ runtime:
           "processVariables": {
             "estateSplit": {"value": JSON.stringify({
             "estateObj1": {
-                "hugo.habicht@demo.org": 100
+                "hugo.habicht@demo.org": 75,
+                "sugi.sorglos@demomail.org": 25
             }
         }), "type": "Json"}
           }

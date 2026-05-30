@@ -1,5 +1,5 @@
 info:
-  name: Beglaubigungsablehnung
+  name: Dokument hochladen
   type: http
   seq: 1
 
@@ -13,7 +13,7 @@ http:
         "messageName": "advanceDirectiveContent",
         "businessKey": "user@demo.org",
         "correlationKeys": {
-          "documentId": {"value": "advanceDecisionToRefuseTreatment", "type": "String"}
+          "documentId": {"value": "powerOfAttorney", "type": "String"}
         },
         "processVariables": {
           "documentContent": {"value": "1234 Hier gibt es coolen Inhalt, der auch valide ist", "type": "String"}

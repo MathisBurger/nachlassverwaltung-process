@@ -6,6 +6,9 @@ info:
 http:
   method: POST
   url: http://localhost:8080/engine-rest/message
+  headers:
+    - name: Content-Type
+      value: application/json
   auth: inherit
 
 runtime:

@@ -17,49 +17,24 @@
         <bpmn:flowNodeRef>Event_0fjdrhj</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1eh8by6</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0l5c7cs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1sgfmay</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_166fnvw</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_18tq0sr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1ant1pk</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_1sgfmay</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1fyjjla</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0f28pqm</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_04zbo7v</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Event_0fjdrhj" name="Testament-erstellung angefordert">
-      <bpmn:outgoing>Flow_0do4mxw</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:sendTask id="Activity_1eh8by6" name="Gewünschte Aufteilung anfragen" camunda:expression="${1}">
-      <bpmn:incoming>Flow_0do4mxw</bpmn:incoming>
-      <bpmn:outgoing>Flow_1herkye</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:receiveTask id="Activity_0l5c7cs" name="Gewünschte Aufteilung empfangen" messageRef="Message_2een0dm">
-      <bpmn:incoming>Flow_1herkye</bpmn:incoming>
-      <bpmn:outgoing>Flow_0cdq5dn</bpmn:outgoing>
-    </bpmn:receiveTask>
     <bpmn:sequenceFlow id="Flow_0do4mxw" sourceRef="Event_0fjdrhj" targetRef="Activity_1eh8by6" />
     <bpmn:sequenceFlow id="Flow_1herkye" sourceRef="Activity_1eh8by6" targetRef="Activity_0l5c7cs" />
     <bpmn:sequenceFlow id="Flow_1jhaue8" sourceRef="Activity_166fnvw" targetRef="Activity_18tq0sr" />
     <bpmn:sequenceFlow id="Flow_1vvof3a" sourceRef="Activity_18tq0sr" targetRef="Event_1fyjjla" />
     <bpmn:sequenceFlow id="Flow_1ivs59w" sourceRef="Activity_0f28pqm" targetRef="Activity_1ant1pk" />
     <bpmn:sequenceFlow id="Flow_1n8xj8p" sourceRef="Activity_1ant1pk" targetRef="Activity_166fnvw" />
-    <bpmn:receiveTask id="Activity_166fnvw" name="Signiertes Testament empfangen" messageRef="Message_3s7qler">
-      <bpmn:incoming>Flow_1n8xj8p</bpmn:incoming>
-      <bpmn:outgoing>Flow_1jhaue8</bpmn:outgoing>
-    </bpmn:receiveTask>
-    <bpmn:callActivity id="Activity_18tq0sr" name="Testament notariell beglaubigen" calledElement="notaryDocumentProcess">
-      <bpmn:extensionElements>
-        <camunda:in businessKey="#{execution.processBusinessKey}" />
-        <camunda:in source="signedLastWill" target="documentContent" />
-        <camunda:in sourceExpression="${&#34;lastWill&#34;}" target="documentId" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1jhaue8</bpmn:incoming>
-      <bpmn:outgoing>Flow_1vvof3a</bpmn:outgoing>
-    </bpmn:callActivity>
-    <bpmn:sendTask id="Activity_1ant1pk" name="Unterschrift anfordern" camunda:expression="${1}">
-      <bpmn:incoming>Flow_1ivs59w</bpmn:incoming>
-      <bpmn:outgoing>Flow_1n8xj8p</bpmn:outgoing>
-    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_0cdq5dn" sourceRef="Activity_0l5c7cs" targetRef="Gateway_1sgfmay" />
+    <bpmn:sequenceFlow id="Flow_1vqgk4c" sourceRef="Gateway_1sgfmay" targetRef="Activity_0f28pqm" />
+    <bpmn:sequenceFlow id="Flow_03s5sms" sourceRef="Event_04zbo7v" targetRef="Gateway_1sgfmay" />
     <bpmn:subProcess id="Activity_0f28pqm">
       <bpmn:incoming>Flow_1vqgk4c</bpmn:incoming>
       <bpmn:outgoing>Flow_1ivs59w</bpmn:outgoing>
@@ -68,14 +43,27 @@
         <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${false == needsRevision}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_156q75p">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="end">
+            <camunda:script scriptFormat="JavaScript">function flattenOwnership(data) {
+  return Object.entries(data).flatMap(([object, owners]) =&gt;
+    Object.entries(owners).map(([owner, percentage]) =&gt; ({
+      object,
+      owner,
+      percentage,
+    }))
+  );
+}
+
+const estateSplitJson = JSON.parse(estateSplit.toString());
+const normalizedEstateSplit = flattenOwnership(estateSplitJson);
+execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedEstateSplit)));</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0wd31hv</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:userTask id="Activity_1a1j55x" name="Testament-entwurf erstellen">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="lastWillContent" label="Testamentsinhalt" type="string" />
-          </camunda:formData>
-        </bpmn:extensionElements>
+      <bpmn:userTask id="Activity_1a1j55x" name="Testament-entwurf erstellen" camunda:formRef="lastWillForm" camunda:formRefBinding="latest" camunda:assignee="demo">
+        <bpmn:extensionElements />
         <bpmn:incoming>Flow_0wd31hv</bpmn:incoming>
         <bpmn:outgoing>Flow_0xpnfz5</bpmn:outgoing>
       </bpmn:userTask>
@@ -84,7 +72,6 @@
         <bpmn:outgoing>Flow_14vyoli</bpmn:outgoing>
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_0xpnfz5" sourceRef="Activity_1a1j55x" targetRef="Activity_1mhvpqa" />
-      <bpmn:sequenceFlow id="Flow_0wd31hv" sourceRef="Event_156q75p" targetRef="Activity_1a1j55x" />
       <bpmn:sequenceFlow id="Flow_14vyoli" sourceRef="Activity_1mhvpqa" targetRef="Gateway_01t3l65" />
       <bpmn:eventBasedGateway id="Gateway_01t3l65">
         <bpmn:incoming>Flow_14vyoli</bpmn:incoming>
@@ -121,22 +108,52 @@
         <bpmn:incoming>Flow_0zow4se</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0zow4se" sourceRef="Event_1ojwuc2" targetRef="Event_1ghhlly" />
+      <bpmn:sequenceFlow id="Flow_0wd31hv" sourceRef="Event_156q75p" targetRef="Activity_1a1j55x" />
     </bpmn:subProcess>
-    <bpmn:boundaryEvent id="Event_04zbo7v" name="Dokument invalide" attachedToRef="Activity_18tq0sr">
-      <bpmn:outgoing>Flow_03s5sms</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0qod0d9" escalationRef="Escalation_0tjkbn0" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0cdq5dn" sourceRef="Activity_0l5c7cs" targetRef="Gateway_1sgfmay" />
-    <bpmn:sequenceFlow id="Flow_1vqgk4c" sourceRef="Gateway_1sgfmay" targetRef="Activity_0f28pqm" />
     <bpmn:exclusiveGateway id="Gateway_1sgfmay">
       <bpmn:incoming>Flow_0cdq5dn</bpmn:incoming>
       <bpmn:incoming>Flow_03s5sms</bpmn:incoming>
       <bpmn:outgoing>Flow_1vqgk4c</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_03s5sms" sourceRef="Event_04zbo7v" targetRef="Gateway_1sgfmay" />
+    <bpmn:receiveTask id="Activity_0l5c7cs" name="Gewünschte Aufteilung empfangen" messageRef="Message_2een0dm">
+      <bpmn:incoming>Flow_1herkye</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cdq5dn</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sendTask id="Activity_1eh8by6" name="Gewünschte Aufteilung anfragen" camunda:expression="${1}">
+      <bpmn:incoming>Flow_0do4mxw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1herkye</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:startEvent id="Event_0fjdrhj" name="Testament-erstellung angefordert">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;notaryRejectionReason&#34;, &#34;&#34;)}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0do4mxw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:boundaryEvent id="Event_04zbo7v" name="Dokument invalide" attachedToRef="Activity_18tq0sr">
+      <bpmn:outgoing>Flow_03s5sms</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0qod0d9" escalationRef="Escalation_0tjkbn0" />
+    </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_1fyjjla" name="Testament erstellt und beglaubigt">
       <bpmn:incoming>Flow_1vvof3a</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:sendTask id="Activity_1ant1pk" name="Unterschrift anfordern" camunda:expression="${1}">
+      <bpmn:incoming>Flow_1ivs59w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n8xj8p</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:callActivity id="Activity_18tq0sr" name="Testament notariell beglaubigen" calledElement="notaryDocumentProcess">
+      <bpmn:extensionElements>
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in source="signedLastWill" target="documentContent" />
+        <camunda:in sourceExpression="${&#34;lastWill&#34;}" target="documentId" />
+        <camunda:out source="reason" target="notaryRejectionReason" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jhaue8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vvof3a</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:receiveTask id="Activity_166fnvw" name="Signiertes Testament empfangen" messageRef="Message_3s7qler">
+      <bpmn:incoming>Flow_1n8xj8p</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jhaue8</bpmn:outgoing>
+    </bpmn:receiveTask>
   </bpmn:process>
   <bpmn:message id="Message_2een0dm" name="desiredSplitMessage" />
   <bpmn:message id="Message_1c2kia9" name="lastWillSplitChange" />
