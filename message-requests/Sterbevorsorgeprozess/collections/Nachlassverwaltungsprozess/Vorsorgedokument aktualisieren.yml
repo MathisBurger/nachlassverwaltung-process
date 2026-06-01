@@ -12,8 +12,8 @@ http:
       {
         "messageName": "updateAdvanceDirective",
         "businessKey": "user@demo.org",
-        "processVariables": {
-          "documentId": {"value": "powerOfAttorney", "type": "String", "valueInfo": {"transient": true}}
+        "processVariablesLocal": {
+          "documentId": {"value": "advanceDecisionToRefuseTreatment", "type": "String"}
         }
       }
   auth: inherit

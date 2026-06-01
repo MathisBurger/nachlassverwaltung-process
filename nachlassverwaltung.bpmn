@@ -180,7 +180,6 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
     <bpmn:subProcess id="Activity_0n6i6vr" name="Vorsorgedokumentänderungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0i4i23g" name="Vorsorgedokumenteänderung erhalten" isInterrupting="false">
         <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;documentId&#34;, null)}" event="start" />
           <camunda:executionListener expression="${execution.setVariableLocal(&#34;documentContent&#34;, null)}" event="start" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0u4rx65</bpmn:outgoing>
@@ -195,7 +194,7 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw ={};
 
-if (advanceDirectiveContents) {
+if (execution.hasVariable("advanceDirectiveContents")) {
 advanceDirectiveContentsRaw = JSON.parse(advanceDirectiveContents.toString());
 }
 

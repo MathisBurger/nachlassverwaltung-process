@@ -37,7 +37,7 @@
       <bpmn:incoming>Flow_0q5qihi</bpmn:incoming>
       <bpmn:outgoing>Flow_1myo2pk</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:exclusiveGateway id="Gateway_05v592d" name="Letzte Worte gewünscht?">
+    <bpmn:exclusiveGateway id="Gateway_05v592d" name="Letzte Worte gewünscht?" default="Flow_178zs9o">
       <bpmn:incoming>Flow_0tl91a1</bpmn:incoming>
       <bpmn:outgoing>Flow_0thm2qx</bpmn:outgoing>
       <bpmn:outgoing>Flow_178zs9o</bpmn:outgoing>

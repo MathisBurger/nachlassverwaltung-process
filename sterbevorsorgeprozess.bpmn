@@ -5,16 +5,12 @@
     <bpmn:participant id="Participant_17istra" name="Erblasser" />
     <bpmn:messageFlow id="Flow_02um106" name="Registrierungsinformationen" sourceRef="Participant_17istra" targetRef="Event_1qte4uv" />
     <bpmn:messageFlow id="Flow_0iem8lb" name="Stornierungsanfrage" sourceRef="Participant_17istra" targetRef="Event_1tzdvvp" />
-    <bpmn:textAnnotation id="TextAnnotation_1ns3qsy">
-      <bpmn:text>Wird später zur Call Activity</bpmn:text>
-    </bpmn:textAnnotation>
     <bpmn:textAnnotation id="TextAnnotation_1lcp0ud">
       <bpmn:text>Wird später zur Call Activity</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="TextAnnotation_06i8m7v">
       <bpmn:text>Wird später zur Call Activity</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_0qbca4m" associationDirection="None" sourceRef="Activity_1dnyeqt" targetRef="TextAnnotation_1ns3qsy" />
     <bpmn:association id="Association_19u1cbh" associationDirection="None" sourceRef="Activity_0xvglbd" targetRef="TextAnnotation_1lcp0ud" />
     <bpmn:association id="Association_0zw1ykb" associationDirection="None" sourceRef="Activity_0e92b8h" targetRef="TextAnnotation_06i8m7v" />
     <bpmn:textAnnotation id="TextAnnotation_0ct9yhh">
@@ -224,10 +220,6 @@
         <dc:Bounds x="170" y="680" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1ns3qsy_di" bpmnElement="TextAnnotation_1ns3qsy">
-        <dc:Bounds x="630" y="100" width="100" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0xksqci" bpmnElement="TextAnnotation_1lcp0ud">
         <dc:Bounds x="760" y="110" width="100" height="41" />
         <bpmndi:BPMNLabel />
@@ -254,10 +246,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="279" y="559" width="82" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0qbca4m_di" bpmnElement="Association_0qbca4m">
-        <di:waypoint x="618" y="180" />
-        <di:waypoint x="655" y="141" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_19u1cbh_di" bpmnElement="Association_19u1cbh">
         <di:waypoint x="761" y="180" />
