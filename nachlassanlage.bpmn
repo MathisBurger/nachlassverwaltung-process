@@ -5,10 +5,6 @@
     <bpmn:participant id="Participant_18jmyqt" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1suyvps" name="Dokumentenauswahlanfrage" sourceRef="Activity_0rdll59" targetRef="Participant_18jmyqt" />
     <bpmn:messageFlow id="Flow_0jp9f2y" name="Dokumentauswahl" sourceRef="Participant_18jmyqt" targetRef="Activity_0rdll59" />
-    <bpmn:textAnnotation id="TextAnnotation_1tlhev7">
-      <bpmn:text>Testen</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_10qe1fq" associationDirection="None" sourceRef="Activity_17pu7b7" targetRef="TextAnnotation_1tlhev7" />
   </bpmn:collaboration>
   <bpmn:process id="estateRegistrationProzess" name="Nachlassanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:parallelGateway id="Gateway_0tpxrg1">
@@ -221,7 +217,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in sourceExpression="${null}" target="preference" />
         <camunda:in sourceExpression="${null}" target="lastWords" />
-        <camunda:out sourceExpression="lastWords" target="lastWords" />
+        <camunda:out source="lastWords" target="lastWords" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0faompi</bpmn:incoming>
       <bpmn:outgoing>Flow_147sc7n</bpmn:outgoing>
@@ -311,10 +307,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <dc:Bounds x="410" y="80" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_10qe1fq_di" bpmnElement="Association_10qe1fq">
-        <di:waypoint x="560" y="550" />
-        <di:waypoint x="595" y="530" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1suyvps_di" bpmnElement="Flow_1suyvps">
         <di:waypoint x="470" y="250" />
         <di:waypoint x="470" y="140" />
@@ -329,10 +321,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
           <dc:Bounds x="545" y="173" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1tlhev7_di" bpmnElement="TextAnnotation_1tlhev7">
-        <dc:Bounds x="570" y="500" width="100" height="30" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1ej6n29">

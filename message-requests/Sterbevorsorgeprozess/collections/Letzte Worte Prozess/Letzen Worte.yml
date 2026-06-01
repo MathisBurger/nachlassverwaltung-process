@@ -1,7 +1,7 @@
 info:
-  name: Präferenz
+  name: Letzen Worte
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "lastWordsPreference",
+        "messageName": "lastWords",
         "businessKey": "user@demo.org",
         "processVariables": {
-          "preference": {"value": true, "type": "Boolean"}
+          "lastWords": {"value": "Meine letzten Worte!", "type": "String"}
         }
       }
   auth: inherit
