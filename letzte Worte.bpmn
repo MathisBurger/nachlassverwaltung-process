@@ -63,12 +63,12 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_178zs9o" sourceRef="Gateway_05v592d" targetRef="Gateway_1v8ic4u" />
     <bpmn:sequenceFlow id="Flow_0h9cg3d" name="Ja" sourceRef="Gateway_1v8ic4u" targetRef="Activity_03ub0yu">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${lastWords}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${lastWords != ""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:scriptTask id="Activity_03ub0yu" name="Letzte Worte löschen" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0h9cg3d</bpmn:incoming>
       <bpmn:outgoing>Flow_01ra7ul</bpmn:outgoing>
-      <bpmn:script>execution.setVariable("lastWords", null);</bpmn:script>
+      <bpmn:script>execution.setVariable("lastWords","");</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_01ra7ul" sourceRef="Activity_03ub0yu" targetRef="Gateway_0719wwf" />
     <bpmn:exclusiveGateway id="Gateway_0719wwf">

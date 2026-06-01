@@ -12,8 +12,8 @@ http:
       {
         "messageName": "lastWordsChange",
         "businessKey": "user@demo.org",
-        "processVariables": {
-          "preference": {"value": false, "type": "Boolean"}
+        "processVariablesLocal": {
+          "preference": {"value": false, "type": "Boolean", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit

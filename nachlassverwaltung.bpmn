@@ -30,7 +30,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
         <camunda:executionListener event="end">
           <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("relativesList", S(JSON.stringify([])));</camunda:script>
         </camunda:executionListener>
-        <camunda:executionListener expression="${execution.setVariable(&#34;lastWords&#34;, null)}" event="start" />
+        <camunda:executionListener expression="${execution.setVariable(&#34;lastWords&#34;,&#34;&#34;)}" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0h8ew10</bpmn:outgoing>
     </bpmn:startEvent>
@@ -91,8 +91,10 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_0q0knlo" name="Letzte Worte Änderungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0dp5iv8" name="Letze Worte Änderung erhalten" isInterrupting="false">
-        <bpmn:extensionElements />
-        <bpmn:outgoing>Flow_0v2xrum</bpmn:outgoing>
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;localPreference&#34;, preference)}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_1ywnuhm</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_02xk96p" messageRef="Message_3d5u19o" />
       </bpmn:startEvent>
       <bpmn:sendTask id="Activity_099sb4q" name="Bestätigung senden" camunda:expression="${1}">
@@ -102,17 +104,17 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
       <bpmn:endEvent id="Event_08v168v">
         <bpmn:incoming>Flow_0bsyf6g</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0v2xrum" sourceRef="Event_0dp5iv8" targetRef="Activity_1fdxhu4" />
       <bpmn:sequenceFlow id="Flow_1j8sitj" sourceRef="Activity_1fdxhu4" targetRef="Activity_099sb4q" />
       <bpmn:sequenceFlow id="Flow_0bsyf6g" sourceRef="Activity_099sb4q" targetRef="Event_08v168v" />
+      <bpmn:sequenceFlow id="Flow_1ywnuhm" sourceRef="Event_0dp5iv8" targetRef="Activity_1fdxhu4" />
       <bpmn:callActivity id="Activity_1fdxhu4" name="Letzte Worte Prozess" calledElement="lastWordsProcess">
         <bpmn:extensionElements>
-          <camunda:in source="preference" target="preference" />
           <camunda:in businessKey="#{execution.processBusinessKey}" />
+          <camunda:in source="localPreference" target="preference" />
           <camunda:in source="lastWords" target="lastWords" />
           <camunda:out source="lastWords" target="lastWords" />
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0v2xrum</bpmn:incoming>
+        <bpmn:incoming>Flow_1ywnuhm</bpmn:incoming>
         <bpmn:outgoing>Flow_1j8sitj</bpmn:outgoing>
       </bpmn:callActivity>
     </bpmn:subProcess>
@@ -262,7 +264,7 @@ execution.setVariableLocal("lastWordsLocal", null)</camunda:script>
         <camunda:executionListener event="end">
           <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = {
   ...JSON.parse(advanceDirectiveContentsLocal.toString()),
-  ...(advanceDirectiveContents
+  ...(execution.hasVariable("advanceDirectiveContents")
     ? JSON.parse(advanceDirectiveContents.toString())
     : {})
 };
@@ -360,13 +362,9 @@ execution.setVariable("lastWords", lastWordsLocal);
       <bpmndi:BPMNShape id="BPMNShape_025xmjm" bpmnElement="Event_08v168v">
         <dc:Bounds x="1402" y="1032" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0e635lr_di" bpmnElement="Activity_1fdxhu4">
+      <bpmndi:BPMNShape id="Activity_0q2ogeo_di" bpmnElement="Activity_1fdxhu4">
         <dc:Bounds x="1060" y="1010" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_1ptb31w" bpmnElement="Flow_0v2xrum">
-        <di:waypoint x="996" y="1050" />
-        <di:waypoint x="1060" y="1050" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1glmdej" bpmnElement="Flow_1j8sitj">
         <di:waypoint x="1160" y="1050" />
         <di:waypoint x="1230" y="1050" />
@@ -374,6 +372,10 @@ execution.setVariable("lastWords", lastWordsLocal);
       <bpmndi:BPMNEdge id="BPMNEdge_0nyt8y5" bpmnElement="Flow_0bsyf6g">
         <di:waypoint x="1330" y="1050" />
         <di:waypoint x="1402" y="1050" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ywnuhm_di" bpmnElement="Flow_1ywnuhm">
+        <di:waypoint x="996" y="1050" />
+        <di:waypoint x="1060" y="1050" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1krwrqt_di" bpmnElement="Activity_18sq7t3">
         <dc:Bounds x="1170" y="440" width="100" height="80" />
