@@ -137,18 +137,28 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
         </bpmn:endEvent>
         <bpmn:sequenceFlow id="Flow_02c6mq3" sourceRef="Activity_1iz454v" targetRef="Event_1amjsfm" />
         <bpmn:startEvent id="Event_0zis8vm" name="Neuer Erbschaftsgegenstand erhalten">
+          <bpmn:extensionElements />
           <bpmn:outgoing>Flow_08e5ab1</bpmn:outgoing>
           <bpmn:messageEventDefinition id="MessageEventDefinition_13tna37" messageRef="Message_35ult04" />
         </bpmn:startEvent>
-        <bpmn:task id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen">
+        <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen" calledElement="estateCreationProcess">
+          <bpmn:extensionElements>
+            <camunda:in source="estateList" target="estateList" />
+            <camunda:in businessKey="#{execution.processBusinessKey}" />
+            <camunda:in sourceExpression="${null}" target="estateDocument" />
+            <camunda:out source="estateList" target="estateList" />
+          </bpmn:extensionElements>
           <bpmn:incoming>Flow_08e5ab1</bpmn:incoming>
           <bpmn:outgoing>Flow_1g9889d</bpmn:outgoing>
-          <bpmn:standardLoopCharacteristics />
-        </bpmn:task>
-        <bpmn:task id="Activity_1iz454v" name="Testament erstellen">
+        </bpmn:callActivity>
+        <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen" calledElement="lastWillCreationProcess">
+          <bpmn:extensionElements>
+            <camunda:in businessKey="#{execution.processBusinessKey}" />
+            <camunda:out source="signedLastWill" target="signedLastWill" />
+          </bpmn:extensionElements>
           <bpmn:incoming>Flow_1g9889d</bpmn:incoming>
           <bpmn:outgoing>Flow_02c6mq3</bpmn:outgoing>
-        </bpmn:task>
+        </bpmn:callActivity>
       </bpmn:subProcess>
       <bpmn:endEvent id="Event_13rfbmu">
         <bpmn:incoming>Flow_0naagu0</bpmn:incoming>
@@ -285,7 +295,7 @@ execution.setVariable("lastWords", lastWordsLocal);
   <bpmn:message id="Message_3d5u19o" name="lastWordsChange" />
   <bpmn:message id="Message_3r13gtr" name="updateAdvanceDirective" />
   <bpmn:message id="Message_3lsl8ml" name="funeralUpdate" />
-  <bpmn:message id="Message_35ult04" name="placeholder" />
+  <bpmn:message id="Message_35ult04" name="estateUpdate" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0coxuzx">
       <bpmndi:BPMNShape id="Participant_01k12kj_di" bpmnElement="Participant_01k12kj" isHorizontal="true">
@@ -491,12 +501,12 @@ execution.setVariable("lastWords", lastWordsLocal);
         <dc:Bounds x="280" y="1250" width="1220" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1upkc1t_di" bpmnElement="Association_1upkc1t">
-        <di:waypoint x="1249" y="440" />
-        <di:waypoint x="1291" y="381" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_1d8l39c_di" bpmnElement="TextAnnotation_1d8l39c">
         <dc:Bounds x="980" y="40" width="99.99156545209178" height="256.4102564102564" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1jdqn4g_di" bpmnElement="TextAnnotation_1jdqn4g">
+        <dc:Bounds x="1260" y="340" width="100" height="41" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_16fp6ie_di" bpmnElement="Flow_16fp6ie">
@@ -580,10 +590,10 @@ execution.setVariable("lastWords", lastWordsLocal);
         <di:waypoint x="898" y="350" />
         <di:waypoint x="980" y="167" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1jdqn4g_di" bpmnElement="TextAnnotation_1jdqn4g">
-        <dc:Bounds x="1260" y="340" width="100" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1upkc1t_di" bpmnElement="Association_1upkc1t">
+        <di:waypoint x="1249" y="440" />
+        <di:waypoint x="1291" y="381" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1o0f0hk">
@@ -607,10 +617,10 @@ execution.setVariable("lastWords", lastWordsLocal);
           <dc:Bounds x="174" y="355" width="89" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0rcro6d_di" bpmnElement="Activity_10dt71o">
+      <bpmndi:BPMNShape id="Activity_0qstbij_di" bpmnElement="Activity_10dt71o">
         <dc:Bounds x="290" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_00brxzv_di" bpmnElement="Activity_1iz454v">
+      <bpmndi:BPMNShape id="Activity_1mslcy9_di" bpmnElement="Activity_1iz454v">
         <dc:Bounds x="450" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_08e5ab1_di" bpmnElement="Flow_08e5ab1">
