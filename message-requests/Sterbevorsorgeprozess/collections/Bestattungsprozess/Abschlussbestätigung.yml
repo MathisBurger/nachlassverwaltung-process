@@ -1,0 +1,22 @@
+info:
+  name: Abschlussbestätigung
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "funeralDoneConfirmation",
+        "businessKey": "user@demo.org"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

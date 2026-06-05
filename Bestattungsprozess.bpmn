@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_077lff8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_077lff8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1oy1zo7">
-    <bpmn:participant id="Participant_1apn0t4" name="Bestattungsprozess" processRef="Process_1t378x1" />
+    <bpmn:participant id="Participant_1apn0t4" name="Bestattungsprozess" processRef="funeralProcess" />
     <bpmn:participant id="Participant_1pla1ex" name="Bestattungsinstitut" />
     <bpmn:messageFlow id="Flow_0z6rw98" name="Bestattungsauftrag" sourceRef="Activity_0ig0z2d" targetRef="Participant_1pla1ex" />
     <bpmn:messageFlow id="Flow_0u7267x" name="Erinnerung" sourceRef="Activity_0i4b6dt" targetRef="Participant_1pla1ex" />
     <bpmn:messageFlow id="Flow_0f2y8gy" name="Rückmeldung" sourceRef="Participant_1pla1ex" targetRef="Activity_1ivnsmj" />
     <bpmn:messageFlow id="Flow_16vqq4a" name="Abschlussbestätigung" sourceRef="Participant_1pla1ex" targetRef="Activity_1i2gi2p" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1t378x1" isExecutable="true">
+  <bpmn:process id="funeralProcess" name="Bestattungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="Event_0855fug" name="Todesfall bestätigt">
       <bpmn:outgoing>Flow_0lqii47</bpmn:outgoing>
     </bpmn:startEvent>
@@ -20,7 +20,7 @@
       <bpmn:startEvent id="Event_1j5h0d3">
         <bpmn:outgoing>Flow_15brruh</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln">
+      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln" camunda:expression="${1}">
         <bpmn:incoming>Flow_15brruh</bpmn:incoming>
         <bpmn:outgoing>Flow_1yszqed</bpmn:outgoing>
         <bpmn:property id="Property_0we3574" name="__targetRef_placeholder" />
@@ -32,9 +32,11 @@
       <bpmn:subProcess id="Activity_1xu4or2" triggeredByEvent="true">
         <bpmn:startEvent id="Event_0kbamo4" name="Alle zwei Tage" isInterrupting="false">
           <bpmn:outgoing>Flow_191lezq</bpmn:outgoing>
-          <bpmn:timerEventDefinition id="TimerEventDefinition_1jj3axi" />
+          <bpmn:timerEventDefinition id="TimerEventDefinition_1jj3axi">
+            <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/P2D</bpmn:timeCycle>
+          </bpmn:timerEventDefinition>
         </bpmn:startEvent>
-        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden">
+        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden" camunda:expression="${1}">
           <bpmn:incoming>Flow_191lezq</bpmn:incoming>
           <bpmn:outgoing>Flow_1i9v4gg</bpmn:outgoing>
         </bpmn:sendTask>
@@ -46,7 +48,7 @@
       </bpmn:subProcess>
       <bpmn:sequenceFlow id="Flow_15brruh" sourceRef="Event_1j5h0d3" targetRef="Activity_0ig0z2d" />
       <bpmn:sequenceFlow id="Flow_1yszqed" sourceRef="Activity_0ig0z2d" targetRef="Activity_1ivnsmj" />
-      <bpmn:receiveTask id="Activity_1ivnsmj" name="Rückmeldung empfangen">
+      <bpmn:receiveTask id="Activity_1ivnsmj" name="Rückmeldung empfangen" messageRef="Message_0n4n2vo">
         <bpmn:incoming>Flow_1yszqed</bpmn:incoming>
         <bpmn:outgoing>Flow_19de7w9</bpmn:outgoing>
       </bpmn:receiveTask>
@@ -57,7 +59,7 @@
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0lqii47" sourceRef="Event_0855fug" targetRef="Activity_14g8mce" />
     <bpmn:sequenceFlow id="Flow_1vxeem7" sourceRef="Activity_14g8mce" targetRef="Activity_1i2gi2p" />
-    <bpmn:receiveTask id="Activity_1i2gi2p" name="Abschlussbestätigung empfangen">
+    <bpmn:receiveTask id="Activity_1i2gi2p" name="Abschlussbestätigung empfangen" messageRef="Message_32p804r">
       <bpmn:incoming>Flow_1vxeem7</bpmn:incoming>
       <bpmn:outgoing>Flow_15d0tgi</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -66,6 +68,8 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_15d0tgi" sourceRef="Activity_1i2gi2p" targetRef="Event_1gnfyq3" />
   </bpmn:process>
+  <bpmn:message id="Message_0n4n2vo" name="funeralConfirmation" />
+  <bpmn:message id="Message_32p804r" name="funeralDoneConfirmation" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1oy1zo7">
       <bpmndi:BPMNShape id="Participant_1apn0t4_di" bpmnElement="Participant_1apn0t4" isHorizontal="true">
@@ -84,15 +88,6 @@
           <dc:Bounds x="270" y="312" width="62" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_11tges6_di" bpmnElement="Activity_1i2gi2p">
-        <dc:Bounds x="1220" y="300" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1gnfyq3_di" bpmnElement="Event_1gnfyq3">
-        <dc:Bounds x="1422" y="322" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1403" y="365.5" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11hb35a_di" bpmnElement="Activity_14g8mce" isExpanded="true">
         <dc:Bounds x="370" y="130" width="770" height="420" />
       </bpmndi:BPMNShape>
@@ -102,13 +97,6 @@
       <bpmndi:BPMNShape id="BPMNShape_0grz3j4" bpmnElement="Activity_0ig0z2d">
         <dc:Bounds x="460" y="380" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ofrnku_di" bpmnElement="Activity_1ivnsmj">
-        <dc:Bounds x="930" y="380" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1isu4z8_di" bpmnElement="Event_1isu4z8">
-        <dc:Bounds x="1082" y="402" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0s29keh" bpmnElement="Activity_1xu4or2" isExpanded="true">
         <dc:Bounds x="600" y="150" width="375" height="200" />
@@ -134,6 +122,13 @@
         <di:waypoint x="815" y="260" />
         <di:waypoint x="867" y="260" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1ofrnku_di" bpmnElement="Activity_1ivnsmj">
+        <dc:Bounds x="930" y="380" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1isu4z8_di" bpmnElement="Event_1isu4z8">
+        <dc:Bounds x="1082" y="402" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0d922wm" bpmnElement="Flow_15brruh">
         <di:waypoint x="438" y="420" />
         <di:waypoint x="460" y="420" />
@@ -146,6 +141,15 @@
         <di:waypoint x="1030" y="420" />
         <di:waypoint x="1082" y="420" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_11tges6_di" bpmnElement="Activity_1i2gi2p">
+        <dc:Bounds x="1220" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1gnfyq3_di" bpmnElement="Event_1gnfyq3">
+        <dc:Bounds x="1422" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1403" y="365.5" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0lqii47_di" bpmnElement="Flow_0lqii47">
         <di:waypoint x="259" y="420" />
         <di:waypoint x="370" y="420" />

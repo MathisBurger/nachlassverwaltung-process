@@ -1,0 +1,25 @@
+info:
+  name: Neue Einigung
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "newSplitAgreement",
+        "businessKey": "user@demo.org",
+        "processVariables": {
+          "splitInfo": {"value": "Hier ist die neue Einigung", "type": "String"}
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

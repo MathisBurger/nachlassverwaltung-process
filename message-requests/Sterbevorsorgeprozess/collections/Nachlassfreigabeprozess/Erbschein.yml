@@ -1,0 +1,40 @@
+info:
+  name: Erbschein
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const grantOfProbate = [
+          {
+            "firstName": "Mathis",
+            "lastName": "Burger",
+            "email": "mab8881@thi.de",
+            "birthday": "28.03.2005"
+          }
+        ];
+
+
+        req.setBody({
+          "messageName": "grantOfProbate",
+          "businessKey": "user@demo.org",
+          "processVariables": {
+            "grantOfProbate": {"value": JSON.stringify(grantOfProbate), "type": "Json", "valueInfo": {"transient": true}}
+          }
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

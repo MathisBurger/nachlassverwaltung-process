@@ -26,6 +26,10 @@ collections:
     path: "collections/Testamenterstellungsprozess"
   - name: "Letzte Worte Prozess"
     path: "collections/Letzte Worte Prozess"
+  - name: "Bestattungsprozess"
+    path: "collections/Bestattungsprozess"
+  - name: "Nachlassfreigabeprozess"
+    path: "collections/Nachlassfreigabeprozess"
 
 specs:
 

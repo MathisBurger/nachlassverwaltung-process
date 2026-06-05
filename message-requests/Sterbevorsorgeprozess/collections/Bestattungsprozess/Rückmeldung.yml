@@ -1,0 +1,22 @@
+info:
+  name: Rückmeldung
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "funeralConfirmation",
+        "businessKey": "user@demo.org"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

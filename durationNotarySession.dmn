@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0n76z2c" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <decision id="durationNotarySession" name="Dauer Notarsitzung" camunda:historyTimeToLive="180">
+    <informationRequirement id="InformationRequirement_1g71nub">
+      <requiredInput href="#InputData_0j7jl31" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1xj4l1l">
+      <input id="Input_1" label="Anzahl Zeichen Testament" camunda:inputVariable="lastWillLength">
+        <inputExpression id="InputExpression_1" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Dauer in Minuten" name="durationInMinutes" typeRef="integer" />
+      <rule id="DecisionRule_1cr7vlq">
+        <inputEntry id="UnaryTests_0wk7qmq">
+          <text>&lt; 200</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0uw7m8u">
+          <text>10</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_18yx7zd">
+        <inputEntry id="UnaryTests_1tqshzj">
+          <text>&gt;= 200 &amp;&amp; &lt; 600</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ub3xuj">
+          <text>30</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0r53fig">
+        <inputEntry id="UnaryTests_0lzzdyc">
+          <text>&gt;= 600 &amp;&amp; &lt; 1000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0uqh4gi">
+          <text>60</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_16hyrcv">
+        <inputEntry id="UnaryTests_0v8b9ce">
+          <text>&gt;= 1000 &amp;&amp; &lt; 2500</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0x52hw6">
+          <text>120</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1vqi3bv">
+        <inputEntry id="UnaryTests_00q36uh">
+          <text>&lt;= 2500 &amp;&amp; &lt; 5000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0pd360m">
+          <text>180</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1jk3948">
+        <inputEntry id="UnaryTests_0fpnima">
+          <text>&gt;= 5000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_03cex0n">
+          <text>240</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0j7jl31" name="Anzahl Zeichen Testament" />
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape id="Decision_1ewpph9_di" dmnElementRef="durationNotarySession">
+        <dc:Bounds height="80" width="180" x="160" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0wrbsa3" dmnElementRef="InputData_0j7jl31">
+        <dc:Bounds height="45" width="125" x="187" y="278" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1brdryh" dmnElementRef="InformationRequirement_1g71nub">
+        <di:waypoint x="250" y="278" />
+        <di:waypoint x="250" y="180" />
+        <di:waypoint x="250" y="160" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

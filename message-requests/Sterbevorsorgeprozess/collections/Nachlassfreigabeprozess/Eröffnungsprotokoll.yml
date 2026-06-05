@@ -1,0 +1,44 @@
+info:
+  name: Eröffnungsprotokoll
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "openingProtocol",
+        "businessKey": "user@demo.org"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const grantOfProbate = [
+          {
+            "firstName": "",
+            "lastName": "",
+            "email": "",
+            "birthday": ""
+          }
+        ];
+
+
+        req.setBody({
+          "messageName": "grantOfProbate",
+          "businessKey": "user@demo.org",
+          "processVariables": {
+            "grantOfProbate": {"value": JSON.stringify(grantOfProbate), "type": "Json", "valueInfo": {"transient": true}}
+          }
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
