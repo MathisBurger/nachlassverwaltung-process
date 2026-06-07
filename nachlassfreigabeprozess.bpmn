@@ -88,7 +88,7 @@
         <bpmn:incoming>Flow_04wkn8j</bpmn:incoming>
         <bpmn:outgoing>Flow_17xg5wl</bpmn:outgoing>
         <bpmn:script>const appointmentOffers = [
-  "2026-07-14T09:30:00Z",
+  "2026-08-14T09:30:00Z",
   "2026-08-22T14:15:00Z",
   "2026-10-05T11:00:00Z",
   "2026-11-18T16:45:00Z",

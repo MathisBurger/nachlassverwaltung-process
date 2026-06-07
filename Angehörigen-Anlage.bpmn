@@ -25,15 +25,6 @@
       <bpmn:incoming>Flow_0tejzsf</bpmn:incoming>
       <bpmn:outgoing>Flow_0o9pxop</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:task id="Activity_150s4uh" name="Prüfen, ob Erbanwärter bereits angelegt ist">
-      <bpmn:incoming>Flow_0o9pxop</bpmn:incoming>
-      <bpmn:outgoing>Flow_1237dyx</bpmn:outgoing>
-      <bpmn:property id="Property_18sr3sb" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation id="DataInputAssociation_1vhlpd5">
-        <bpmn:sourceRef>DataStoreReference_1rvsvb6</bpmn:sourceRef>
-        <bpmn:targetRef>Property_18sr3sb</bpmn:targetRef>
-      </bpmn:dataInputAssociation>
-    </bpmn:task>
     <bpmn:exclusiveGateway id="Gateway_0moz6h4" name="Erbberechtigt?" default="Flow_026p4f9">
       <bpmn:incoming>Flow_00udmjx</bpmn:incoming>
       <bpmn:outgoing>Flow_026p4f9</bpmn:outgoing>
@@ -164,6 +155,15 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
     <bpmn:sequenceFlow id="Flow_18nbofj" name="Ja" sourceRef="Gateway_0o7opkm" targetRef="Event_01woafc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${createNewRelative}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_150s4uh" name="Prüfen, ob Erbanwärter bereits angelegt ist">
+      <bpmn:incoming>Flow_0o9pxop</bpmn:incoming>
+      <bpmn:outgoing>Flow_1237dyx</bpmn:outgoing>
+      <bpmn:property id="Property_0nv5dl4" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_1vhlpd5">
+        <bpmn:sourceRef>DataStoreReference_1rvsvb6</bpmn:sourceRef>
+        <bpmn:targetRef>Property_0nv5dl4</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:task>
   </bpmn:process>
   <bpmn:message id="Message_3j15d54" name="citizenDataCheckResponse" />
   <bpmn:message id="Message_0jrvop7" name="relativeCreation" />
@@ -179,10 +179,6 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
         <bpmndi:BPMNLabel>
           <dc:Bounds x="801" y="499" width="81" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_150s4uh_di" bpmnElement="Activity_150s4uh">
-        <dc:Bounds x="930" y="427" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0moz6h4_di" bpmnElement="Gateway_0moz6h4" isMarkerVisible="true">
         <dc:Bounds x="1285" y="442" width="50" height="50" />
@@ -244,6 +240,9 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1n4eedv_di" bpmnElement="Gateway_1n4eedv" isMarkerVisible="true">
         <dc:Bounds x="565" y="442" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1j7pt8f_di" bpmnElement="Activity_150s4uh">
+        <dc:Bounds x="930" y="427" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04lvot3_di" bpmnElement="Activity_0m9xh4y">
         <dc:Bounds x="660" y="427" width="100" height="80" />
@@ -381,11 +380,11 @@ execution.setVariable("relativesList", S(JSON.stringify(rawList)));</bpmn:script
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0eadwtv_di" bpmnElement="Flow_0eadwtv">
         <di:waypoint x="550" y="140" />
-        <di:waypoint x="550" y="256" />
-        <di:waypoint x="490" y="256" />
+        <di:waypoint x="550" y="220" />
+        <di:waypoint x="490" y="220" />
         <di:waypoint x="490" y="372" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="500" y="277" width="61" height="14" />
+          <dc:Bounds x="500" y="241" width="61" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1cdqf1k_di" bpmnElement="Flow_1cdqf1k">

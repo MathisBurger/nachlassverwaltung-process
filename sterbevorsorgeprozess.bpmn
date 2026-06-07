@@ -95,7 +95,7 @@
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_15kiah9" name="Nachlassverwaltung beendet">
         <bpmn:incoming>Flow_0li3orl</bpmn:incoming>
-        <bpmn:compensateEventDefinition id="CompensateEventDefinition_07jjuji" />
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_07jjuji" activityRef="Activity_15oni8y" />
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0li3orl" sourceRef="Event_0jtt5pq" targetRef="Event_15kiah9" />
     </bpmn:subProcess>
@@ -124,7 +124,7 @@
       <bpmndi:BPMNShape id="Event_11oxeag_di" bpmnElement="Event_1qte4uv">
         <dc:Bounds x="242" y="202" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="218" y="248" width="83" height="40" />
+          <dc:Bounds x="218" y="240" width="83" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0ubj7c8" bpmnElement="Event_135yoqb">
@@ -233,7 +233,7 @@
         <di:waypoint x="190" y="220" />
         <di:waypoint x="242" y="220" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="218" y="256" width="83" height="27" />
+          <dc:Bounds x="148" y="176" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0iem8lb_di" bpmnElement="Flow_0iem8lb">

@@ -27,7 +27,7 @@
         <bpmn:outgoing>Flow_0pyypfc</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_0w17oox" name="Testament erfolgreich erstellt">
-        <bpmn:incoming>Flow_0ezfsme</bpmn:incoming>
+        <bpmn:incoming>Flow_18rr8ez</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:intermediateCatchEvent id="Event_0y0rbsf" name="Testament erneut erstellen">
         <bpmn:outgoing>Flow_1tpsrn3</bpmn:outgoing>
@@ -41,38 +41,40 @@
       <bpmn:sequenceFlow id="Flow_0pyypfc" sourceRef="Event_19aajiv" targetRef="Gateway_1111kav" />
       <bpmn:sequenceFlow id="Flow_1tpsrn3" sourceRef="Event_0y0rbsf" targetRef="Gateway_1111kav" />
       <bpmn:sequenceFlow id="Flow_1fu699j" sourceRef="Gateway_1111kav" targetRef="Activity_1iz454v" />
-      <bpmn:sequenceFlow id="Flow_0ezfsme" sourceRef="Activity_1iz454v" targetRef="Event_0w17oox" />
-      <bpmn:boundaryEvent id="Event_1045693" name="Änderungswunsch" attachedToRef="Activity_1iz454v">
-        <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;estateDocument&#34;, estateDocument)}" event="end" />
-        </bpmn:extensionElements>
-        <bpmn:outgoing>Flow_0cryo7q</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_02jxdup" messageRef="Message_3qnnv9q" />
-      </bpmn:boundaryEvent>
-      <bpmn:intermediateThrowEvent id="Event_0iw4e6g" name="Testament erneut erstellen">
-        <bpmn:incoming>Flow_1u65ct3</bpmn:incoming>
-        <bpmn:linkEventDefinition id="LinkEventDefinition_09xpudw" name="recreateLastWll" />
-      </bpmn:intermediateThrowEvent>
-      <bpmn:sequenceFlow id="Flow_0cryo7q" sourceRef="Event_1045693" targetRef="Activity_0e0sca8" />
-      <bpmn:sequenceFlow id="Flow_1u65ct3" sourceRef="Activity_0e0sca8" targetRef="Event_0iw4e6g" />
       <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen" calledElement="lastWillCreationProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
           <camunda:out source="signedLastWill" target="signedLastWill" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1fu699j</bpmn:incoming>
-        <bpmn:outgoing>Flow_0ezfsme</bpmn:outgoing>
+        <bpmn:outgoing>Flow_18rr8ez</bpmn:outgoing>
       </bpmn:callActivity>
-      <bpmn:callActivity id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen" calledElement="estateCreationProcess">
-        <bpmn:extensionElements>
-          <camunda:in businessKey="#{execution.processBusinessKey}" />
-          <camunda:in source="estateList" target="estateList" />
-          <camunda:in source="estateDocument" target="estateDocument" />
-          <camunda:out source="estateList" target="estateList" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0cryo7q</bpmn:incoming>
-        <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
-      </bpmn:callActivity>
+      <bpmn:subProcess id="Activity_0sxh0f3" triggeredByEvent="true">
+        <bpmn:intermediateCatchEvent id="Event_1045693" name="Änderungswunsch">
+          <bpmn:extensionElements>
+            <camunda:executionListener expression="${execution.setVariableLocal(&#34;estateDocument&#34;, estateDocument)}" event="end" />
+          </bpmn:extensionElements>
+          <bpmn:outgoing>Flow_0hduc8w</bpmn:outgoing>
+          <bpmn:messageEventDefinition id="MessageEventDefinition_15fz91y" messageRef="Message_3qnnv9q" />
+        </bpmn:intermediateCatchEvent>
+        <bpmn:callActivity id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen" calledElement="estateCreationProcess">
+          <bpmn:extensionElements>
+            <camunda:in businessKey="#{execution.processBusinessKey}" />
+            <camunda:in source="estateList" target="estateList" />
+            <camunda:in source="estateDocument" target="estateDocument" />
+            <camunda:out source="estateList" target="estateList" />
+          </bpmn:extensionElements>
+          <bpmn:incoming>Flow_0hduc8w</bpmn:incoming>
+          <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
+        </bpmn:callActivity>
+        <bpmn:intermediateThrowEvent id="Event_0iw4e6g" name="Testament erneut erstellen">
+          <bpmn:incoming>Flow_1u65ct3</bpmn:incoming>
+          <bpmn:linkEventDefinition id="LinkEventDefinition_09xpudw" name="recreateLastWll" />
+        </bpmn:intermediateThrowEvent>
+        <bpmn:sequenceFlow id="Flow_1u65ct3" sourceRef="Activity_0e0sca8" targetRef="Event_0iw4e6g" />
+        <bpmn:sequenceFlow id="Flow_0hduc8w" sourceRef="Event_1045693" targetRef="Activity_0e0sca8" />
+      </bpmn:subProcess>
+      <bpmn:sequenceFlow id="Flow_18rr8ez" sourceRef="Activity_1iz454v" targetRef="Event_0w17oox" />
     </bpmn:subProcess>
     <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen" calledElement="estateCreationProcess">
       <bpmn:extensionElements>
@@ -455,24 +457,35 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNShape id="Gateway_1111kav_di" bpmnElement="Gateway_1111kav" isMarkerVisible="true">
         <dc:Bounds x="275" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0chbsc5" bpmnElement="Event_0iw4e6g">
-        <dc:Bounds x="792" y="302" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="768" y="345" width="85" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ukp1ne_di" bpmnElement="Activity_1iz454v">
         <dc:Bounds x="420" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05dqbdi_di" bpmnElement="Activity_0e0sca8">
-        <dc:Bounds x="620" y="280" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1ugjoab_di" bpmnElement="Activity_0sxh0f3" isExpanded="true">
+        <dc:Bounds x="170" y="340" width="450" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1k2bl1a_di" bpmnElement="Event_1045693">
-        <dc:Bounds x="502" y="252" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0wglsyw_di" bpmnElement="Event_1045693">
+        <dc:Bounds x="212" y="422" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="551" y="260" width="85" height="27" />
+          <dc:Bounds x="197" y="465.5" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05dqbdi_di" bpmnElement="Activity_0e0sca8">
+        <dc:Bounds x="350" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0chbsc5" bpmnElement="Event_0iw4e6g">
+        <dc:Bounds x="522" y="422" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="498" y="465" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0hduc8w_di" bpmnElement="Flow_0hduc8w">
+        <di:waypoint x="248" y="440" />
+        <di:waypoint x="350" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u65ct3_di" bpmnElement="Flow_1u65ct3">
+        <di:waypoint x="450" y="440" />
+        <di:waypoint x="522" y="440" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0pyypfc_di" bpmnElement="Flow_0pyypfc">
         <di:waypoint x="188" y="230" />
         <di:waypoint x="275" y="230" />
@@ -485,18 +498,9 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <di:waypoint x="325" y="230" />
         <di:waypoint x="420" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ezfsme_di" bpmnElement="Flow_0ezfsme">
+      <bpmndi:BPMNEdge id="Flow_18rr8ez_di" bpmnElement="Flow_18rr8ez">
         <di:waypoint x="520" y="230" />
         <di:waypoint x="792" y="230" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0cryo7q_di" bpmnElement="Flow_0cryo7q">
-        <di:waypoint x="520" y="288" />
-        <di:waypoint x="520" y="320" />
-        <di:waypoint x="620" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1u65ct3_di" bpmnElement="Flow_1u65ct3">
-        <di:waypoint x="720" y="320" />
-        <di:waypoint x="792" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
