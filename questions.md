@@ -8,6 +8,6 @@
 - [ ] Ist es in Ordnung, die Kalender Abfrage so zu mocken wie sie aktuell ist und dann einfach nur die Terminvorschläge zu generieren?
 - [ ] Antwort: Sendeaufgabe und Empfangsaufgabe anstatt Service-Task -> Einfach über print dann "Abfrage gestartet" und in der Empfangsaufgabe das Hardcodierte senden
 - [ ] Nachlassverwaltungsprozess: Kann man auf eine Nachricht von der Beerdigungsplanung warten, damit man quasi noch das Testament in dem Part aktualisieren kann? Macht das Sinn oder ist das unsauber?
-- [ ] Antwort: -
+- [ ] Antwort: Haben die Frage nicht verstanden -> Müssen das nochmal klären
 
 
