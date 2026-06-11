@@ -8,10 +8,9 @@
     <bpmn:messageFlow id="Flow_0ncuzmc" name="Betrugsmeldung" sourceRef="Activity_0pi1wj9" targetRef="Participant_09nou9v" />
     <bpmn:messageFlow id="Flow_1imrrpk" name="Prüfungsanfrage" sourceRef="Activity_1r49j42" targetRef="Participant_0jlko7g" />
     <bpmn:messageFlow id="Flow_09rmrii" name="Identitätsantwort" sourceRef="Participant_0jlko7g" targetRef="Activity_1ex7j68" />
-    <bpmn:messageFlow id="Flow_0hbxsjs" name="Personalstammurkundenanfrage" sourceRef="Activity_0crfdgo" targetRef="Participant_1h8gyvy" />
-    <bpmn:messageFlow id="Flow_1oadd5b" name="Personalstammurkunden" sourceRef="Participant_1h8gyvy" targetRef="Activity_0bvk3hj" />
     <bpmn:messageFlow id="Flow_1lhy6qu" name="Registrierungsbestätigung" sourceRef="Activity_14hs9pc" targetRef="Participant_1h8gyvy" />
-    <bpmn:messageFlow id="Flow_057mzy8" name="Erinnerung" sourceRef="Activity_07fkpg6" targetRef="Participant_1h8gyvy" />
+    <bpmn:messageFlow id="Flow_1oadd5b" name="Personalstammurkunden" sourceRef="Participant_1h8gyvy" targetRef="Activity_0bvk3hj" />
+    <bpmn:messageFlow id="Flow_0hbxsjs" name="Personalstammurkundenanfrage" sourceRef="Activity_0crfdgo" targetRef="Participant_1h8gyvy" />
   </bpmn:collaboration>
   <bpmn:process id="registrationProcess" name="Registrierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0dg1zx1">
@@ -26,22 +25,12 @@
         <bpmn:flowNodeRef>Activity_14hs9pc</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_14pip2o</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0d4bkeh</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_04xqfwy</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Event_07ktm1q" name="Nutzer möchte sich registrieren">
       <bpmn:outgoing>Flow_0nycjp4</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sendTask id="Activity_0crfdgo" name="Personalstammurkunden anfragen" camunda:expression="${1}">
-      <bpmn:extensionElements />
-      <bpmn:incoming>Flow_0nycjp4</bpmn:incoming>
-      <bpmn:outgoing>Flow_06y1xpr</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:receiveTask id="Activity_0bvk3hj" name="Personalstammurkunden empfangen" messageRef="Message_1kohvqv">
-      <bpmn:incoming>Flow_06y1xpr</bpmn:incoming>
-      <bpmn:outgoing>Flow_1lugzyi</bpmn:outgoing>
-    </bpmn:receiveTask>
-    <bpmn:sendTask id="Activity_1r49j42" name="Identitätsprüfung anfragen" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_1r49j42" name="Identitätsprüfung anfragen" camunda:expression="${print(&#34;Requesting identify check for ID card &#34; + initialRegistrationInformation.prop(&#34;idCardNumber&#34;).stringValue())}">
       <bpmn:incoming>Flow_1lugzyi</bpmn:incoming>
       <bpmn:outgoing>Flow_1tttzoc</bpmn:outgoing>
     </bpmn:sendTask>
@@ -54,13 +43,10 @@
       <bpmn:outgoing>Flow_0yu201o</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qlsrx8</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_0pi1wj9" name="Behörden Informieren" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_0pi1wj9" name="Behörden Informieren" camunda:expression="${print(&#34;Reporting fraud for ID card&#34; + initialRegistrationInformation.prop(&#34;idCardNumber&#34;).stringValue())}">
       <bpmn:incoming>Flow_0qlsrx8</bpmn:incoming>
       <bpmn:outgoing>Flow_1ef3752</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sequenceFlow id="Flow_0nycjp4" sourceRef="Event_07ktm1q" targetRef="Activity_0crfdgo" />
-    <bpmn:sequenceFlow id="Flow_06y1xpr" sourceRef="Activity_0crfdgo" targetRef="Activity_0bvk3hj" />
-    <bpmn:sequenceFlow id="Flow_1lugzyi" sourceRef="Activity_0bvk3hj" targetRef="Activity_1r49j42" />
     <bpmn:sequenceFlow id="Flow_1tttzoc" sourceRef="Activity_1r49j42" targetRef="Activity_1ex7j68" />
     <bpmn:sequenceFlow id="Flow_1q9nfog" sourceRef="Activity_1ex7j68" targetRef="Gateway_0a9m63a" />
     <bpmn:sequenceFlow id="Flow_0yu201o" name="Ja" sourceRef="Gateway_0a9m63a" targetRef="Activity_14hs9pc">
@@ -69,7 +55,7 @@
     <bpmn:sequenceFlow id="Flow_0qlsrx8" name="Nein" sourceRef="Gateway_0a9m63a" targetRef="Activity_0pi1wj9" />
     <bpmn:sequenceFlow id="Flow_0wbm9f0" sourceRef="Activity_14hs9pc" targetRef="Event_14pip2o" />
     <bpmn:sequenceFlow id="Flow_1ef3752" sourceRef="Activity_0pi1wj9" targetRef="Event_0d4bkeh" />
-    <bpmn:sendTask id="Activity_14hs9pc" name="Registrierungsbestätigung senden" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_14hs9pc" name="Registrierungsbestätigung senden" camunda:expression="${print(&#34;Sending Registration Success Message to &#34; + initialRegistrationInformation.prop(&#34;email&#34;).stringValue())}">
       <bpmn:incoming>Flow_0yu201o</bpmn:incoming>
       <bpmn:outgoing>Flow_0wbm9f0</bpmn:outgoing>
     </bpmn:sendTask>
@@ -80,23 +66,18 @@
       <bpmn:incoming>Flow_1ef3752</bpmn:incoming>
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_0a3bg1j" escalationRef="Escalation_0npharp" />
     </bpmn:endEvent>
-    <bpmn:subProcess id="Activity_04xqfwy" name="Erinnerungsprozess" triggeredByEvent="true">
-      <bpmn:endEvent id="Event_0a8optn" name="Erinnerung versandt">
-        <bpmn:incoming>Flow_123vmhj</bpmn:incoming>
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_01w0iqr" sourceRef="Event_1ikzaha" targetRef="Activity_07fkpg6" />
-      <bpmn:sequenceFlow id="Flow_123vmhj" sourceRef="Activity_07fkpg6" targetRef="Event_0a8optn" />
-      <bpmn:startEvent id="Event_1ikzaha" name="3 Tage warten" isInterrupting="false">
-        <bpmn:outgoing>Flow_01w0iqr</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_1sdldrm">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
-        </bpmn:timerEventDefinition>
-      </bpmn:startEvent>
-      <bpmn:sendTask id="Activity_07fkpg6" name="Erinnerung versenden" camunda:expression="${1}">
-        <bpmn:incoming>Flow_01w0iqr</bpmn:incoming>
-        <bpmn:outgoing>Flow_123vmhj</bpmn:outgoing>
-      </bpmn:sendTask>
-    </bpmn:subProcess>
+    <bpmn:receiveTask id="Activity_0bvk3hj" name="Personalstammurkunden empfangen" messageRef="Message_1kohvqv">
+      <bpmn:incoming>Flow_06y1xpr</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lugzyi</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sequenceFlow id="Flow_1lugzyi" sourceRef="Activity_0bvk3hj" targetRef="Activity_1r49j42" />
+    <bpmn:sendTask id="Activity_0crfdgo" name="Personalstammurkunden anfragen" camunda:expression="${print(&#34;Requesting Personal Summary Records for ID Card &#34; + initialRegistrationInformation.prop(&#34;idCardNumber&#34;).stringValue())}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0nycjp4</bpmn:incoming>
+      <bpmn:outgoing>Flow_06y1xpr</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_06y1xpr" sourceRef="Activity_0crfdgo" targetRef="Activity_0bvk3hj" />
+    <bpmn:sequenceFlow id="Flow_0nycjp4" sourceRef="Event_07ktm1q" targetRef="Activity_0crfdgo" />
   </bpmn:process>
   <bpmn:message id="Message_1kohvqv" name="personalSummaryRecord" />
   <bpmn:message id="Message_2kaen0c" name="identifyCheckResponse" />
@@ -104,11 +85,11 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1bqzlhf">
       <bpmndi:BPMNShape id="Participant_0dd0tdg_di" bpmnElement="Participant_0dd0tdg" isHorizontal="true">
-        <dc:Bounds x="160" y="270" width="1500" height="520" />
+        <dc:Bounds x="160" y="270" width="1500" height="420" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_19jrqrc_di" bpmnElement="Lane_19jrqrc" isHorizontal="true">
-        <dc:Bounds x="190" y="270" width="1470" height="520" />
+        <dc:Bounds x="190" y="270" width="1470" height="420" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1dpa3n3_di" bpmnElement="Event_07ktm1q">
         <dc:Bounds x="242" y="432" width="36" height="36" />
@@ -155,32 +136,6 @@
           <dc:Bounds x="1563" y="635" width="56" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12ug7sn_di" bpmnElement="Activity_04xqfwy" isExpanded="true">
-        <dc:Bounds x="205" y="550" width="350" height="200" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0a8optn_di" bpmnElement="Event_0a8optn">
-        <dc:Bounds x="482" y="632" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="473" y="675" width="54" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1asrh6y_di" bpmnElement="Event_1ikzaha">
-        <dc:Bounds x="232" y="632" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="216" y="675" width="69" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_08ykajj_di" bpmnElement="Activity_07fkpg6">
-        <dc:Bounds x="320" y="610" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_01w0iqr_di" bpmnElement="Flow_01w0iqr">
-        <di:waypoint x="268" y="650" />
-        <di:waypoint x="320" y="650" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_123vmhj_di" bpmnElement="Flow_123vmhj">
-        <di:waypoint x="420" y="650" />
-        <di:waypoint x="482" y="650" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0nycjp4_di" bpmnElement="Flow_0nycjp4">
         <di:waypoint x="278" y="450" />
         <di:waypoint x="330" y="450" />
@@ -274,14 +229,6 @@
         <di:waypoint x="1450" y="140" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1455" y="226" width="89" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_057mzy8_di" bpmnElement="Flow_057mzy8">
-        <di:waypoint x="420" y="620" />
-        <di:waypoint x="470" y="620" />
-        <di:waypoint x="470" y="140" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="473" y="531" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

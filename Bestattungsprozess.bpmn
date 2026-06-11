@@ -20,7 +20,7 @@
       <bpmn:startEvent id="Event_1j5h0d3">
         <bpmn:outgoing>Flow_15brruh</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln" camunda:expression="${1}">
+      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln" camunda:expression="${print(&#34;Requesting funeral execution for funeral order &#34; + funeralOrder.toString())}">
         <bpmn:incoming>Flow_15brruh</bpmn:incoming>
         <bpmn:outgoing>Flow_1yszqed</bpmn:outgoing>
         <bpmn:property id="Property_0we3574" name="__targetRef_placeholder" />
@@ -36,7 +36,7 @@
             <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/P2D</bpmn:timeCycle>
           </bpmn:timerEventDefinition>
         </bpmn:startEvent>
-        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden" camunda:expression="${1}">
+        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden" camunda:expression="${print(&#34;Sending reminder for confirmation of funeralOrder &#34; + funeralOrder.toString())}">
           <bpmn:incoming>Flow_191lezq</bpmn:incoming>
           <bpmn:outgoing>Flow_1i9v4gg</bpmn:outgoing>
         </bpmn:sendTask>
@@ -95,7 +95,7 @@
         <dc:Bounds x="402" y="402" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0grz3j4" bpmnElement="Activity_0ig0z2d">
-        <dc:Bounds x="460" y="380" width="100" height="80" />
+        <dc:Bounds x="480" y="380" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0s29keh" bpmnElement="Activity_1xu4or2" isExpanded="true">
@@ -131,10 +131,10 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0d922wm" bpmnElement="Flow_15brruh">
         <di:waypoint x="438" y="420" />
-        <di:waypoint x="460" y="420" />
+        <di:waypoint x="480" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1yszqed_di" bpmnElement="Flow_1yszqed">
-        <di:waypoint x="560" y="420" />
+        <di:waypoint x="580" y="420" />
         <di:waypoint x="930" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_19de7w9_di" bpmnElement="Flow_19de7w9">
@@ -167,14 +167,14 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataInputAssociation_0s2qm0c_di" bpmnElement="DataInputAssociation_0s2qm0c">
-        <di:waypoint x="318" y="292" />
-        <di:waypoint x="461" y="387" />
+        <di:waypoint x="318" y="291" />
+        <di:waypoint x="480" y="390" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0z6rw98_di" bpmnElement="Flow_0z6rw98">
-        <di:waypoint x="510" y="460" />
-        <di:waypoint x="510" y="610" />
+        <di:waypoint x="530" y="460" />
+        <di:waypoint x="530" y="610" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="516" y="496" width="87" height="27" />
+          <dc:Bounds x="536" y="496" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0u7267x_di" bpmnElement="Flow_0u7267x">

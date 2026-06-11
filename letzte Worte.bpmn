@@ -21,7 +21,7 @@
       <bpmn:outgoing>Flow_0vjhzuj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0x52vjh" sourceRef="Gateway_0ck407x" targetRef="Activity_17rp3s5" />
-    <bpmn:sendTask id="Activity_17rp3s5" name="Präferenz anfragen" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_17rp3s5" name="Präferenz anfragen" camunda:expression="${print(&#34;Requesting last words preference from &#34; + execution.processBusinessKey)}">
       <bpmn:incoming>Flow_0x52vjh</bpmn:incoming>
       <bpmn:outgoing>Flow_0waf4v8</bpmn:outgoing>
     </bpmn:sendTask>
@@ -29,7 +29,7 @@
       <bpmn:incoming>Flow_0waf4v8</bpmn:incoming>
       <bpmn:outgoing>Flow_138g1sv</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:sendTask id="Activity_06d36o4" name="Letze Worte anfragen" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_06d36o4" name="Letze Worte anfragen" camunda:expression="${print(&#34;Requesting desired last words from &#34; + execution.processBusinessKey)}">
       <bpmn:incoming>Flow_0thm2qx</bpmn:incoming>
       <bpmn:outgoing>Flow_0q5qihi</bpmn:outgoing>
     </bpmn:sendTask>

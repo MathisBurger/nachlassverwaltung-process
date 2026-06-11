@@ -24,7 +24,7 @@
       <bpmn:incoming>Flow_1kdgm09</bpmn:incoming>
       <bpmn:outgoing>Flow_13g8zz3</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${print(&#34;Requesting document &#34; + documentId + &#34; from &#34; + execution.processBusinessKey)}">
       <bpmn:incoming>Flow_1olke9e</bpmn:incoming>
       <bpmn:outgoing>Flow_0d8fp2n</bpmn:outgoing>
     </bpmn:sendTask>

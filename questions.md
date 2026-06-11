@@ -9,5 +9,5 @@
 - [ ] Antwort: Sendeaufgabe und Empfangsaufgabe anstatt Service-Task -> Einfach über print dann "Abfrage gestartet" und in der Empfangsaufgabe das Hardcodierte senden
 - [ ] Nachlassverwaltungsprozess: Kann man auf eine Nachricht von der Beerdigungsplanung warten, damit man quasi noch das Testament in dem Part aktualisieren kann? Macht das Sinn oder ist das unsauber?
 - [ ] Antwort: Haben die Frage nicht verstanden -> Müssen das nochmal klären
-
-
+- [ ] nachlassanlage.bpmn: Muss ich den Subprozess in Vorsorge Dokumente gedöns beschriften?
+- [ ] Vllt Ergäzend daran: Muss wirklich jeder Subprozess eine Bezeichnung haben oder reicht es in manchen Fällen den weg zu lassen, wenn klar ist was passiert?

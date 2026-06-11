@@ -16,7 +16,8 @@ http:
           "username": {"value": "Demo User", "type": "String"},
           "password": {"value": "Supersecret password", "type": "String"},
           "email": {"value": "user@demo.org", "type": "String"},
-          "birthday": {"value": "01.01.1970", "type": "String"}
+          "birthday": {"value": "01.01.1970", "type": "String"},
+          "idCardNumber": {"value": "L1234567", "type": "String"}
         }
       }
   auth: inherit
