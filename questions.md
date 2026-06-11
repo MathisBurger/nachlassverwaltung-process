@@ -2,8 +2,8 @@
 
 ### Question Session 01
 
-- [ ] Ist bei der Nachlassverwaltung der Ansatz mit den Subprozessen richtig? Können wir annehmen, dass ein Update Event nicht reinkommt, wenn ein Schritt noch nicht final abgeschlossen ist?
-- [ ] Antwort: Nein muss nicht bedacht werden in unserem Fall
+- [x] Ist bei der Nachlassverwaltung der Ansatz mit den Subprozessen richtig? Können wir annehmen, dass ein Update Event nicht reinkommt, wenn ein Schritt noch nicht final abgeschlossen ist?
+- [x] Antwort: Nein muss nicht bedacht werden in unserem Fall
 - [ ] Kann man die Rückgängig mach Ereignisse der Transaktion hier gleich nennen? Oder ist das gegen die Best-Practises?
 - [ ] Kann man die Kompensierenden Aufgaben für unsere Transaktion auch in die Call Activities rein machen?
 - [ ] Antwort: Keine Call-Activity, sondern eingebetteter Prozess
