@@ -54,7 +54,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sendTask id="Activity_0dcyj4j" name="Beedigungspräferenzen anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting funeral preferences from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting funeral preferences from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n20skx</bpmn:incoming>
@@ -385,16 +385,16 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
         <dc:Bounds x="120" y="80" width="1510" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0vg0g88_di" bpmnElement="Association_0vg0g88">
-        <di:waypoint x="1165" y="420" />
-        <di:waypoint x="1178" y="520" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_03xtiv3_di" bpmnElement="TextAnnotation_03xtiv3">
         <dc:Bounds x="2150" y="180" width="99.9959660068847" height="55.077452667814114" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0ycjj6i_di" bpmnElement="TextAnnotation_0ycjj6i">
         <dc:Bounds x="2150" y="370" width="99.9959660068847" height="55.077452667814114" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1tnkohn_di" bpmnElement="TextAnnotation_1tnkohn">
+        <dc:Bounds x="1130" y="520" width="100" height="55" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1h6zsaq_di" bpmnElement="TextAnnotation_1h6zsaq">
@@ -462,6 +462,10 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
         <di:waypoint x="2138" y="450" />
         <di:waypoint x="2162" y="425" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0vg0g88_di" bpmnElement="Association_0vg0g88">
+        <di:waypoint x="1165" y="420" />
+        <di:waypoint x="1178" y="520" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_0gupf23_di" bpmnElement="Association_0gupf23">
         <di:waypoint x="2288" y="260" />
         <di:waypoint x="2312" y="235" />
@@ -470,10 +474,6 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
         <di:waypoint x="2428" y="450" />
         <di:waypoint x="2465" y="411" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1tnkohn_di" bpmnElement="TextAnnotation_1tnkohn">
-        <dc:Bounds x="1130" y="520" width="100" height="55" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

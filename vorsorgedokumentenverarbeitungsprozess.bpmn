@@ -27,7 +27,7 @@
     <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting document " + documentId + " from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting document " + documentId + " from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1olke9e</bpmn:incoming>

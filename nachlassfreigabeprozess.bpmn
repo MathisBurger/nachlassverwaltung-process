@@ -230,7 +230,7 @@ execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
     <bpmn:sendTask id="Activity_0gadktb" name="Notar über Umstimmigkeit informieren" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Informing notary that there has been some concerns with the agreement of " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Informing notary that there has been some concerns with the agreement of " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10zsxek</bpmn:incoming>
@@ -258,7 +258,7 @@ execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
       <bpmn:sendTask id="Activity_1in3i3g" name="Erbscheinantrag stellen lassen" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Requesting grantOfProbate for " + execution.processBusinessKey + " from notary")</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Requesting grantOfProbate for " + execution.getProcessBusinessKey() + " from notary")</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0dblha9</bpmn:incoming>
@@ -411,7 +411,7 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
     <bpmn:sendTask id="Activity_15gv4bz" name="Notar mit der Auszahlung beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Instruct notary to start cash out of estate for " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Instruct notary to start cash out of estate for " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1y5ngna</bpmn:incoming>

@@ -57,7 +57,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
       <bpmn:sendTask id="Activity_0k85c20" name="Bestätigung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending additional relative added confirmation to " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending additional relative added confirmation to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1clffq4</bpmn:incoming>
@@ -89,7 +89,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
       <bpmn:sendTask id="Activity_099sb4q" name="Bestätigung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending last words changed confirmation to " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending last words changed confirmation to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1j8sitj</bpmn:incoming>
@@ -177,7 +177,7 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
       <bpmn:sendTask id="Activity_1c5l92s" name="Bestätigung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending funeral change confirmation to " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending funeral change confirmation to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0adpmjr</bpmn:incoming>
@@ -208,7 +208,7 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
       <bpmn:sendTask id="Activity_0f0f26s" name="Bestätigung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending advancedDirectives changed confirmation to " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending advancedDirectives changed confirmation to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0ld124p</bpmn:incoming>

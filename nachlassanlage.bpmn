@@ -122,7 +122,7 @@ execution.setVariableLocal("documentIdRaw", null);</camunda:script>
       <bpmn:sendTask id="Activity_193rmu7" name="Auswahl Dokumente anfragen" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Requesting selection of advancedDirectives (advanceDecisionToRefuseTreatment, powerOfAttorney, nominationOfGuardian) from " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Requesting selection of advancedDirectives (advanceDecisionToRefuseTreatment, powerOfAttorney, nominationOfGuardian) from " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0ou1j6c</bpmn:incoming>

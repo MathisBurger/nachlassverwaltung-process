@@ -24,7 +24,7 @@
     <bpmn:sendTask id="Activity_17rp3s5" name="Präferenz anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting last words preference from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting last words preference from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0x52vjh</bpmn:incoming>
@@ -37,7 +37,7 @@
     <bpmn:sendTask id="Activity_06d36o4" name="Letze Worte anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting desired last words from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting desired last words from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0thm2qx</bpmn:incoming>

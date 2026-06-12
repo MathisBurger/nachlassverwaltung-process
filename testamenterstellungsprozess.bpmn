@@ -71,7 +71,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
       <bpmn:sendTask id="Activity_1mhvpqa" name="Entwurf senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending draft of last will with content " + lastWillContent + " to " + execution.processBusinessKey)</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending draft of last will with content " + lastWillContent + " to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0xpnfz5</bpmn:incoming>
@@ -128,7 +128,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
     <bpmn:sendTask id="Activity_1eh8by6" name="Gewünschte Aufteilung anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting desired estate split of " + estateList.toString() + " from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting desired estate split of " + estateList.toString() + " from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0do4mxw</bpmn:incoming>
@@ -150,7 +150,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
     <bpmn:sendTask id="Activity_1ant1pk" name="Unterschrift anfordern" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting signature of last will with content " + lastWillContent + " from " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting signature of last will with content " + lastWillContent + " from " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ivs59w</bpmn:incoming>

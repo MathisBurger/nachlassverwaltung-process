@@ -29,7 +29,7 @@
     <bpmn:sendTask id="Activity_0go60ul" name="Dokument an den Notar senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting notarization of document " + documentId + " with content " + documentContent + " for " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting notarization of document " + documentId + " with content " + documentContent + " for " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1t543rk</bpmn:incoming>
@@ -58,7 +58,7 @@
     <bpmn:sendTask id="Activity_0z2yj83" name="Invaliditätsinformationen senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending invalidity information for document " + documentId + " with reason " + reason + " to " + execution.processBusinessKey)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending invalidity information for document " + documentId + " with reason " + reason + " to " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1e4qu4t</bpmn:incoming>
