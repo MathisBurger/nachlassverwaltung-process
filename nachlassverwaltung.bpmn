@@ -273,8 +273,8 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <camunda:out source="signedLastWill" target="signedLastWill" />
         <camunda:out source="lastWords" target="lastWordsLocal" />
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("advanceDirectiveContentsLocal", null);
-execution.setVariableLocal("lastWordsLocal", null)</camunda:script>
+          <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("advanceDirectiveContentsLocal",S("{}"));
+execution.setVariableLocal("lastWordsLocal","");</camunda:script>
         </camunda:executionListener>
         <camunda:executionListener event="end">
           <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = {
