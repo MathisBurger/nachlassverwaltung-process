@@ -26,7 +26,12 @@
       <bpmn:outgoing>Flow_1t543rk</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1t543rk" sourceRef="StartEvent_1" targetRef="Activity_0go60ul" />
-    <bpmn:sendTask id="Activity_0go60ul" name="Dokument an den Notar senden" camunda:expression="${print(&#34;Requesting notarization of document &#34; + documentId + &#34; with content &#34; + documentContent + &#34; for &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_0go60ul" name="Dokument an den Notar senden" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting notarization of document " + documentId + " with content " + documentContent + " for " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1t543rk</bpmn:incoming>
       <bpmn:outgoing>Flow_11ne0fs</bpmn:outgoing>
     </bpmn:sendTask>
@@ -50,7 +55,12 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1ksarzq" sourceRef="Event_19ejq5l" targetRef="Event_0zpaeh7" />
     <bpmn:sequenceFlow id="Flow_1e4qu4t" sourceRef="Event_0n6mgeh" targetRef="Activity_0z2yj83" />
-    <bpmn:sendTask id="Activity_0z2yj83" name="Invaliditätsinformationen senden" camunda:expression="${print(&#34;Sending invalidity information for document &#34; + documentId + &#34; with reason &#34; + reason + &#34; to &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_0z2yj83" name="Invaliditätsinformationen senden" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Sending invalidity information for document " + documentId + " with reason " + reason + " to " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1e4qu4t</bpmn:incoming>
       <bpmn:outgoing>Flow_1c9tx7d</bpmn:outgoing>
     </bpmn:sendTask>

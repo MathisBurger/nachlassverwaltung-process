@@ -29,9 +29,9 @@
       <bpmn:endEvent id="Event_0w17oox" name="Testament erfolgreich erstellt">
         <bpmn:incoming>Flow_18rr8ez</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:intermediateCatchEvent id="Event_0y0rbsf" name="Testament erneut erstellen">
+      <bpmn:intermediateCatchEvent id="recreateLastWill" name="Testament erneut erstellen">
         <bpmn:outgoing>Flow_1tpsrn3</bpmn:outgoing>
-        <bpmn:linkEventDefinition id="LinkEventDefinition_1oxxqdn" name="recreateLastWll" />
+        <bpmn:linkEventDefinition id="LinkEventDefinition_1oxxqdn" name="recreateLastWill" />
       </bpmn:intermediateCatchEvent>
       <bpmn:exclusiveGateway id="Gateway_1111kav">
         <bpmn:incoming>Flow_0pyypfc</bpmn:incoming>
@@ -39,7 +39,7 @@
         <bpmn:outgoing>Flow_1fu699j</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_0pyypfc" sourceRef="Event_19aajiv" targetRef="Gateway_1111kav" />
-      <bpmn:sequenceFlow id="Flow_1tpsrn3" sourceRef="Event_0y0rbsf" targetRef="Gateway_1111kav" />
+      <bpmn:sequenceFlow id="Flow_1tpsrn3" sourceRef="recreateLastWill" targetRef="Gateway_1111kav" />
       <bpmn:sequenceFlow id="Flow_1fu699j" sourceRef="Gateway_1111kav" targetRef="Activity_1iz454v" />
       <bpmn:callActivity id="Activity_1iz454v" name="Testament erstellen" calledElement="lastWillCreationProcess">
         <bpmn:extensionElements>
@@ -50,32 +50,30 @@
         <bpmn:incoming>Flow_1fu699j</bpmn:incoming>
         <bpmn:outgoing>Flow_18rr8ez</bpmn:outgoing>
       </bpmn:callActivity>
-      <bpmn:subProcess id="Activity_0sxh0f3" name="Erbschaftsgegenstandsergänzungssubprozess" triggeredByEvent="true">
-        <bpmn:intermediateCatchEvent id="Event_1045693" name="Änderungswunsch">
-          <bpmn:extensionElements>
-            <camunda:executionListener expression="${execution.setVariableLocal(&#34;estateDocument&#34;, estateDocument)}" event="end" />
-          </bpmn:extensionElements>
-          <bpmn:outgoing>Flow_0hduc8w</bpmn:outgoing>
-          <bpmn:messageEventDefinition id="MessageEventDefinition_15fz91y" messageRef="Message_3qnnv9q" />
-        </bpmn:intermediateCatchEvent>
-        <bpmn:callActivity id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen" calledElement="estateCreationProcess">
-          <bpmn:extensionElements>
-            <camunda:in businessKey="#{execution.processBusinessKey}" />
-            <camunda:in source="estateList" target="estateList" />
-            <camunda:in source="estateDocument" target="estateDocument" />
-            <camunda:out source="estateList" target="estateList" />
-          </bpmn:extensionElements>
-          <bpmn:incoming>Flow_0hduc8w</bpmn:incoming>
-          <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
-        </bpmn:callActivity>
-        <bpmn:intermediateThrowEvent id="Event_0iw4e6g" name="Testament erneut erstellen">
-          <bpmn:incoming>Flow_1u65ct3</bpmn:incoming>
-          <bpmn:linkEventDefinition id="LinkEventDefinition_09xpudw" name="recreateLastWll" />
-        </bpmn:intermediateThrowEvent>
-        <bpmn:sequenceFlow id="Flow_1u65ct3" sourceRef="Activity_0e0sca8" targetRef="Event_0iw4e6g" />
-        <bpmn:sequenceFlow id="Flow_0hduc8w" sourceRef="Event_1045693" targetRef="Activity_0e0sca8" />
-      </bpmn:subProcess>
       <bpmn:sequenceFlow id="Flow_18rr8ez" sourceRef="Activity_1iz454v" targetRef="Event_0w17oox" />
+      <bpmn:intermediateThrowEvent id="Event_0iw4e6g" name="Testament erneut erstellen">
+        <bpmn:incoming>Flow_1u65ct3</bpmn:incoming>
+        <bpmn:linkEventDefinition id="LinkEventDefinition_0esw8vx" name="recreateLastWill" />
+      </bpmn:intermediateThrowEvent>
+      <bpmn:callActivity id="Activity_0e0sca8" name="Erbschaftsgegenstand erfassen" calledElement="estateCreationProcess">
+        <bpmn:extensionElements>
+          <camunda:in businessKey="#{execution.processBusinessKey}" />
+          <camunda:in source="estateList" target="estateList" />
+          <camunda:in source="estateDocument" target="estateDocument" />
+          <camunda:out source="estateList" target="estateList" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0hduc8w</bpmn:incoming>
+        <bpmn:outgoing>Flow_1u65ct3</bpmn:outgoing>
+      </bpmn:callActivity>
+      <bpmn:sequenceFlow id="Flow_0hduc8w" sourceRef="Event_1045693" targetRef="Activity_0e0sca8" />
+      <bpmn:sequenceFlow id="Flow_1u65ct3" sourceRef="Activity_0e0sca8" targetRef="Event_0iw4e6g" />
+      <bpmn:boundaryEvent id="Event_1045693" name="Änderungswunsch" attachedToRef="Activity_1iz454v">
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;estateDocument&#34;, estateDocument)}" event="end" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_0hduc8w</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1ddz15q" messageRef="Message_3qnnv9q" />
+      </bpmn:boundaryEvent>
     </bpmn:subProcess>
     <bpmn:callActivity id="Activity_10dt71o" name="Erbschaftsgegenstände erfassen" calledElement="estateCreationProcess">
       <bpmn:extensionElements>
@@ -121,7 +119,12 @@ execution.setVariableLocal("documentIdRaw", null);</camunda:script>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1oz0edi" sourceRef="Gateway_0nyr33z" targetRef="Event_1e3zoix" />
       <bpmn:sequenceFlow id="Flow_0ou1j6c" sourceRef="Event_0mgg4f4" targetRef="Activity_193rmu7" />
-      <bpmn:sendTask id="Activity_193rmu7" name="Auswahl Dokumente anfragen" camunda:expression="${print(&#34;Requesting selection of advancedDirectives (advanceDecisionToRefuseTreatment, powerOfAttorney, nominationOfGuardian) from &#34; + execution.processBusinessKey)}">
+      <bpmn:sendTask id="Activity_193rmu7" name="Auswahl Dokumente anfragen" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Requesting selection of advancedDirectives (advanceDecisionToRefuseTreatment, powerOfAttorney, nominationOfGuardian) from " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0ou1j6c</bpmn:incoming>
         <bpmn:outgoing>Flow_1wcxwna</bpmn:outgoing>
       </bpmn:sendTask>
@@ -401,7 +404,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
           <dc:Bounds x="587" y="255" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0ufxc0e_di" bpmnElement="Event_0y0rbsf">
+      <bpmndi:BPMNShape id="Event_0ufxc0e_di" bpmnElement="recreateLastWill">
         <dc:Bounds x="282" y="113" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="258" y="83" width="85" height="27" />
@@ -413,33 +416,21 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNShape id="Activity_1ukp1ne_di" bpmnElement="Activity_1iz454v">
         <dc:Bounds x="420" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ugjoab_di" bpmnElement="Activity_0sxh0f3" isExpanded="true">
-        <dc:Bounds x="170" y="340" width="450" height="200" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0wglsyw_di" bpmnElement="Event_1045693">
-        <dc:Bounds x="212" y="422" width="36" height="36" />
+      <bpmndi:BPMNShape id="BPMNShape_0rqh20l" bpmnElement="Event_0iw4e6g">
+        <dc:Bounds x="782" y="332" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="197" y="465.5" width="85" height="27" />
+          <dc:Bounds x="758" y="375" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05dqbdi_di" bpmnElement="Activity_0e0sca8">
-        <dc:Bounds x="350" y="400" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_0in1yjr" bpmnElement="Activity_0e0sca8">
+        <dc:Bounds x="610" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0chbsc5" bpmnElement="Event_0iw4e6g">
-        <dc:Bounds x="522" y="422" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_16me2r0_di" bpmnElement="Event_1045693">
+        <dc:Bounds x="482" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="498" y="465" width="85" height="27" />
+          <dc:Bounds x="467" y="296" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1u65ct3_di" bpmnElement="Flow_1u65ct3">
-        <di:waypoint x="450" y="440" />
-        <di:waypoint x="522" y="440" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0hduc8w_di" bpmnElement="Flow_0hduc8w">
-        <di:waypoint x="248" y="440" />
-        <di:waypoint x="350" y="440" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0pyypfc_di" bpmnElement="Flow_0pyypfc">
         <di:waypoint x="188" y="230" />
         <di:waypoint x="275" y="230" />
@@ -455,6 +446,15 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNEdge id="Flow_18rr8ez_di" bpmnElement="Flow_18rr8ez">
         <di:waypoint x="520" y="230" />
         <di:waypoint x="612" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0qb524q" bpmnElement="Flow_0hduc8w">
+        <di:waypoint x="500" y="288" />
+        <di:waypoint x="500" y="350" />
+        <di:waypoint x="610" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0ijgutm" bpmnElement="Flow_1u65ct3">
+        <di:waypoint x="710" y="350" />
+        <di:waypoint x="782" y="350" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

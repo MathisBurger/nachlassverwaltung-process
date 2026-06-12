@@ -24,7 +24,12 @@
       <bpmn:incoming>Flow_1kdgm09</bpmn:incoming>
       <bpmn:outgoing>Flow_13g8zz3</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${print(&#34;Requesting document &#34; + documentId + &#34; from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_0dl58r3" name="Dokument anfragen" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting document " + documentId + " from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1olke9e</bpmn:incoming>
       <bpmn:outgoing>Flow_0d8fp2n</bpmn:outgoing>
     </bpmn:sendTask>

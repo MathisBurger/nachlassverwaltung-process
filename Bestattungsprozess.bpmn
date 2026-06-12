@@ -20,7 +20,12 @@
       <bpmn:startEvent id="Event_1j5h0d3">
         <bpmn:outgoing>Flow_15brruh</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln" camunda:expression="${print(&#34;Requesting funeral execution for funeral order &#34; + funeralOrder.toString())}">
+      <bpmn:sendTask id="Activity_0ig0z2d" name="Bestattungs-auftrag übermitteln" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Requesting funeral execution for funeral order " + funeralOrder.toString())</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_15brruh</bpmn:incoming>
         <bpmn:outgoing>Flow_1yszqed</bpmn:outgoing>
         <bpmn:property id="Property_0we3574" name="__targetRef_placeholder" />
@@ -36,7 +41,12 @@
             <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/P2D</bpmn:timeCycle>
           </bpmn:timerEventDefinition>
         </bpmn:startEvent>
-        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden" camunda:expression="${print(&#34;Sending reminder for confirmation of funeralOrder &#34; + funeralOrder.toString())}">
+        <bpmn:sendTask id="Activity_0i4b6dt" name="Erinnerung senden" camunda:expression="${1}">
+          <bpmn:extensionElements>
+            <camunda:executionListener event="start">
+              <camunda:script scriptFormat="JavaScript">print("Sending reminder for confirmation of funeralOrder " + funeralOrder.toString())</camunda:script>
+            </camunda:executionListener>
+          </bpmn:extensionElements>
           <bpmn:incoming>Flow_191lezq</bpmn:incoming>
           <bpmn:outgoing>Flow_1i9v4gg</bpmn:outgoing>
         </bpmn:sendTask>

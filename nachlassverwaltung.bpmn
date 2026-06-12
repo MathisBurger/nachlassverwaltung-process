@@ -55,6 +55,11 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
       <bpmn:sequenceFlow id="Flow_1pvmfpp" sourceRef="Event_0ujy1dt" targetRef="Activity_1eyrfwi" />
       <bpmn:sequenceFlow id="Flow_1clffq4" sourceRef="Activity_1eyrfwi" targetRef="Activity_0k85c20" />
       <bpmn:sendTask id="Activity_0k85c20" name="Bestätigung senden" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Sending additional relative added confirmation to " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1clffq4</bpmn:incoming>
         <bpmn:outgoing>Flow_1y9dsi1</bpmn:outgoing>
       </bpmn:sendTask>
@@ -82,6 +87,11 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
         <bpmn:messageEventDefinition id="MessageEventDefinition_02xk96p" messageRef="Message_3d5u19o" />
       </bpmn:startEvent>
       <bpmn:sendTask id="Activity_099sb4q" name="Bestätigung senden" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Sending last words changed confirmation to " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1j8sitj</bpmn:incoming>
         <bpmn:outgoing>Flow_0bsyf6g</bpmn:outgoing>
       </bpmn:sendTask>
@@ -165,6 +175,11 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
       <bpmn:sequenceFlow id="Flow_1kk435u" sourceRef="Event_1inr6fy" targetRef="Activity_1o1v49c" />
       <bpmn:sequenceFlow id="Flow_0adpmjr" sourceRef="Activity_1o1v49c" targetRef="Activity_1c5l92s" />
       <bpmn:sendTask id="Activity_1c5l92s" name="Bestätigung senden" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Sending funeral change confirmation to " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0adpmjr</bpmn:incoming>
         <bpmn:outgoing>Flow_0kr6pww</bpmn:outgoing>
       </bpmn:sendTask>
@@ -191,6 +206,11 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
         <bpmn:messageEventDefinition id="MessageEventDefinition_1qjqkio" messageRef="Message_3r13gtr" />
       </bpmn:startEvent>
       <bpmn:sendTask id="Activity_0f0f26s" name="Bestätigung senden" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Sending advancedDirectives changed confirmation to " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0ld124p</bpmn:incoming>
         <bpmn:outgoing>Flow_1xccn2q</bpmn:outgoing>
       </bpmn:sendTask>
@@ -506,12 +526,12 @@ execution.setVariable("lastWords", lastWordsLocal);
         <dc:Bounds x="280" y="1250" width="1220" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0qhjagl_di" bpmnElement="Association_0qhjagl">
-        <di:waypoint x="620" y="470" />
-        <di:waypoint x="620" y="416" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_1d8l39c_di" bpmnElement="TextAnnotation_1d8l39c">
         <dc:Bounds x="980" y="40" width="99.99156545209178" height="256.4102564102564" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1eusj1u_di" bpmnElement="TextAnnotation_1eusj1u">
+        <dc:Bounds x="570" y="375" width="100" height="41" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_16fp6ie_di" bpmnElement="Flow_16fp6ie">
@@ -592,10 +612,10 @@ execution.setVariable("lastWords", lastWordsLocal);
           <dc:Bounds x="1198" y="1105" width="84" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1eusj1u_di" bpmnElement="TextAnnotation_1eusj1u">
-        <dc:Bounds x="570" y="375" width="100" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0qhjagl_di" bpmnElement="Association_0qhjagl">
+        <di:waypoint x="620" y="470" />
+        <di:waypoint x="620" y="416" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1o0f0hk">

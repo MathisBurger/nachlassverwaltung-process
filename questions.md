@@ -17,3 +17,7 @@
 
 - [ ] nachlassanlage.bpmn: Muss ich den Subprozess in Vorsorge Dokumente gedöns beschriften?
 - [ ] Vllt Ergäzend daran: Muss wirklich jeder Subprozess eine Bezeichnung haben oder reicht es in manchen Fällen den weg zu lassen, wenn klar ist was passiert?
+- [ ] Wo muss ich überall Datenobjekte und Data Stores nutzen und wo nicht?
+
+
+

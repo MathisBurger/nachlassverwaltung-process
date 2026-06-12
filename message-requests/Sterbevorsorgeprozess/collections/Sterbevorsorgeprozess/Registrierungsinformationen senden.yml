@@ -13,11 +13,11 @@ http:
         "messageName": "initialRegistrationInformation",
         "businessKey": "user@demo.org",
         "processVariables": {
-          "username": {"value": "Demo User", "type": "String"},
-          "password": {"value": "Supersecret password", "type": "String"},
-          "email": {"value": "user@demo.org", "type": "String"},
-          "birthday": {"value": "01.01.1970", "type": "String"},
-          "idCardNumber": {"value": "L1234567", "type": "String"}
+          "username": {"value": "Demo User", "type": "String", "valueInfo": {"transient": true}},
+          "password": {"value": "Supersecret password", "type": "String", "valueInfo": {"transient": true}},
+          "email": {"value": "user@demo.org", "type": "String", "valueInfo": {"transient": true}},
+          "birthday": {"value": "01.01.1970", "type": "String", "valueInfo": {"transient": true}},
+          "idCardNumber": {"value": "L1234567", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit

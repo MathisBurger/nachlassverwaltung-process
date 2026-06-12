@@ -68,7 +68,12 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
         <bpmn:incoming>Flow_0wd31hv</bpmn:incoming>
         <bpmn:outgoing>Flow_0xpnfz5</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:sendTask id="Activity_1mhvpqa" name="Entwurf senden" camunda:expression="${print(&#34;Sending draft of last will with content &#34; + lastWillContent + &#34; to &#34; + execution.processBusinessKey)}">
+      <bpmn:sendTask id="Activity_1mhvpqa" name="Entwurf senden" camunda:expression="${1}">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="start">
+            <camunda:script scriptFormat="JavaScript">print("Sending draft of last will with content " + lastWillContent + " to " + execution.processBusinessKey)</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0xpnfz5</bpmn:incoming>
         <bpmn:outgoing>Flow_14vyoli</bpmn:outgoing>
       </bpmn:sendTask>
@@ -120,7 +125,12 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
       <bpmn:incoming>Flow_1herkye</bpmn:incoming>
       <bpmn:outgoing>Flow_0cdq5dn</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:sendTask id="Activity_1eh8by6" name="Gewünschte Aufteilung anfragen" camunda:expression="${print(&#34;Requesting desired estate split of &#34; + estateList.toString() + &#34; from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_1eh8by6" name="Gewünschte Aufteilung anfragen" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting desired estate split of " + estateList.toString() + " from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0do4mxw</bpmn:incoming>
       <bpmn:outgoing>Flow_1herkye</bpmn:outgoing>
     </bpmn:sendTask>
@@ -137,7 +147,12 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
     <bpmn:endEvent id="Event_1fyjjla" name="Testament erstellt und beglaubigt">
       <bpmn:incoming>Flow_1vvof3a</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_1ant1pk" name="Unterschrift anfordern" camunda:expression="${print(&#34;Requesting signature of last will with content &#34; + lastWillContent + &#34; from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_1ant1pk" name="Unterschrift anfordern" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting signature of last will with content " + lastWillContent + " from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ivs59w</bpmn:incoming>
       <bpmn:outgoing>Flow_1n8xj8p</bpmn:outgoing>
     </bpmn:sendTask>

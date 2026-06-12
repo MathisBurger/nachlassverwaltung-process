@@ -62,7 +62,12 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isDocuentValid == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06njirw" sourceRef="Activity_0hqc3es" targetRef="Gateway_0cw2e7h" />
-    <bpmn:sendTask id="Activity_0zlpe06" name="Erbschaftsgegenstand anfragen" camunda:expression="${print(&#34;Requesting estate document for new estate from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_0zlpe06" name="Erbschaftsgegenstand anfragen" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting estate document for new estate from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1huvegj</bpmn:incoming>
       <bpmn:outgoing>Flow_16chq38</bpmn:outgoing>
     </bpmn:sendTask>
@@ -100,7 +105,12 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
       <bpmn:incoming>Flow_1ufj2yl</bpmn:incoming>
       <bpmn:outgoing>Flow_1hkj2b9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_118orjh" name="Zugriffsinformationen anfragen" camunda:expression="${print(&#34;Requesting access information for estate with content &#34; + estateDocument + &#34; from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_118orjh" name="Zugriffsinformationen anfragen" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting access information for estate with content " + estateDocument + " from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0a13uze</bpmn:incoming>
       <bpmn:outgoing>Flow_0nn9qmd</bpmn:outgoing>
     </bpmn:sendTask>
@@ -120,7 +130,12 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
       <bpmn:extensionElements />
       <bpmn:incoming>Flow_0ezs7bh</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_111t6er" name="Nächste Aktion abfragen" camunda:expression="${print(&#34;Requesting estate next action from &#34; + execution.processBusinessKey)}">
+    <bpmn:sendTask id="Activity_111t6er" name="Nächste Aktion abfragen" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting estate next action from " + execution.processBusinessKey)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_06413nq</bpmn:incoming>
       <bpmn:outgoing>Flow_0lv1ljw</bpmn:outgoing>
     </bpmn:sendTask>
