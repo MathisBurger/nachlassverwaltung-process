@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "signedLastWill",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "signedLastWill": {"value": "Hier ist das signed Document", "type": "String"}
         }

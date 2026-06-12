@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "funeralPlanningChange",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "funeralType": {"value": "burial", "type": "String"},
           "funeralObject": {"value": "urn", "type": "String"},

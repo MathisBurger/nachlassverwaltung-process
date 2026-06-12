@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "estateProcessNextAction",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "continueCreateNewEstate": {"value": false, "type": "Boolean"}
         }

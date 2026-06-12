@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "citizenDataCheckResponse",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "correlationKeys": {
           "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
         },

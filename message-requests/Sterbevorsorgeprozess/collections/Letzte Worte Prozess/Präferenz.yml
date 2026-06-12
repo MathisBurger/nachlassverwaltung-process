@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "lastWordsPreference",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "preference": {"value": true, "type": "Boolean"}
         }

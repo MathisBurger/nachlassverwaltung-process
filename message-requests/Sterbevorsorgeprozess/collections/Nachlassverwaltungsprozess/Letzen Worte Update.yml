@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "lastWordsChange",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariablesLocal": {
           "preference": {"value": true, "type": "Boolean", "valueInfo": {"transient": true}}
         }

@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "initialRegistrationInformation",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "username": {"value": "Demo User", "type": "String", "valueInfo": {"transient": true}},
           "password": {"value": "Supersecret password", "type": "String", "valueInfo": {"transient": true}},

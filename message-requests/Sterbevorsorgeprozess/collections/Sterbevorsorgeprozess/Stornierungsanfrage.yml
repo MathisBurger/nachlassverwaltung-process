@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "globalCancelRequest",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {}
       }
   auth: inherit

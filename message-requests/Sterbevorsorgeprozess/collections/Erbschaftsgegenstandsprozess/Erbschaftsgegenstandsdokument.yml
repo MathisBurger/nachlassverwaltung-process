@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "estateDocument",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "estateDocument": {"value": "Hier mein Millionen Depot mit 20 Mio", "type": "String"}
         }

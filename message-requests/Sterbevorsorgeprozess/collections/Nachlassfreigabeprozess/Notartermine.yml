@@ -17,7 +17,7 @@ runtime:
       code: |-
         req.setBody({
           "messageName": "appointmentOffers",
-          "businessKey": "user@demo.org",
+          "businessKey": "L1234567",
           "processVariables": {
             "appointmentOffers": {"value": JSON.stringify([
           "2026-08-14T09:30:00Z",

@@ -27,7 +27,7 @@ runtime:
 
         req.setBody({
           "messageName": "grantOfProbate",
-          "businessKey": "user@demo.org",
+          "businessKey": "L1234567",
           "processVariables": {
             "grantOfProbate": {"value": JSON.stringify(grantOfProbate), "type": "Json", "valueInfo": {"transient": true}}
           }

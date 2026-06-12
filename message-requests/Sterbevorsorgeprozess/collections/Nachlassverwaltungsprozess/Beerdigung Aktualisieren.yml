@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "messageName": "funeralUpdate",
-        "businessKey": "user@demo.org",
+        "businessKey": "L1234567",
         "processVariables": {
           "funeralType": {"value": "sea", "type": "String", "valueInfo": {"transient": true}},
           "funeralObject": {"value": "urn", "type": "String", "valueInfo": {"transient": true}},
