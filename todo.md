@@ -8,4 +8,7 @@
 - [x] Alle Sendenen Events in die Konsole printen lassen ;)  
 - [ ] Nach Uniquitous Language prüfen
 - [ ] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
+- [ ] Ubiquitous Language definieren
+
+
 
