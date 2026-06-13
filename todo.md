@@ -9,6 +9,11 @@
 - [ ] Nach Uniquitous Language prüfen
 - [ ] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
 - [ ] Ubiquitous Language definieren
+- [ ] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
+- [ ] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
+
+
+
 
 
 

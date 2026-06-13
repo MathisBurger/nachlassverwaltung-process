@@ -14,9 +14,8 @@ http:
         "businessKey": "L1234567",
         "processVariables": {
           "funeralType": {"value": "burial", "type": "String"},
-          "funeralObject": {"value": "urn", "type": "String"},
           "maxAmountGuests": {"value": 12, "type": "Integer"},
-          "budget": {"value": 1000, "type": "Integer"}
+          "budget": {"value": 2000, "type": "Integer"}
         }
       }
   auth: inherit

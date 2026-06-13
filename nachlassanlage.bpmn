@@ -98,7 +98,7 @@
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})));
 
-execution.setVariableLocal("documentIdRaw", null);</camunda:script>
+execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0ou1j6c</bpmn:outgoing>

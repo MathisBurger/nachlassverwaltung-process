@@ -20,8 +20,8 @@ runtime:
           "businessKey": "L1234567",
           "processVariables": {
             "estateSplit": {"value": JSON.stringify({
-            "estateObj1": {
-                "hugo.habicht@demo.org": 100
+            "20 Mio Depot": {
+                "L0000001": 100
             }
         }), "type": "Json"}
           }

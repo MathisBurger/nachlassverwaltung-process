@@ -13,7 +13,7 @@ http:
         "messageName": "documentNotarized",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "documentId": {"value": "lastWill", "type": "String"}
+          "documentId": {"value": "powerOfAttorney", "type": "String"}
         }
       }
   auth: inherit

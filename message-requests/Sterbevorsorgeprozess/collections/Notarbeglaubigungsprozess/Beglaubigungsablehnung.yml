@@ -13,7 +13,7 @@ http:
         "messageName": "documentNotNotarized",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "documentId": {"value": "lastWill", "type": "String"}
+          "documentId": {"value": "powerOfAttorney", "type": "String"}
         },
         "processVariables": {
           "reason": {"value": "Gefällt mir nicht", "type": "String"}

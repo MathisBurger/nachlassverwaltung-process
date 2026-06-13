@@ -59,7 +59,6 @@ const estateSplitJson = JSON.parse(estateSplit.toString());
 const normalizedEstateSplit = flattenOwnership(estateSplitJson);
 execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedEstateSplit)));</camunda:script>
           </camunda:executionListener>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;lastWillContent&#34;, &#34;&#34;)}" event="start" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0wd31hv</bpmn:outgoing>
       </bpmn:startEvent>

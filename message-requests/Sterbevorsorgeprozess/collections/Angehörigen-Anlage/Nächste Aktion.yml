@@ -13,7 +13,7 @@ http:
         "messageName": "relativeCreationNextAction",
         "businessKey": "L1234567",
         "processVariables": {
-          "createNewRelative": {"value": false, "type": "Boolean"}
+          "continueNew": {"value": false, "type": "Boolean"}
         }
       }
   auth: inherit

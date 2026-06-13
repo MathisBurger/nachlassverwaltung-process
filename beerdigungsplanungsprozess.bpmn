@@ -48,6 +48,13 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sequenceFlow id="Flow_0tqufez" sourceRef="StartEvent_Trauerfall" targetRef="Gateway_0eoijma" />
     <bpmn:sequenceFlow id="Flow_0n20skx" sourceRef="Gateway_0eoijma" targetRef="Activity_0dcyj4j" />
     <bpmn:subProcess id="Activity_02rauh0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="funeralType">${funeralPreference.prop("funeralType").stringValue()}</camunda:inputParameter>
+          <camunda:inputParameter name="maxAmountGuests">${funeralPreference.prop("maxAmountGuests").numberValue()}</camunda:inputParameter>
+          <camunda:inputParameter name="budget">${funeralPreference.prop("budget").numberValue()}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1qcmghw</bpmn:incoming>
       <bpmn:outgoing>Flow_17zo3ui</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
@@ -56,16 +63,14 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
       </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_0ig7wes">
         <bpmn:extensionElements>
-          <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("funeralType", funeralPreference.prop("funeralType").stringValue());
-execution.setVariableLocal("maxAmountGuests", funeralPreference.prop("maxAmountGuests").numberValue());
-execution.setVariableLocal("budget", funeralPreference.prop("budget").numberValue());</camunda:script>
-          </camunda:executionListener>
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;finalFuneralDecisionResult&#34;, null)}" event="start" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_13jktrk</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:businessRuleTask id="Activity_0tzjd5f" name="Bestattungsoption entscheiden" camunda:resultVariable="finalFuneralDecisionResult" camunda:decisionRef="finalFuneralDecision" camunda:mapDecisionResult="singleResult">
-        <bpmn:extensionElements />
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariable(&#34;funeralDecision&#34;, JSON(finalFuneralDecisionResult))}" event="end" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_13jktrk</bpmn:incoming>
         <bpmn:outgoing>Flow_053h3mg</bpmn:outgoing>
       </bpmn:businessRuleTask>
@@ -73,7 +78,7 @@ execution.setVariableLocal("budget", funeralPreference.prop("budget").numberValu
       <bpmn:sendTask id="Activity_1uepr93" name="Entscheidung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending funeral decision: " + JSON.stringify(execution.getVariable("finalFuneralDecisionResult")));</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending funeral decision: " + funeralDecision.toString());</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_053h3mg</bpmn:incoming>
@@ -87,6 +92,15 @@ execution.setVariableLocal("budget", funeralPreference.prop("budget").numberValu
         <bpmn:outgoing>Flow_0uhi1kx</bpmn:outgoing>
       </bpmn:eventBasedGateway>
       <bpmn:intermediateCatchEvent id="Event_19c9atk" name="Änderungswunsch empfangen">
+        <bpmn:extensionElements>
+          <camunda:executionListener event="end">
+            <camunda:script scriptFormat="JavaScript">const funeralPreference = S(JSON.stringify({funeralType, maxAmountGuests, budget}), "application/json");
+
+print(execution.getVariables().toString());
+
+execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
+          </camunda:executionListener>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1va1h17</bpmn:incoming>
         <bpmn:outgoing>Flow_1jkx75d</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_18ahjp7" messageRef="Message_3viufsu" />
@@ -138,14 +152,14 @@ execution.setVariableLocal("budget", funeralPreference.prop("budget").numberValu
     <bpmn:scriptTask id="Activity_0oetiel" name="Bestattungsauftrag aktualisieren" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
       <bpmn:outgoing>Flow_0ok1czf</bpmn:outgoing>
-      <bpmn:script>var updatedOrder = execution.getVariable("finalFuneralDecisionResult");
+      <bpmn:script>var updatedOrder = execution.getVariable("funeralDecision");
 execution.setVariable("funeralOrder", updatedOrder);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0ok1czf" sourceRef="Activity_0oetiel" targetRef="Activity_0ooshf6" />
     <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + JSON.stringify(execution.getVariable("funeralOrder")));</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ok1czf</bpmn:incoming>
@@ -158,13 +172,13 @@ execution.setVariable("funeralOrder", updatedOrder);</bpmn:script>
     <bpmn:scriptTask id="Activity_0mtezji" name="Bestattungsauftrag verfassen" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
       <bpmn:outgoing>Flow_1qmwy1u</bpmn:outgoing>
-      <bpmn:script>var funeralPlanning = execution.getVariable("finalFuneralDecisionResult");
+      <bpmn:script>var funeralPlanning = execution.getVariable("funeralDecision");
 execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + JSON.stringify(execution.getVariable("funeralOrder")));</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1qmwy1u</bpmn:incoming>
@@ -213,6 +227,9 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
         <dc:Bounds x="960" y="340" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0m3jgzj_di" bpmnElement="Activity_1uepr93">
+        <dc:Bounds x="1120" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_18qj92i_di" bpmnElement="Gateway_0timu5e">
         <dc:Bounds x="1265" y="355" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -239,9 +256,6 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1557" y="455" width="67" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0m3jgzj_di" bpmnElement="Activity_1uepr93">
-        <dc:Bounds x="1120" y="340" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_053h3mg_di" bpmnElement="Flow_053h3mg">
         <di:waypoint x="1060" y="380" />
