@@ -13,7 +13,7 @@ http:
         "messageName": "splitAgree",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "email": {"value": "", "type": "String"}
+          "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
         }
       }
   auth: inherit

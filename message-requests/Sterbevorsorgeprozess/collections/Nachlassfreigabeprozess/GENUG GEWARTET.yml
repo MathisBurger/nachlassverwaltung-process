@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/engine-rest/job?processInstanceId=21f2dd2b-67fc-11f1-b74c-1262b9c34d3c&activityId=Event_02q50oa
+  url: http://localhost:8080/engine-rest/job?processInstanceId=bab32f95-6800-11f1-b74c-1262b9c34d3c&activityId=Event_02q50oa
   params:
     - name: processInstanceId
-      value: 21f2dd2b-67fc-11f1-b74c-1262b9c34d3c
+      value: bab32f95-6800-11f1-b74c-1262b9c34d3c
       type: query
     - name: activityId
       value: Event_02q50oa

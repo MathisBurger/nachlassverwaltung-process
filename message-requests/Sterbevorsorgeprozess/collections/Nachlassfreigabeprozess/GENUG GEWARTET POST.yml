@@ -5,7 +5,11 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8080/engine-rest/job/a402804e-67fd-11f1-b74c-1262b9c34d3c/execute
+  url: http://localhost:8080/engine-rest/job/:id/execute
+  params:
+    - name: id
+      value: f0b2e34e-6800-11f1-b74c-1262b9c34d3c
+      type: path
   body:
     type: json
     data: |
