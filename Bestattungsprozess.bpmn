@@ -73,7 +73,7 @@
       <bpmn:incoming>Flow_1vxeem7</bpmn:incoming>
       <bpmn:outgoing>Flow_15d0tgi</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:endEvent id="Event_1gnfyq3" name="Beerdigung abgeschlossen">
+    <bpmn:endEvent id="Event_1gnfyq3" name="Bestattung abgeschlossen">
       <bpmn:incoming>Flow_15d0tgi</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_15d0tgi" sourceRef="Activity_1i2gi2p" targetRef="Event_1gnfyq3" />
@@ -157,7 +157,7 @@
       <bpmndi:BPMNShape id="Event_1gnfyq3_di" bpmnElement="Event_1gnfyq3">
         <dc:Bounds x="1422" y="322" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1403" y="365.5" width="74" height="27" />
+          <dc:Bounds x="1403" y="366" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0lqii47_di" bpmnElement="Flow_0lqii47">

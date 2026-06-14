@@ -8,7 +8,7 @@
     <bpmn:messageFlow id="Flow_0yrbfm7" name="Testament" sourceRef="Activity_05cwkwo" targetRef="Participant_08hs5v2" />
     <bpmn:messageFlow id="Flow_1fr3nhy" name="Testamentsbestätigung" sourceRef="Participant_08hs5v2" targetRef="Event_1maa16f" />
     <bpmn:messageFlow id="Flow_13qrsyq" name="Testamentsablehnung" sourceRef="Participant_08hs5v2" targetRef="Event_0yxaee2" />
-    <bpmn:messageFlow id="Flow_11xpd0a" name="Erbscheinantrag" sourceRef="Activity_0qa1g79" targetRef="Participant_0stz0bz" />
+    <bpmn:messageFlow id="Flow_11xpd0a" name="Erbscheinantragsbeauftragung" sourceRef="Activity_0qa1g79" targetRef="Participant_0stz0bz" />
     <bpmn:messageFlow id="Flow_0bujihu" name="Erbschein" sourceRef="Participant_0stz0bz" targetRef="Activity_0qa1g79" />
     <bpmn:messageFlow id="Flow_1t8fczg" name="Eröffnungsprotokoll" sourceRef="Participant_0stz0bz" targetRef="Activity_08ts9aa" />
     <bpmn:messageFlow id="Flow_0x2co2x" name="Terminvorschlag" sourceRef="Activity_0g2npn5" targetRef="Participant_1nzb2ic" />
@@ -92,12 +92,12 @@
       <bpmn:sendTask id="Activity_0gdd4rn" name="Terminvorschläge versenden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending appointmentOffers " + appointmentOffers.toString() + " to " + relative.prop("email").stringValue())</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending appointmentOffers " + appointmentOffers.toString() + " to " + heir.prop("email").stringValue())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_17xg5wl</bpmn:incoming>
         <bpmn:outgoing>Flow_0c7rtf2</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${relativesList.elements()}" camunda:elementVariable="relative" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_0c7rtf2" sourceRef="Activity_0gdd4rn" targetRef="Activity_1bvjat3" />
       <bpmn:subProcess id="Activity_1bvjat3">
@@ -107,7 +107,7 @@
         <bpmn:startEvent id="Event_0x0tflq">
           <bpmn:extensionElements>
             <camunda:executionListener expression="${execution.setVariableLocal(&#34;vote&#34;, &#34;&#34;)}" event="start" />
-            <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, relative.prop(&#34;email&#34;).stringValue())}" event="start" />
+            <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, heir.prop(&#34;email&#34;).stringValue())}" event="start" />
           </bpmn:extensionElements>
           <bpmn:outgoing>Flow_10782qg</bpmn:outgoing>
         </bpmn:startEvent>
@@ -139,7 +139,7 @@ execution.setVariable("appointmentVotes", S(JSON.stringify(votes)));</bpmn:scrip
       <bpmn:subProcess id="Activity_10tn0v8">
         <bpmn:incoming>Flow_1d6sgwk</bpmn:incoming>
         <bpmn:outgoing>Flow_1v5kpu5</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${relativesList.elements()}" camunda:elementVariable="relative" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_0yhzzx5">
           <bpmn:extensionElements>
             <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, relative.prop(&#34;email&#34;).stringValue())}" event="start" />
@@ -150,13 +150,13 @@ execution.setVariable("appointmentVotes", S(JSON.stringify(votes)));</bpmn:scrip
         <bpmn:scriptTask id="Activity_0boznz0" name="Termineinladung generieren" scriptFormat="JavaScript">
           <bpmn:incoming>Flow_1tm158h</bpmn:incoming>
           <bpmn:outgoing>Flow_0gsqhg1</bpmn:outgoing>
-          <bpmn:script>const invitation = `${relative.prop("firstName").stringValue()} ${relative.prop("lastName").stringValue()}, sie sind eingeladen am ${decidedNotaryAppointment} mit der Dauer ${durationInMinutes}.`;
+          <bpmn:script>const invitation = `${heir.prop("firstName").stringValue()} ${heir.prop("lastName").stringValue()}, sie sind eingeladen am ${decidedNotaryAppointment} mit der Dauer ${durationInMinutes}.`;
 execution.setVariableLocal("invitation", invitation);</bpmn:script>
         </bpmn:scriptTask>
         <bpmn:sendTask id="Activity_18rjyjj" name="Termineinladung versenden" camunda:expression="${1}">
           <bpmn:extensionElements>
             <camunda:executionListener event="start">
-              <camunda:script scriptFormat="JavaScript">print("Sending invitation (" + invitation + ") to " + relative.prop("email").stringValue())</camunda:script>
+              <camunda:script scriptFormat="JavaScript">print("Sending invitation (" + invitation + ") to " + heir.prop("email").stringValue())</camunda:script>
             </camunda:executionListener>
           </bpmn:extensionElements>
           <bpmn:incoming>Flow_0gsqhg1</bpmn:incoming>
@@ -215,9 +215,7 @@ execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
       </bpmn:sendTask>
     </bpmn:subProcess>
     <bpmn:receiveTask id="Activity_08ts9aa" name="Eröffnungsprotokoll erhalten" messageRef="Message_3u90o53">
-      <bpmn:extensionElements>
-        <camunda:executionListener expression="${execution.setVariable(&#34;heirs&#34;, relativesList)}" event="end" />
-      </bpmn:extensionElements>
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_0c6tn7a</bpmn:incoming>
       <bpmn:outgoing>Flow_0ahdzim</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -265,7 +263,7 @@ execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
       </bpmn:sendTask>
       <bpmn:receiveTask id="Activity_1fjrvom" name="Erbschein erhalten" messageRef="Message_3eag7q8">
         <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariable(&#34;heirs&#34;, grantOfProbate)}" event="end" />
+          <camunda:executionListener expression="${execution.setVariable(&#34;heirsList&#34;, grantOfProbate)}" event="end" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0vgcrzq</bpmn:incoming>
         <bpmn:outgoing>Flow_044m50u</bpmn:outgoing>
@@ -320,12 +318,12 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1f8wz8i</bpmn:incoming>
         <bpmn:outgoing>Flow_0p8loxg</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirs.elements()}" camunda:elementVariable="heir" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
       </bpmn:sendTask>
       <bpmn:subProcess id="Activity_0v3zmbl">
         <bpmn:incoming>Flow_0p8loxg</bpmn:incoming>
         <bpmn:outgoing>Flow_000b4j6</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirs.elements()}" camunda:elementVariable="heir" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_1xfqc1i">
           <bpmn:extensionElements>
             <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, heir.prop(&#34;email&#34;).stringValue())}" event="start" />
@@ -629,7 +627,7 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="1060" y="600" />
         <di:waypoint x="1060" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="969" y="323" width="81" height="14" />
+          <dc:Bounds x="967" y="323" width="86" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0bujihu_di" bpmnElement="Flow_0bujihu">
@@ -748,18 +746,10 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNShape id="Event_01l6tdp_di" bpmnElement="Event_01l6tdp">
         <dc:Bounds x="852" y="222" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1amsoot_di" bpmnElement="Association_1amsoot">
-        <di:waypoint x="750" y="200" />
-        <di:waypoint x="788" y="150" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_0nu1gue_di" bpmnElement="TextAnnotation_0nu1gue">
         <dc:Bounds x="780" y="80" width="160" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0dblha9_di" bpmnElement="Flow_0dblha9">
-        <di:waypoint x="178" y="240" />
-        <di:waypoint x="280" y="240" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1gmhw91" bpmnElement="Flow_0vgcrzq">
         <di:waypoint x="380" y="240" />
         <di:waypoint x="470" y="240" />
@@ -768,9 +758,17 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="570" y="240" />
         <di:waypoint x="670" y="240" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dblha9_di" bpmnElement="Flow_0dblha9">
+        <di:waypoint x="178" y="240" />
+        <di:waypoint x="280" y="240" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1nlncaq_di" bpmnElement="Flow_1nlncaq">
         <di:waypoint x="770" y="240" />
         <di:waypoint x="852" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1amsoot_di" bpmnElement="Association_1amsoot">
+        <di:waypoint x="750" y="200" />
+        <di:waypoint x="788" y="150" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
@@ -905,12 +903,6 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_11ry61z" bpmnElement="Activity_06phryc">
         <dc:Bounds x="288" y="110" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0xkc0fm" bpmnElement="Event_1iygbq7">
-        <dc:Bounds x="1480" y="282" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1462" y="325" width="73" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0f47ibu" bpmnElement="Activity_0v3zmbl" isExpanded="true">
         <dc:Bounds x="508" y="80" width="720" height="460" />
       </bpmndi:BPMNShape>
@@ -997,6 +989,12 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="946" y="260" />
         <di:waypoint x="1072" y="260" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_0xkc0fm" bpmnElement="Event_1iygbq7">
+        <dc:Bounds x="1480" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1462" y="325" width="73" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_1fehmy4" bpmnElement="Flow_1f8wz8i">
         <di:waypoint x="216" y="150" />
         <di:waypoint x="288" y="150" />

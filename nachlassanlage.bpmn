@@ -5,8 +5,8 @@
     <bpmn:participant id="Participant_18jmyqt" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1suyvps" name="Dokumentenauswahlanfrage" sourceRef="Activity_0rdll59" targetRef="Participant_18jmyqt" />
     <bpmn:messageFlow id="Flow_0jp9f2y" name="Dokumentauswahl" sourceRef="Participant_18jmyqt" targetRef="Activity_0rdll59" />
-    <bpmn:messageFlow id="Flow_0quh3f6" name="Angehörigen Anlagebestätitung" sourceRef="Activity_1xluz0f" targetRef="Participant_18jmyqt" />
-    <bpmn:messageFlow id="Flow_0t127c5" name="Angehörigenergänzung" sourceRef="Participant_18jmyqt" targetRef="Activity_1xluz0f" />
+    <bpmn:messageFlow id="Flow_0quh3f6" name="Erbender Anlagebestätitung" sourceRef="Activity_1xluz0f" targetRef="Participant_18jmyqt" />
+    <bpmn:messageFlow id="Flow_0t127c5" name="Erbenergänzung" sourceRef="Participant_18jmyqt" targetRef="Activity_1xluz0f" />
     <bpmn:messageFlow id="Flow_08jrum3" name="Neuer Erbschaftsgegenstand" sourceRef="Participant_18jmyqt" targetRef="Activity_1xluz0f" />
   </bpmn:collaboration>
   <bpmn:process id="estateRegistrationProzess" name="Nachlassanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
@@ -78,12 +78,12 @@
         <bpmn:outgoing>Flow_0hduc8w</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_1ddz15q" messageRef="Message_3qnnv9q" />
       </bpmn:boundaryEvent>
-      <bpmn:boundaryEvent id="Event_0kccbj9" name="Angehöriger Ergänzung erhalten" attachedToRef="Activity_1iz454v">
+      <bpmn:boundaryEvent id="Event_0kccbj9" name="Erbenergänzung erhalten" attachedToRef="Activity_1iz454v">
         <bpmn:extensionElements>
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const data = {firstName, lastName, email, birthday, idCardNumber};
 
-execution.setVariable("desiredRelativeData", S(JSON.stringify(data)));</camunda:script>
+execution.setVariable("desiredHeirData", S(JSON.stringify(data)));</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0c5j8j5</bpmn:outgoing>
@@ -92,18 +92,18 @@ execution.setVariable("desiredRelativeData", S(JSON.stringify(data)));</camunda:
       <bpmn:sendTask id="Activity_0k85c20" name="Bestätigung senden" camunda:expression="${1}">
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
-            <camunda:script scriptFormat="JavaScript">print("Sending additional relative added confirmation to " + execution.getProcessBusinessKey())</camunda:script>
+            <camunda:script scriptFormat="JavaScript">print("Sending additional heir added confirmation to " + execution.getProcessBusinessKey())</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1clffq4</bpmn:incoming>
         <bpmn:outgoing>Flow_0wf9837</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:callActivity id="Activity_1eyrfwi" name="Angehörigenanlageprozess" calledElement="relativeCreationProcess">
+      <bpmn:callActivity id="Activity_1eyrfwi" name="Erbenden anlegen" calledElement="heirCreationProcess">
         <bpmn:extensionElements>
-          <camunda:in source="relativesList" target="relativesList" />
-          <camunda:in source="desiredRelativeData" target="desiredRelativeData" />
+          <camunda:in source="heirsList" target="heirsList" />
+          <camunda:in source="desiredHeirData" target="desiredHeirData" />
           <camunda:in businessKey="#{execution.processBusinessKey}" />
-          <camunda:out source="relativesList" target="relativesList" />
+          <camunda:out source="heirsList" target="heirsList" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0c5j8j5</bpmn:incoming>
         <bpmn:outgoing>Flow_1clffq4</bpmn:outgoing>
@@ -257,7 +257,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
   <bpmn:message id="Message_3qnnv9q" name="estateUpdate" />
   <bpmn:message id="Message_0efs2mf" name="selectedAdvanceDirectives" />
   <bpmn:message id="Message_2s646dm" name="relativeAddition" />
-  <bpmn:message id="Message_2st5hgo" name="relativeAddition" />
+  <bpmn:message id="Message_2st5hgo" name="heirAddition" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_04n5tom">
       <bpmndi:BPMNShape id="Participant_0xvzoah_di" bpmnElement="Participant_0xvzoah" isHorizontal="true">
@@ -364,7 +364,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <di:waypoint x="850" y="270" />
         <di:waypoint x="850" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="663" y="252" width="85" height="27" />
+          <dc:Bounds x="665" y="252" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08jrum3_di" bpmnElement="Flow_08jrum3">
@@ -470,6 +470,12 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
           <dc:Bounds x="145" y="255" width="51" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0w17oox_di" bpmnElement="Event_0w17oox">
+        <dc:Bounds x="872" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="847" y="255" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ufxc0e_di" bpmnElement="recreateLastWill">
         <dc:Bounds x="282" y="113" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -482,6 +488,12 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNShape id="Activity_1ukp1ne_di" bpmnElement="Activity_1iz454v">
         <dc:Bounds x="420" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0rqh20l" bpmnElement="Event_0iw4e6g">
+        <dc:Bounds x="872" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="848" y="375" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0in1yjr" bpmnElement="Activity_0e0sca8">
         <dc:Bounds x="610" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -491,32 +503,21 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1rym8n2" bpmnElement="Activity_1eyrfwi">
         <dc:Bounds x="470" y="410" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_19pxe80_di" bpmnElement="Gateway_19pxe80" isMarkerVisible="true">
         <dc:Bounds x="765" y="325" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0rqh20l" bpmnElement="Event_0iw4e6g">
-        <dc:Bounds x="872" y="332" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0o3n7gb_di" bpmnElement="Event_0kccbj9">
+        <dc:Bounds x="402" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="848" y="375" width="85" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0w17oox_di" bpmnElement="Event_0w17oox">
-        <dc:Bounds x="872" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="847" y="255" width="87" height="27" />
+          <dc:Bounds x="321" y="250" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_16me2r0_di" bpmnElement="Event_1045693">
         <dc:Bounds x="482" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="465" y="296" width="89" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0o3n7gb_di" bpmnElement="Event_0kccbj9">
-        <dc:Bounds x="402" y="252" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="330.5" y="250" width="61" height="40" />
+          <dc:Bounds x="505" y="280" width="89" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0pyypfc_di" bpmnElement="Flow_0pyypfc">

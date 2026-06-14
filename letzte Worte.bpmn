@@ -9,7 +9,7 @@
     <bpmn:messageFlow id="Flow_1vcpz0c" name="Letze Worte Anfrage" sourceRef="Activity_06d36o4" targetRef="Participant_0kmyb5w" />
   </bpmn:collaboration>
   <bpmn:process id="lastWordsProcess" name="Letzte-Worte-Prozess" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1" name="Letzte Worte sollen hinterlegt werden">
+    <bpmn:startEvent id="StartEvent_1" name="Letzte Worte sind zu berücksichtigen">
       <bpmn:outgoing>Flow_02qc185</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0waf4v8" sourceRef="Activity_17rp3s5" targetRef="Activity_1llhhrv" />
@@ -86,7 +86,7 @@
       <bpmn:incoming>Flow_0hthqg4</bpmn:incoming>
       <bpmn:outgoing>Flow_1klshpl</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_17plfn7" name="Keine letzten Worte">
+    <bpmn:endEvent id="Event_17plfn7" name="Letze Worte nicht erwünscht">
       <bpmn:incoming>Flow_1klshpl</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="Event_0eacty8" name="Letzte Worte sind hinterlegt">
@@ -106,7 +106,7 @@
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="222" y="332" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="202" y="375" width="78" height="40" />
+          <dc:Bounds x="198" y="375" width="86" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ck407x_di" bpmnElement="Gateway_0ck407x" isMarkerVisible="true">
@@ -154,7 +154,7 @@
       <bpmndi:BPMNShape id="Event_17plfn7_di" bpmnElement="Event_17plfn7">
         <dc:Bounds x="1472" y="442" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1458" y="485.5" width="64" height="27" />
+          <dc:Bounds x="1447" y="486" width="86" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0eacty8_di" bpmnElement="Event_0eacty8">

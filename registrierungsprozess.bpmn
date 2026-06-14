@@ -27,7 +27,7 @@
         <bpmn:flowNodeRef>Event_0d4bkeh</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Event_07ktm1q" name="Nutzer möchte sich registrieren">
+    <bpmn:startEvent id="Event_07ktm1q" name="Erblasser will sich vollständig registrieren">
       <bpmn:outgoing>Flow_0nycjp4</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sendTask id="Activity_1r49j42" name="Identitätsprüfung anfragen" camunda:expression="${1}">
@@ -100,7 +100,7 @@
   </bpmn:process>
   <bpmn:message id="Message_1kohvqv" name="personalSummaryRecord" />
   <bpmn:message id="Message_2kaen0c" name="identifyCheckResponse" />
-  <bpmn:escalation id="Escalation_0npharp" name="cancelationRequired" escalationCode="400" />
+  <bpmn:escalation id="Escalation_0npharp" name="cancelationRequired" escalationCode="1400" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1bqzlhf">
       <bpmndi:BPMNShape id="Participant_0dd0tdg_di" bpmnElement="Participant_0dd0tdg" isHorizontal="true">
@@ -113,7 +113,7 @@
       <bpmndi:BPMNShape id="Event_1dpa3n3_di" bpmnElement="Event_07ktm1q">
         <dc:Bounds x="242" y="432" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="221" y="475" width="78" height="27" />
+          <dc:Bounds x="216" y="475" width="88" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ff1rfl_di" bpmnElement="Activity_1r49j42">

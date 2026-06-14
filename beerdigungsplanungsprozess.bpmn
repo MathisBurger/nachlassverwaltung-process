@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_Beerdigung">
-    <bpmn:participant id="Participant_Angehoerige" name="Beerdigungsplanungsprozess" processRef="funeralPlanningProcess" />
+    <bpmn:participant id="Participant_Angehoerige" name="Bestattungsplanungsprozess" processRef="funeralPlanningProcess" />
     <bpmn:participant id="Participant_09uh32h" name="Bestattungsinstitut" />
     <bpmn:participant id="Participant_11qf0vh" name="Erblasser" />
     <bpmn:messageFlow id="Flow_16seaio" name="Zukünftige Beauftragung" sourceRef="Activity_Feier" targetRef="Participant_09uh32h" />
@@ -12,7 +12,7 @@
     <bpmn:messageFlow id="Flow_1g6ap3l" name="Bestätigung" sourceRef="Participant_11qf0vh" targetRef="Event_07j6aif" />
     <bpmn:messageFlow id="Flow_0wp1dnd" name="Auftragsänderung" sourceRef="Activity_0ooshf6" targetRef="Participant_09uh32h" />
   </bpmn:collaboration>
-  <bpmn:process id="funeralPlanningProcess" name="Beerdigungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_Trauerfall" name="Beerdigung soll geplant werden">
       <bpmn:extensionElements />
       <bpmn:outgoing>Flow_0tqufez</bpmn:outgoing>
@@ -31,7 +31,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
       <bpmn:incoming>Flow_0cgx0e2</bpmn:incoming>
       <bpmn:outgoing>Flow_1tdnw2y</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:sendTask id="Activity_0dcyj4j" name="Beedigungspräferenzen anfragen" camunda:expression="${1}">
+    <bpmn:sendTask id="Activity_0dcyj4j" name="Bestattungspräferenzen anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">print("Requesting funeral preferences from " + execution.getProcessBusinessKey())</camunda:script>
@@ -184,7 +184,7 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
       <bpmn:incoming>Flow_1qmwy1u</bpmn:incoming>
       <bpmn:outgoing>Flow_6</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:endEvent id="EndEvent_Fertig" name="Beerdigung fertig geplant">
+    <bpmn:endEvent id="EndEvent_Fertig" name="Bestattung vollständig geplant">
       <bpmn:incoming>Flow_6</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
@@ -318,7 +318,7 @@ execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
       <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
         <dc:Bounds x="2542" y="282" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2518" y="318" width="84" height="27" />
+          <dc:Bounds x="2534" y="318" width="53" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1qmwy1u_di" bpmnElement="Flow_1qmwy1u">
