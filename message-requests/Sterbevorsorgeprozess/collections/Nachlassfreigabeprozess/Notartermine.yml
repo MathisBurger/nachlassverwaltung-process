@@ -6,14 +6,14 @@ info:
 http:
   method: POST
   url: http://localhost:8080/engine-rest/message
-  body:
-    type: json
-    data: ""
+  headers:
+    - name: Content-Type
+      value: application/json
   auth: inherit
 
 runtime:
   scripts:
-    - type: after-response
+    - type: before-request
       code: |-
         req.setBody({
           "messageName": "appointmentOffers",
@@ -27,7 +27,7 @@ runtime:
           "2026-12-01T08:00:00Z",
           "2027-01-15T13:30:00Z",
           "2027-02-23T10:15:00Z"
-        ]), "type": "Json", "valueInfo": {"transient": true}}
+        ]), "type": "Json"}
           }
         })
 

@@ -21,7 +21,7 @@
       </rule>
       <rule id="DecisionRule_18yx7zd">
         <inputEntry id="UnaryTests_1tqshzj">
-          <text>&gt;= 200 &amp;&amp; &lt; 600</text>
+          <text>[200..600)</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0ub3xuj">
           <text>30</text>
@@ -29,7 +29,7 @@
       </rule>
       <rule id="DecisionRule_0r53fig">
         <inputEntry id="UnaryTests_0lzzdyc">
-          <text>&gt;= 600 &amp;&amp; &lt; 1000</text>
+          <text>[600..1000)</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0uqh4gi">
           <text>60</text>
@@ -37,7 +37,7 @@
       </rule>
       <rule id="DecisionRule_16hyrcv">
         <inputEntry id="UnaryTests_0v8b9ce">
-          <text>&gt;= 1000 &amp;&amp; &lt; 2500</text>
+          <text>[1000..2500)</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0x52hw6">
           <text>120</text>
@@ -45,7 +45,7 @@
       </rule>
       <rule id="DecisionRule_1vqi3bv">
         <inputEntry id="UnaryTests_00q36uh">
-          <text>&lt;= 2500 &amp;&amp; &lt; 5000</text>
+          <text>[2500..5000)</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0pd360m">
           <text>180</text>

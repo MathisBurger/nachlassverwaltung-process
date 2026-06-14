@@ -1,0 +1,39 @@
+info:
+  name: GENUG GEWARTET
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: http://localhost:8080/engine-rest/job?processInstanceId=21f2dd2b-67fc-11f1-b74c-1262b9c34d3c&activityId=Event_02q50oa
+  params:
+    - name: processInstanceId
+      value: 21f2dd2b-67fc-11f1-b74c-1262b9c34d3c
+      type: query
+    - name: activityId
+      value: Event_02q50oa
+      type: query
+  body:
+    type: json
+    data: |
+      {
+        "skipCustomListeners": true,
+        "skipIoMappings": true,
+        "instructions": [
+          {
+            "type": "cancel",
+            "activityId": "Waiting_Event_Activity_ID"
+          },
+          {
+            "type": "startBeforeActivity",
+            "activityId": "Next_Task_Activity_ID"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

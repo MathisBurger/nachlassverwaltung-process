@@ -71,6 +71,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
           <bpmn:extensionElements>
             <camunda:in businessKey="#{execution.processBusinessKey}" />
             <camunda:in source="estateList" target="estateList" />
+            <camunda:in source="signedLastWill" target="lastWillContent" />
             <camunda:out source="signedLastWill" target="signedLastWill" />
           </bpmn:extensionElements>
           <bpmn:incoming>Flow_1g9889d</bpmn:incoming>
@@ -123,6 +124,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
           <bpmn:extensionElements>
             <camunda:in businessKey="#{execution.processBusinessKey}" />
             <camunda:in source="estateList" target="estateList" />
+            <camunda:in source="signedLastWill" target="lastWillContent" />
             <camunda:out source="signedLastWill" target="signedLastWill" />
           </bpmn:extensionElements>
           <bpmn:incoming>Flow_05v65g0</bpmn:incoming>
@@ -234,10 +236,12 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
     <bpmn:callActivity id="Activity_1x1aepy" name="Nachlassanlageprozess" calledElement="estateRegistrationProzess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in source="relativesList" target="relativesList" />
         <camunda:out source="advanceDirectiveContents" target="advanceDirectiveContentsLocal" />
         <camunda:out source="estateList" target="estateList" />
         <camunda:out source="signedLastWill" target="signedLastWill" />
         <camunda:out source="lastWords" target="lastWordsLocal" />
+        <camunda:out source="relativesList" target="relativesList" />
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">execution.setVariableLocal("advanceDirectiveContentsLocal",S("{}"));
 execution.setVariableLocal("lastWordsLocal","");</camunda:script>

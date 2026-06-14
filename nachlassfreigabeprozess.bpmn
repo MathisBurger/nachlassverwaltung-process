@@ -84,6 +84,7 @@
           <camunda:executionListener expression="${execution.setVariableLocal(&#34;durationInMinutes&#34;, 0)}" event="end" />
           <camunda:executionListener expression="${execution.setVariableLocal(&#34;appointmentOffers&#34;, S(&#34;[]&#34;))}" event="end" />
           <camunda:executionListener expression="${execution.setVariableLocal(&#34;appointmentVotes&#34;, S(&#34;{}&#34;))}" event="end" />
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;lastWillLength&#34;, signedLastWill.length())}" event="end" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_1y9vrnt</bpmn:outgoing>
       </bpmn:startEvent>
@@ -182,10 +183,8 @@ const largestKey = Object.keys(votes).reduce((a, b) =&gt; data[a] &gt; data[b] ?
 
 execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
       </bpmn:scriptTask>
-      <bpmn:businessRuleTask id="Activity_1afwnlg" name="Termindauer bestimmen" camunda:decisionRef="durationNotarySession">
-        <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;lastWillLength&#34;, signedLastWill.length)}" event="start" />
-        </bpmn:extensionElements>
+      <bpmn:businessRuleTask id="Activity_1afwnlg" name="Termindauer bestimmen" camunda:resultVariable="durationInMinutes" camunda:decisionRef="durationNotarySession" camunda:mapDecisionResult="singleEntry">
+        <bpmn:extensionElements />
         <bpmn:incoming>Flow_1y9vrnt</bpmn:incoming>
         <bpmn:outgoing>Flow_0hm39s8</bpmn:outgoing>
       </bpmn:businessRuleTask>
@@ -297,6 +296,10 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmn:endEvent id="Event_01l6tdp">
         <bpmn:incoming>Flow_1nlncaq</bpmn:incoming>
       </bpmn:endEvent>
+      <bpmn:textAnnotation id="TextAnnotation_0w91upz">
+        <bpmn:text>Hier noch fixen</bpmn:text>
+      </bpmn:textAnnotation>
+      <bpmn:association id="Association_0epowso" associationDirection="None" sourceRef="Activity_17a94yb" targetRef="TextAnnotation_0w91upz" />
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="Event_00loc8w" name="Erben sind sich uneinig" attachedToRef="Activity_1hbx0a9">
       <bpmn:outgoing>Flow_10zsxek</bpmn:outgoing>
@@ -319,7 +322,7 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1f8wz8i</bpmn:incoming>
         <bpmn:outgoing>Flow_0p8loxg</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirs.elements()}" />
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirs.elements()}" camunda:elementVariable="heir" />
       </bpmn:sendTask>
       <bpmn:subProcess id="Activity_0v3zmbl">
         <bpmn:incoming>Flow_0p8loxg</bpmn:incoming>
@@ -743,40 +746,48 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1yy9yf2">
     <bpmndi:BPMNPlane id="BPMNPlane_1x7szj8" bpmnElement="Activity_0qa1g79">
       <bpmndi:BPMNShape id="BPMNShape_1qpitsm" bpmnElement="Activity_1in3i3g">
-        <dc:Bounds x="280" y="80" width="100" height="80" />
+        <dc:Bounds x="280" y="130" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1n4afld" bpmnElement="Activity_1fjrvom">
-        <dc:Bounds x="470" y="80" width="100" height="80" />
+        <dc:Bounds x="470" y="130" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_15ngs2z" bpmnElement="Activity_17a94yb">
-        <dc:Bounds x="670" y="80" width="100" height="80" />
+        <dc:Bounds x="670" y="130" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_08a2mer_di" bpmnElement="Event_08a2mer">
-        <dc:Bounds x="142" y="102" width="36" height="36" />
+        <dc:Bounds x="142" y="152" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="118" y="145" width="84" height="27" />
+          <dc:Bounds x="118" y="195" width="84" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_01l6tdp_di" bpmnElement="Event_01l6tdp">
-        <dc:Bounds x="852" y="102" width="36" height="36" />
+        <dc:Bounds x="852" y="152" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0epowso_di" bpmnElement="Association_0epowso">
+        <di:waypoint x="758" y="130" />
+        <di:waypoint x="806" y="80" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0w91upz_di" bpmnElement="TextAnnotation_0w91upz">
+        <dc:Bounds x="770" y="50" width="100" height="30" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0dblha9_di" bpmnElement="Flow_0dblha9">
+        <di:waypoint x="178" y="170" />
+        <di:waypoint x="280" y="170" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1gmhw91" bpmnElement="Flow_0vgcrzq">
-        <di:waypoint x="380" y="120" />
-        <di:waypoint x="470" y="120" />
+        <di:waypoint x="380" y="170" />
+        <di:waypoint x="470" y="170" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1pp9yez" bpmnElement="Flow_044m50u">
-        <di:waypoint x="570" y="120" />
-        <di:waypoint x="670" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0dblha9_di" bpmnElement="Flow_0dblha9">
-        <di:waypoint x="178" y="120" />
-        <di:waypoint x="280" y="120" />
+        <di:waypoint x="570" y="170" />
+        <di:waypoint x="670" y="170" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1nlncaq_di" bpmnElement="Flow_1nlncaq">
-        <di:waypoint x="770" y="120" />
-        <di:waypoint x="852" y="120" />
+        <di:waypoint x="770" y="170" />
+        <di:waypoint x="852" y="170" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

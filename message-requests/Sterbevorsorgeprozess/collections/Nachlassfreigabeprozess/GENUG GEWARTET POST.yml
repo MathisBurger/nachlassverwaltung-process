@@ -1,0 +1,32 @@
+info:
+  name: GENUG GEWARTET POST
+  type: http
+  seq: 12
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/job/a402804e-67fd-11f1-b74c-1262b9c34d3c/execute
+  body:
+    type: json
+    data: |
+      {
+        "skipCustomListeners": true,
+        "skipIoMappings": true,
+        "instructions": [
+          {
+            "type": "cancel",
+            "activityId": "Waiting_Event_Activity_ID"
+          },
+          {
+            "type": "startBeforeActivity",
+            "activityId": "Next_Task_Activity_ID"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

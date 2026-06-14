@@ -13,10 +13,10 @@ http:
         "messageName": "appointmentVote",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "email": {"value": "", "type": "String"}
+          "email": {"value": "hugo.habicht@demomail.org", "type": "String"}
         },
         "processVariables": {
-          "vote": {"value": "", "type": "String", "valueInfo": {"transient": true}}
+          "vote": {"value": "2026-08-14T09:30:00Z", "type": "String"}
         }
       }
   auth: inherit
