@@ -20,5 +20,9 @@
 - [ ] Wo muss ich überall Datenobjekte und Data Stores nutzen und wo nicht?
 - [ ] Müssen Default Flows auch beschriftet werden?
 - [x] Angehörigen Anlage: Kann man die End Events so machen?
+- [ ] Was genau aus dem 3. Semester ist relevant?
+- [ ] Wie viele Business Rule Tasks sind notwenig? 4? Oder sind in den Anforderungen 4 Entscheidungen gemeint?
+- [ ] Bei dem Eingebetteten Prozess, dann entsprechend selbst Logik, die Prüft, was storniert werden muss, oder?
+
 
 

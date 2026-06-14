@@ -1,6 +1,6 @@
 # Todo Liste
 
-- [ ] Bubbeln bei Vergabedokumenten
+- [x] Bubbeln bei Vergabedokumenten
 - [ ] Generell das Bubbeln überprüfen
 - [ ] Prüfen auf richtige Verwendung von transient und local
 - [x] Wenn das Testament fertig ist, aber die letzten Worte noch nicht, dann kann das Testament nicht aktualisiert werden
@@ -11,9 +11,12 @@
 - [ ] Ubiquitous Language definieren
 - [ ] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
 - [ ] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
-
-
-
+- [ ] Method and Style prüfen
+- [ ] Zwei weitere DMN Modelle
+- [ ] Vorsorgedokumente merge testen
+- [ ] Last words override testen
+- [ ] Die Erben auch nur Beerdigung einladen (Da kann man auch nochmal ordentlich eine Business Rule task einbauen)
+- [ ] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
 
 
 

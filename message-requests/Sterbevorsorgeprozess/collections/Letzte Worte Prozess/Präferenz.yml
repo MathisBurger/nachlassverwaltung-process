@@ -13,7 +13,7 @@ http:
         "messageName": "lastWordsPreference",
         "businessKey": "L1234567",
         "processVariables": {
-          "preference": {"value": true, "type": "Boolean"}
+          "preference": {"value": false, "type": "Boolean"}
         }
       }
   auth: inherit
