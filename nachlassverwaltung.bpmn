@@ -82,9 +82,6 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
           <bpmn:messageEventDefinition id="MessageEventDefinition_1bd56fl" messageRef="Message_35ult04" />
         </bpmn:startEvent>
       </bpmn:subProcess>
-      <bpmn:endEvent id="Event_13rfbmu">
-        <bpmn:incoming>Flow_0naagu0</bpmn:incoming>
-      </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0naagu0" sourceRef="Activity_17m6k59" targetRef="Event_13rfbmu" />
       <bpmn:subProcess id="Activity_16s1fmg" name="Erbe Ergänzungsprozess" triggeredByEvent="true">
         <bpmn:startEvent id="Event_0ujy1dt" name="Neuer Erbe erhalten" isInterrupting="false">
@@ -133,6 +130,10 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
         <bpmn:sequenceFlow id="Flow_05v65g0" sourceRef="Activity_0k85c20" targetRef="Activity_00l0swb" />
         <bpmn:sequenceFlow id="Flow_0c28ey6" sourceRef="Activity_00l0swb" targetRef="Event_1ndbk7r" />
       </bpmn:subProcess>
+      <bpmn:endEvent id="Event_13rfbmu">
+        <bpmn:incoming>Flow_0naagu0</bpmn:incoming>
+        <bpmn:terminateEventDefinition id="TerminateEventDefinition_06wyqha" />
+      </bpmn:endEvent>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_1j8wqv1" name="Bestattungsänderungsprozess" triggeredByEvent="true">
       <bpmn:startEvent id="Event_1inr6fy" name="Bestattungsänderung erhalten" isInterrupting="false">
@@ -601,6 +602,9 @@ execution.setVariable("lastWords", lastWordsLocal);
       <bpmndi:BPMNShape id="Event_05rgpu3_di" bpmnElement="Event_05rgpu3">
         <dc:Bounds x="152" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0wrz4qu_di" bpmnElement="Event_13rfbmu">
+        <dc:Bounds x="552" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jslasd_di" bpmnElement="Activity_0aa69ul" isExpanded="true">
         <dc:Bounds x="160" y="230" width="590" height="200" />
         <bpmndi:BPMNLabel />
@@ -632,9 +636,6 @@ execution.setVariable("lastWords", lastWordsLocal);
         <di:waypoint x="550" y="330" />
         <di:waypoint x="612" y="330" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_1e5wtis_di" bpmnElement="Event_13rfbmu">
-        <dc:Bounds x="552" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0u07mhh" bpmnElement="Activity_16s1fmg" isExpanded="true">
         <dc:Bounds x="160" y="460" width="618" height="200" />
         <bpmndi:BPMNLabel />

@@ -19,4 +19,7 @@
 - [ ] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
 - [ ] Registration Escalation handeln
 - [ ] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
+- [ ] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde
+
+
 
