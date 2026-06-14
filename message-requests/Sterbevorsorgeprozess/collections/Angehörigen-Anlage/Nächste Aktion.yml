@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "messageName": "relativeCreationNextAction",
+        "messageName": "heirCreationNextAction",
         "businessKey": "L1234567",
         "processVariables": {
           "continueNew": {"value": false, "type": "Boolean"}

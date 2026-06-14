@@ -99,7 +99,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
         <bpmn:endEvent id="Event_1ndbk7r">
           <bpmn:incoming>Flow_0c28ey6</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:callActivity id="Activity_1eyrfwi" name="Erbe anlegen" calledElement="relativeCreationProcess">
+        <bpmn:callActivity id="Activity_1eyrfwi" name="Erbe anlegen" calledElement="heirCreationProcess">
           <bpmn:extensionElements>
             <camunda:in source="heirsList" target="heirsList" />
             <camunda:in source="desiredHeirData" target="desiredHeirData" />
@@ -221,7 +221,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
     <bpmn:callActivity id="Activity_1vavw6o" name="Erben anlegen" calledElement="heirCreationProcess">
       <bpmn:extensionElements>
         <camunda:in source="heirsList" target="heirsList" />
-        <camunda:in sourceExpression="${null}" target="desiredRelativeData" />
+        <camunda:in sourceExpression="${null}" target="desiredHeirData" />
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:out source="heirsList" target="heirsList" />
         <camunda:out source="continueNew" target="continueCreateNewHeir" />

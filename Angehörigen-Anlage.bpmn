@@ -130,7 +130,7 @@ execution.setVariable("heirAlreadyExists", exists);</bpmn:script>
         <bpmn:targetRef>DataStoreReference_1rvsvb6</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
       <bpmn:script>var rawList = JSON.parse(heirsList.toString());
-rawList.push(JSON.parse(desiredHeirsData.toString()));
+rawList.push(JSON.parse(desiredHeirData.toString()));
 
 execution.setVariable("heirsList", S(JSON.stringify(rawList)));</bpmn:script>
     </bpmn:scriptTask>
