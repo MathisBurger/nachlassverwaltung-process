@@ -142,7 +142,7 @@ execution.setVariable("appointmentVotes", S(JSON.stringify(votes)));</bpmn:scrip
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_0yhzzx5">
           <bpmn:extensionElements>
-            <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, relative.prop(&#34;email&#34;).stringValue())}" event="start" />
+            <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, heir.prop(&#34;email&#34;).stringValue())}" event="start" />
           </bpmn:extensionElements>
           <bpmn:outgoing>Flow_1tm158h</bpmn:outgoing>
         </bpmn:startEvent>

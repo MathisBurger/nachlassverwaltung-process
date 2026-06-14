@@ -27,7 +27,7 @@
       <bpmn:outgoing>Flow_1fcagyj</bpmn:outgoing>
       <bpmn:startEvent id="Event_19aajiv" name="Testament Erstellung notwendig">
         <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;desiredRelativeData&#34;, S(&#34;{}&#34;))}" event="start" />
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;desiredHeirData&#34;, S(&#34;{}&#34;))}" event="start" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0pyypfc</bpmn:outgoing>
       </bpmn:startEvent>
@@ -256,7 +256,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
   </bpmn:process>
   <bpmn:message id="Message_3qnnv9q" name="estateUpdate" />
   <bpmn:message id="Message_0efs2mf" name="selectedAdvanceDirectives" />
-  <bpmn:message id="Message_2s646dm" name="relativeAddition" />
   <bpmn:message id="Message_2st5hgo" name="heirAddition" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_04n5tom">

@@ -172,7 +172,7 @@ execution.setVariable("heirsList", S(JSON.stringify(rawList)));</bpmn:script>
     <bpmn:sendTask id="Activity_0mb13i2" name="Duplikatsnachricht senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending relative duplicate message for heir " + desiredHeirData.prop("idCardNumber").stringValue() + " to " + execution.getProcessBusinessKey())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending heir duplicate message for heir " + desiredHeirData.prop("idCardNumber").stringValue() + " to " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1k4yo4t</bpmn:incoming>
