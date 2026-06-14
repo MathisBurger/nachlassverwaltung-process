@@ -15,7 +15,7 @@ http:
         "processVariables": {
           "funeralType": {"value": "burial", "type": "String"},
           "maxAmountGuests": {"value": 12, "type": "Integer"},
-          "budget": {"value": 2000, "type": "Integer"}
+          "budget": {"value": 100000000, "type": "Integer"}
         }
       }
   auth: inherit

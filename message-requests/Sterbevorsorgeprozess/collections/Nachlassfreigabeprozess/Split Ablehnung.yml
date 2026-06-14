@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "messageName": "splitAgree",
+        "messageName": "splitDisagree",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "email": {"value": "", "type": "String"}
+          "email": {"value": "mab8881@thi.de", "type": "String"}
         }
       }
   auth: inherit

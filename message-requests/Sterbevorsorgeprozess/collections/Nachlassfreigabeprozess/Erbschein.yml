@@ -13,14 +13,15 @@ http:
 
 runtime:
   scripts:
-    - type: after-response
+    - type: before-request
       code: |-
         const grantOfProbate = [
           {
             "firstName": "Mathis",
             "lastName": "Burger",
             "email": "mab8881@thi.de",
-            "birthday": "28.03.2005"
+            "birthday": "28.03.2005",
+            "idCardCode": "L0000005"
           }
         ];
 
@@ -29,7 +30,7 @@ runtime:
           "messageName": "grantOfProbate",
           "businessKey": "L1234567",
           "processVariables": {
-            "grantOfProbate": {"value": JSON.stringify(grantOfProbate), "type": "Json", "valueInfo": {"transient": true}}
+            "grantOfProbate": {"value": JSON.stringify(grantOfProbate), "type": "Json"}
           }
         })
 

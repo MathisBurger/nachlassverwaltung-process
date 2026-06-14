@@ -15,7 +15,7 @@ http:
         "processVariables": {
           "funeralType": {"value": "sea", "type": "String", "valueInfo": {"transient": true}},
           "maxAmountGuests": {"value": 50, "type": "Integer", "valueInfo": {"transient": true}},
-          "budget": {"value": 1000, "type": "Integer", "valueInfo": {"transient": true}}
+          "budget": {"value": 1000000, "type": "Integer", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit
