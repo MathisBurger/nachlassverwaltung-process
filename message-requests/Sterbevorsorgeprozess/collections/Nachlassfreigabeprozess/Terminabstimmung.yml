@@ -1,7 +1,7 @@
 info:
   name: Terminabstimmung
   type: http
-  seq: 4
+  seq: 3
 
 http:
   method: POST
@@ -12,8 +12,8 @@ http:
       {
         "messageName": "appointmentVote",
         "businessKey": "L1234567",
-        "correlationKeys": {
-          "email": {"value": "sugi.sorglos@demomail.org", "type": "String"}
+        "localCorrelationKeys": {
+          "email": {"value": "susi.sorglos@demomail.org", "type": "String"}
         },
         "processVariables": {
           "vote": {"value": "2026-08-14T09:30:00Z", "type": "String"}

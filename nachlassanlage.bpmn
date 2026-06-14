@@ -168,9 +168,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmn:incoming>Flow_0662rz4</bpmn:incoming>
       <bpmn:outgoing>Flow_1fcagyj</bpmn:outgoing>
       <bpmn:startEvent id="Event_19aajiv" name="Testament Erstellung notwendig">
-        <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariableLocal(&#34;desiredHeirData&#34;, S(&#34;{}&#34;))}" event="start" />
-        </bpmn:extensionElements>
+        <bpmn:extensionElements />
         <bpmn:outgoing>Flow_0pyypfc</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_0w17oox" name="Testament erfolgreich erstellt">
@@ -283,6 +281,13 @@ execution.setVariable("desiredHeirData", S(JSON.stringify(data)));</camunda:scri
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1vflkxa" sourceRef="Activity_1x38kjd" targetRef="Activity_0ebl084" />
     <bpmn:boundaryEvent id="Event_1gu9f8r" name="Erbenergänzung erhalten" cancelActivity="false" attachedToRef="Activity_108hdv9">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="end">
+          <camunda:script scriptFormat="JavaScript">const data = {firstName, lastName, email, birthday, idCardNumber};
+
+execution.setVariable("desiredHeirData", S(JSON.stringify(data)));</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0k7ar26</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0q5glej" messageRef="Message_2st5hgo" />
     </bpmn:boundaryEvent>

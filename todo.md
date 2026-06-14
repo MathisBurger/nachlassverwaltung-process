@@ -6,11 +6,11 @@
 - [x] Wenn das Testament fertig ist, aber die letzten Worte noch nicht, dann kann das Testament nicht aktualisiert werden
 - [ ] Abbruch Transaktion
 - [x] Alle Sendenen Events in die Konsole printen lassen ;)  
-- [ ] Nach Uniquitous Language prüfen
+- [x] Nach Uniquitous Language prüfen
 - [ ] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
-- [ ] Ubiquitous Language definieren
+- [x] Ubiquitous Language definieren
 - [ ] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
-- [ ] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
+- [x] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
 - [ ] Method and Style prüfen
 - [ ] Zwei weitere DMN Modelle
 - [x] Vorsorgedokumente merge testen
@@ -19,7 +19,7 @@
 - [ ] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
 - [ ] Registration Escalation handeln
 - [ ] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
-- [ ] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde
+- [x] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde
 
 
 

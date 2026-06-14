@@ -14,8 +14,7 @@
     <bpmn:messageFlow id="Flow_0x2co2x" name="Terminvorschlag" sourceRef="Activity_0g2npn5" targetRef="Participant_1nzb2ic" />
     <bpmn:messageFlow id="Flow_1csyucv" name="Bevorzugter Terminvorschlag" sourceRef="Participant_1nzb2ic" targetRef="Activity_0g2npn5" />
     <bpmn:messageFlow id="Flow_1t3n0uu" name="Termineinladung" sourceRef="Activity_0g2npn5" targetRef="Participant_1nzb2ic" />
-    <bpmn:messageFlow id="Flow_1kxdbt8" name="Zustimmung" sourceRef="Participant_1nzb2ic" targetRef="Activity_1hbx0a9" />
-    <bpmn:messageFlow id="Flow_0iw9vg8" name="Ablehnung" sourceRef="Participant_1nzb2ic" targetRef="Activity_1hbx0a9" />
+    <bpmn:messageFlow id="Flow_1kxdbt8" name="Zustimmungsentscheidung" sourceRef="Participant_1nzb2ic" targetRef="Activity_1hbx0a9" />
     <bpmn:messageFlow id="Flow_0wbvdci" name="Unstimmigkeitsinformation" sourceRef="Activity_0gadktb" targetRef="Participant_0stz0bz" />
     <bpmn:messageFlow id="Flow_01cfy6e" name="Neue Einigung" sourceRef="Participant_0stz0bz" targetRef="Activity_008f84g" />
     <bpmn:messageFlow id="Flow_1uhqt7w" name="Vermögensaufteilung" sourceRef="Activity_1hbx0a9" targetRef="Participant_1nzb2ic" />
@@ -101,11 +100,7 @@
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_0c7rtf2" sourceRef="Activity_0gdd4rn" targetRef="Activity_1bvjat3" />
       <bpmn:subProcess id="Activity_1bvjat3">
-        <bpmn:extensionElements>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="email">${heir.prop("email").stringValue()}</camunda:inputParameter>
-          </camunda:inputOutput>
-        </bpmn:extensionElements>
+        <bpmn:extensionElements />
         <bpmn:incoming>Flow_0c7rtf2</bpmn:incoming>
         <bpmn:outgoing>Flow_0r2l95i</bpmn:outgoing>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
@@ -117,6 +112,11 @@
         </bpmn:startEvent>
         <bpmn:sequenceFlow id="Flow_10782qg" sourceRef="Event_0x0tflq" targetRef="Activity_0im01cr" />
         <bpmn:receiveTask id="Activity_0im01cr" name="Bevorzugter Terminvorschlag empfangen" messageRef="Message_2hock3r">
+          <bpmn:extensionElements>
+            <camunda:inputOutput>
+              <camunda:inputParameter name="email">${heir.prop("email").stringValue()}</camunda:inputParameter>
+            </camunda:inputOutput>
+          </bpmn:extensionElements>
           <bpmn:incoming>Flow_10782qg</bpmn:incoming>
           <bpmn:outgoing>Flow_0xdqqzh</bpmn:outgoing>
         </bpmn:receiveTask>
@@ -330,63 +330,56 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_1xfqc1i">
           <bpmn:extensionElements>
-            <camunda:executionListener expression="${execution.setVariableLocal(&#34;email&#34;, heir.prop(&#34;email&#34;).stringValue())}" event="start" />
+            <camunda:executionListener expression="${execution.setVariableLocal(&#34;agreed&#34;, false)}" event="start" />
           </bpmn:extensionElements>
-          <bpmn:outgoing>Flow_0gsp5au</bpmn:outgoing>
+          <bpmn:outgoing>Flow_0dm43rs</bpmn:outgoing>
         </bpmn:startEvent>
-        <bpmn:eventBasedGateway id="Gateway_08oav3v">
-          <bpmn:incoming>Flow_10rqogh</bpmn:incoming>
-          <bpmn:outgoing>Flow_0obw36e</bpmn:outgoing>
-          <bpmn:outgoing>Flow_1efmwyw</bpmn:outgoing>
-          <bpmn:outgoing>Flow_0t9gerx</bpmn:outgoing>
-        </bpmn:eventBasedGateway>
-        <bpmn:intermediateCatchEvent id="Event_00tfdwy" name="Zustimmung erhalten">
-          <bpmn:incoming>Flow_0obw36e</bpmn:incoming>
-          <bpmn:outgoing>Flow_0zgtmhw</bpmn:outgoing>
-          <bpmn:messageEventDefinition id="MessageEventDefinition_0f7v56g" messageRef="Message_0svknd3" />
-        </bpmn:intermediateCatchEvent>
-        <bpmn:exclusiveGateway id="Gateway_0shsmse">
-          <bpmn:incoming>Flow_0gsp5au</bpmn:incoming>
-          <bpmn:incoming>Flow_00kzjzz</bpmn:incoming>
-          <bpmn:outgoing>Flow_10rqogh</bpmn:outgoing>
-        </bpmn:exclusiveGateway>
-        <bpmn:intermediateCatchEvent id="Event_04hsh41" name="Ablehnung erhalten">
-          <bpmn:incoming>Flow_1efmwyw</bpmn:incoming>
-          <bpmn:outgoing>Flow_18j3cyr</bpmn:outgoing>
-          <bpmn:messageEventDefinition id="MessageEventDefinition_1m8wc6h" messageRef="Message_2aggdtg" />
-        </bpmn:intermediateCatchEvent>
-        <bpmn:intermediateCatchEvent id="Event_1qs7apl" name="3 Tage vergangen">
-          <bpmn:incoming>Flow_0t9gerx</bpmn:incoming>
-          <bpmn:outgoing>Flow_10isng5</bpmn:outgoing>
-          <bpmn:timerEventDefinition id="TimerEventDefinition_0dpl5ru">
-            <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
-          </bpmn:timerEventDefinition>
-        </bpmn:intermediateCatchEvent>
-        <bpmn:sendTask id="Activity_08kyos2" name="Erinnerung seden" camunda:expression="${1}">
-          <bpmn:extensionElements>
-            <camunda:executionListener event="start">
-              <camunda:script scriptFormat="JavaScript">print("Sending reminder to vote for agreement on heritage terms to " + heir.prop("email").stringValue())</camunda:script>
-            </camunda:executionListener>
-          </bpmn:extensionElements>
-          <bpmn:incoming>Flow_10isng5</bpmn:incoming>
-          <bpmn:outgoing>Flow_00kzjzz</bpmn:outgoing>
-        </bpmn:sendTask>
-        <bpmn:sequenceFlow id="Flow_0gsp5au" sourceRef="Event_1xfqc1i" targetRef="Gateway_0shsmse" />
-        <bpmn:sequenceFlow id="Flow_10rqogh" sourceRef="Gateway_0shsmse" targetRef="Gateway_08oav3v" />
-        <bpmn:sequenceFlow id="Flow_0obw36e" sourceRef="Gateway_08oav3v" targetRef="Event_00tfdwy" />
-        <bpmn:sequenceFlow id="Flow_1efmwyw" sourceRef="Gateway_08oav3v" targetRef="Event_04hsh41" />
-        <bpmn:sequenceFlow id="Flow_0t9gerx" sourceRef="Gateway_08oav3v" targetRef="Event_1qs7apl" />
-        <bpmn:sequenceFlow id="Flow_00kzjzz" sourceRef="Activity_08kyos2" targetRef="Gateway_0shsmse" />
-        <bpmn:sequenceFlow id="Flow_10isng5" sourceRef="Event_1qs7apl" targetRef="Activity_08kyos2" />
         <bpmn:endEvent id="Event_1o9u5ty" name="Erbe hat zugestimmt">
-          <bpmn:incoming>Flow_0zgtmhw</bpmn:incoming>
+          <bpmn:incoming>Flow_0asdwpg</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_0zgtmhw" sourceRef="Event_00tfdwy" targetRef="Event_1o9u5ty" />
         <bpmn:endEvent id="Event_15b3qlr" name="Erben sind sich uneinig">
-          <bpmn:incoming>Flow_18j3cyr</bpmn:incoming>
+          <bpmn:incoming>Flow_120nbrx</bpmn:incoming>
           <bpmn:escalationEventDefinition id="EscalationEventDefinition_0vy34j5" escalationRef="Escalation_38hl71v" />
         </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_18j3cyr" sourceRef="Event_04hsh41" targetRef="Event_15b3qlr" />
+        <bpmn:exclusiveGateway id="Gateway_0fesz09" name="Hat Erbe zugestimmt?">
+          <bpmn:incoming>Flow_0jwldl5</bpmn:incoming>
+          <bpmn:outgoing>Flow_0asdwpg</bpmn:outgoing>
+          <bpmn:outgoing>Flow_120nbrx</bpmn:outgoing>
+        </bpmn:exclusiveGateway>
+        <bpmn:sequenceFlow id="Flow_0asdwpg" name="Ja" sourceRef="Gateway_0fesz09" targetRef="Event_1o9u5ty">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${agreed}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+        <bpmn:sequenceFlow id="Flow_120nbrx" name="Nein" sourceRef="Gateway_0fesz09" targetRef="Event_15b3qlr">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!agreed}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+        <bpmn:sequenceFlow id="Flow_0dm43rs" sourceRef="Event_1xfqc1i" targetRef="Activity_0q0q8ro" />
+        <bpmn:receiveTask id="Activity_0q0q8ro" name="Zustimmungsentscheidung erhalten" messageRef="Message_0svknd3">
+          <bpmn:extensionElements>
+            <camunda:inputOutput>
+              <camunda:inputParameter name="email">${heir.prop("email").stringValue()}</camunda:inputParameter>
+            </camunda:inputOutput>
+          </bpmn:extensionElements>
+          <bpmn:incoming>Flow_0dm43rs</bpmn:incoming>
+          <bpmn:outgoing>Flow_0jwldl5</bpmn:outgoing>
+        </bpmn:receiveTask>
+        <bpmn:sequenceFlow id="Flow_0jwldl5" sourceRef="Activity_0q0q8ro" targetRef="Gateway_0fesz09" />
+        <bpmn:subProcess id="Activity_1bzfsxa" triggeredByEvent="true">
+          <bpmn:sendTask id="Activity_08kyos2" name="Erinnerung seden" camunda:expression="${1}">
+            <bpmn:extensionElements>
+              <camunda:executionListener event="start">
+                <camunda:script scriptFormat="JavaScript">print("Sending reminder to vote for agreement on heritage terms to " + heir.prop("email").stringValue())</camunda:script>
+              </camunda:executionListener>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_10isng5</bpmn:incoming>
+          </bpmn:sendTask>
+          <bpmn:sequenceFlow id="Flow_10isng5" sourceRef="Event_1qs7apl" targetRef="Activity_08kyos2" />
+          <bpmn:startEvent id="Event_1qs7apl" name="3 Tage vergangen" isInterrupting="false">
+            <bpmn:outgoing>Flow_10isng5</bpmn:outgoing>
+            <bpmn:timerEventDefinition id="TimerEventDefinition_0gw4mm3">
+              <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
+            </bpmn:timerEventDefinition>
+          </bpmn:startEvent>
+        </bpmn:subProcess>
       </bpmn:subProcess>
       <bpmn:endEvent id="Event_1iygbq7" name="Alle Zustimmungen erhalten">
         <bpmn:incoming>Flow_000b4j6</bpmn:incoming>
@@ -420,9 +413,8 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
   <bpmn:message id="Message_2hock3r" name="appointmentVote" />
   <bpmn:message id="Message_3eag7q8" name="grantOfProbate" />
   <bpmn:message id="Message_3u90o53" name="openingProtocol" />
-  <bpmn:message id="Message_0svknd3" name="splitAgree" />
+  <bpmn:message id="Message_0svknd3" name="splitAgreement" />
   <bpmn:escalation id="Escalation_38hl71v" name="theHeirsDidNotAgree" escalationCode="1415" />
-  <bpmn:message id="Message_2aggdtg" name="splitDisagree" />
   <bpmn:message id="Message_3748hto" name="newSplitAgreement" />
   <bpmn:message id="Message_132pdb9" name="cashoutConfirmation" />
   <bpmn:message id="Message_3t43r9c" name="appointmentOffers" />
@@ -673,14 +665,7 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="1790" y="140" />
         <di:waypoint x="1790" y="480" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1729" y="343" width="61" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0iw9vg8_di" bpmnElement="Flow_0iw9vg8">
-        <di:waypoint x="1810" y="140" />
-        <di:waypoint x="1810" y="480" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1813" y="353" width="53" height="14" />
+          <dc:Bounds x="1786" y="343" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0wbvdci_di" bpmnElement="Flow_0wbvdci">
@@ -909,90 +894,72 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <dc:Bounds x="288" y="110" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0f47ibu" bpmnElement="Activity_0v3zmbl" isExpanded="true">
-        <dc:Bounds x="508" y="80" width="720" height="460" />
+        <dc:Bounds x="508" y="50" width="720" height="490" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0o94ykg" bpmnElement="Event_1xfqc1i">
         <dc:Bounds x="548" y="132" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0rcnnag" bpmnElement="Gateway_08oav3v">
-        <dc:Bounds x="743" y="125" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1jelwts" bpmnElement="Event_00tfdwy">
-        <dc:Bounds x="910" y="132" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="898" y="175" width="61" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1vcjvnu" bpmnElement="Gateway_0shsmse" isMarkerVisible="true">
-        <dc:Bounds x="643" y="125" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1tdn2sp" bpmnElement="Event_04hsh41">
-        <dc:Bounds x="910" y="242" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="902" y="285" width="53" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1bcw18x" bpmnElement="Event_1qs7apl">
-        <dc:Bounds x="910" y="352" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="884" y="395" width="88" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0xz4cq6" bpmnElement="Activity_08kyos2">
-        <dc:Bounds x="1068" y="330" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1o9u5ty_di" bpmnElement="Event_1o9u5ty">
-        <dc:Bounds x="1072" y="132" width="36" height="36" />
+        <dc:Bounds x="1122" y="132" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1062" y="175" width="57" height="27" />
+          <dc:Bounds x="1112" y="175" width="57" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_10t4nti" bpmnElement="Event_15b3qlr">
-        <dc:Bounds x="1072" y="242" width="36" height="36" />
+        <dc:Bounds x="1122" y="242" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1053" y="285" width="76" height="27" />
+          <dc:Bounds x="1103" y="285" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_198k4ro" bpmnElement="Flow_0gsp5au">
+      <bpmndi:BPMNShape id="Gateway_0fesz09_di" bpmnElement="Gateway_0fesz09" isMarkerVisible="true">
+        <dc:Bounds x="1015" y="125" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1008" y="87.5" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qws0qi_di" bpmnElement="Activity_0q0q8ro">
+        <dc:Bounds x="640" y="110" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06vn4j0_di" bpmnElement="Activity_1bzfsxa" isExpanded="true">
+        <dc:Bounds x="655" y="280" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_10nriq7" bpmnElement="Activity_08kyos2">
+        <dc:Bounds x="860" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wzm4cp_di" bpmnElement="Event_1qs7apl">
+        <dc:Bounds x="702" y="362" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="676" y="405" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_0pbtm15" bpmnElement="Flow_10isng5">
+        <di:waypoint x="738" y="380" />
+        <di:waypoint x="860" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0asdwpg_di" bpmnElement="Flow_0asdwpg">
+        <di:waypoint x="1065" y="150" />
+        <di:waypoint x="1122" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1088" y="132" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_120nbrx_di" bpmnElement="Flow_120nbrx">
+        <di:waypoint x="1040" y="175" />
+        <di:waypoint x="1040" y="260" />
+        <di:waypoint x="1122" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1044" y="215" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dm43rs_di" bpmnElement="Flow_0dm43rs">
         <di:waypoint x="584" y="150" />
-        <di:waypoint x="643" y="150" />
+        <di:waypoint x="640" y="150" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_080ftn3" bpmnElement="Flow_10rqogh">
-        <di:waypoint x="693" y="150" />
-        <di:waypoint x="743" y="150" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_009gll5" bpmnElement="Flow_0obw36e">
-        <di:waypoint x="793" y="150" />
-        <di:waypoint x="910" y="150" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1qhiwqb" bpmnElement="Flow_1efmwyw">
-        <di:waypoint x="768" y="175" />
-        <di:waypoint x="768" y="260" />
-        <di:waypoint x="910" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_02jud7x" bpmnElement="Flow_0t9gerx">
-        <di:waypoint x="768" y="175" />
-        <di:waypoint x="768" y="370" />
-        <di:waypoint x="910" y="370" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1f8u3pj" bpmnElement="Flow_00kzjzz">
-        <di:waypoint x="1118" y="410" />
-        <di:waypoint x="1118" y="490" />
-        <di:waypoint x="668" y="490" />
-        <di:waypoint x="668" y="175" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0nyze94" bpmnElement="Flow_10isng5">
-        <di:waypoint x="946" y="370" />
-        <di:waypoint x="1068" y="370" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0zgtmhw_di" bpmnElement="Flow_0zgtmhw">
-        <di:waypoint x="946" y="150" />
-        <di:waypoint x="1072" y="150" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18j3cyr_di" bpmnElement="Flow_18j3cyr">
-        <di:waypoint x="946" y="260" />
-        <di:waypoint x="1072" y="260" />
+      <bpmndi:BPMNEdge id="Flow_0jwldl5_di" bpmnElement="Flow_0jwldl5">
+        <di:waypoint x="740" y="150" />
+        <di:waypoint x="1015" y="150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0xkc0fm" bpmnElement="Event_1iygbq7">
         <dc:Bounds x="1480" y="282" width="36" height="36" />

@@ -1,7 +1,7 @@
 info:
   name: Erbschein
   type: http
-  seq: 5
+  seq: 4
 
 http:
   method: POST

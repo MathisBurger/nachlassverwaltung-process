@@ -15,7 +15,7 @@ http:
         "processVariables": {
           "firstName": {"value": "Susi", "type": "String", "valueInfo": {"transient": true}},
           "lastName": {"value": "Sorglos", "type": "String", "valueInfo": {"transient": true}},
-          "email": {"value": "sugi.sorglos@demomail.org", "type": "String", "valueInfo": {"transient": true}},
+          "email": {"value": "susi.sorglos@demomail.org", "type": "String", "valueInfo": {"transient": true}},
           "birthday": {"value": "01.01.1990", "type": "String", "valueInfo": {"transient": true}},
           "idCardNumber": {"value": "L0000002", "type": "String", "valueInfo": {"transient": true}}
         }
