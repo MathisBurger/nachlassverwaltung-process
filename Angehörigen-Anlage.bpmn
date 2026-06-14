@@ -68,7 +68,7 @@
       <bpmn:incoming>Flow_1o4e8c3</bpmn:incoming>
       <bpmn:outgoing>Flow_1xdpxh7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:scriptTask id="Activity_150s4uh" name="Prüfen ob Erbanwärter bereits hinterlegt" scriptFormat="JavaScript">
+    <bpmn:scriptTask id="Activity_150s4uh" name="Prüfen ob Erbender bereits hinterlegt" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_1xdpxh7</bpmn:incoming>
       <bpmn:outgoing>Flow_19l9lfw</bpmn:outgoing>
       <bpmn:property id="Property_1oz5nwz" name="__targetRef_placeholder" />
@@ -172,7 +172,7 @@ execution.setVariable("heirsList", S(JSON.stringify(rawList)));</bpmn:script>
     <bpmn:sendTask id="Activity_0mb13i2" name="Duplikatsnachricht senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending relative duplicate message for relative " + desiredRelativeData.prop("idCardNumber").stringValue() + " to " + execution.getProcessBusinessKey())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending relative duplicate message for heir " + desiredHeirData.prop("idCardNumber").stringValue() + " to " + execution.getProcessBusinessKey())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1k4yo4t</bpmn:incoming>
@@ -209,6 +209,7 @@ execution.setVariable("heirsList", S(JSON.stringify(rawList)));</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0cjz5wf" bpmnElement="Activity_150s4uh">
         <dc:Bounds x="730" y="557" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1jow6b9_di" bpmnElement="Gateway_1jow6b9" isMarkerVisible="true">
         <dc:Bounds x="945" y="572" width="50" height="50" />
