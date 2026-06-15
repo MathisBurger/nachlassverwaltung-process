@@ -30,11 +30,6 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0h8ew10</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:parallelGateway id="Gateway_1en2sy5">
-      <bpmn:incoming>Flow_1ax10xa</bpmn:incoming>
-      <bpmn:incoming>Flow_0tg98by</bpmn:incoming>
-      <bpmn:outgoing>Flow_0szakk7</bpmn:outgoing>
-    </bpmn:parallelGateway>
     <bpmn:endEvent id="Event_1brr8ch" name="Erblasser verstorben und Erbe bereit zur Freigabe">
       <bpmn:incoming>Flow_10jt4bt</bpmn:incoming>
       <bpmn:terminateEventDefinition id="TerminateEventDefinition_0fro6j9" />
@@ -324,6 +319,11 @@ execution.setVariable("lastWords", lastWordsLocal);
     <bpmn:sequenceFlow id="Flow_0j0wvk0" sourceRef="Activity_1vavw6o" targetRef="Gateway_1rodzsp" />
     <bpmn:sequenceFlow id="Flow_12j0i5v" sourceRef="Gateway_1rodzsp" targetRef="Activity_1x1aepy" />
     <bpmn:sequenceFlow id="Flow_10491i3" sourceRef="Gateway_1rodzsp" targetRef="Activity_1pqq75n" />
+    <bpmn:complexGateway id="Gateway_1en2sy5">
+      <bpmn:incoming>Flow_1ax10xa</bpmn:incoming>
+      <bpmn:incoming>Flow_0tg98by</bpmn:incoming>
+      <bpmn:outgoing>Flow_0szakk7</bpmn:outgoing>
+    </bpmn:complexGateway>
   </bpmn:process>
   <bpmn:message id="Message_0oqp41o" name="deathCertificate" />
   <bpmn:message id="Message_2s646dm" name="heirAddition" />
@@ -343,14 +343,14 @@ execution.setVariable("lastWords", lastWordsLocal);
           <dc:Bounds x="447" y="485" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0os3brw" bpmnElement="Gateway_1en2sy5">
-        <dc:Bounds x="1035" y="405" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0v2lpks_di" bpmnElement="Event_1brr8ch">
         <dc:Bounds x="1412" y="412" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1393" y="453" width="74" height="53" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1nml8p7_di" bpmnElement="Gateway_1en2sy5">
+        <dc:Bounds x="1035" y="405" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1krwrqt_di" bpmnElement="Activity_18sq7t3">
         <dc:Bounds x="1170" y="390" width="100" height="80" />

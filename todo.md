@@ -20,6 +20,6 @@
 - [ ] Registration Escalation handeln
 - [ ] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
 - [x] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde
-
+- [ ] Bei Call Activities und Subprozessen substanzivieren
 
 

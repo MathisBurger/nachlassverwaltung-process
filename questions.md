@@ -11,18 +11,24 @@
 - [x] Antwort: Sendeaufgabe und Empfangsaufgabe anstatt Service-Task -> Einfach über print dann "Abfrage gestartet" und in der Empfangsaufgabe das Hardcodierte senden
 - [ ] Nachlassverwaltungsprozess: Kann man auf eine Nachricht von der Beerdigungsplanung warten, damit man quasi noch das Testament in dem Part aktualisieren kann? Macht das Sinn oder ist das unsauber?
 - [ ] Antwort: Haben die Frage nicht verstanden -> Müssen das nochmal klären
+- Antwort: Ereignisteilprozess mit dem man jederzeit alles Anlegen kann....
+
+- Anrwort; Keine Transaktion notwengi, einfach bestattung canceln und dann alle Daten löschen
 
 
 ### Question Session 02
 
 - [ ] nachlassanlage.bpmn: Muss ich den Subprozess in Vorsorge Dokumente gedöns beschriften?
 - [ ] Vllt Ergäzend daran: Muss wirklich jeder Subprozess eine Bezeichnung haben oder reicht es in manchen Fällen den weg zu lassen, wenn klar ist was passiert?
+- ANtwort: ALle subprozesse. Deren Startereignisse nicht, aber Endereignisse schon
 - [ ] Wo muss ich überall Datenobjekte und Data Stores nutzen und wo nicht?
+- Antwort: Bei den Mehrfachinstanzmarkierungen muss das dran sein, ansonsten eben nicht
 - [ ] Müssen Default Flows auch beschriftet werden?
+- Antwort: Default Flows eliminieren und einfach richtig beschriften
 - [x] Angehörigen Anlage: Kann man die End Events so machen?
-- [ ] Was genau aus dem 3. Semester ist relevant?
+- [x] Was genau aus dem 3. Semester ist relevant?
 - [ ] Wie viele Business Rule Tasks sind notwenig? 4? Oder sind in den Anforderungen 4 Entscheidungen gemeint?
-- [ ] Bei dem Eingebetteten Prozess, dann entsprechend selbst Logik, die Prüft, was storniert werden muss, oder?
+- [ ] Bei dem Eingebetteten Prozess, dann entsprechend selbst Logik, die Prüft, was storniert werden muss, oder?:wq
 
 
 
