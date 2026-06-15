@@ -190,6 +190,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
           <camunda:in source="estateList" target="estateList" />
+          <camunda:in source="heirsList" target="heirsList" />
           <camunda:out source="signedLastWill" target="signedLastWill" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1fu699j</bpmn:incoming>

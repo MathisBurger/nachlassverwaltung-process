@@ -72,6 +72,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
             <camunda:in businessKey="#{execution.processBusinessKey}" />
             <camunda:in source="estateList" target="estateList" />
             <camunda:in source="signedLastWill" target="lastWillContent" />
+            <camunda:in source="heirsList" target="heirsList" />
             <camunda:out source="signedLastWill" target="signedLastWill" />
           </bpmn:extensionElements>
           <bpmn:incoming>Flow_1g9889d</bpmn:incoming>
@@ -122,6 +123,7 @@ maybe warten, bis Beerdigung auch geplant ist?</bpmn:text>
             <camunda:in businessKey="#{execution.processBusinessKey}" />
             <camunda:in source="estateList" target="estateList" />
             <camunda:in source="signedLastWill" target="lastWillContent" />
+            <camunda:in source="heirsList" target="heirsList" />
             <camunda:out source="signedLastWill" target="signedLastWill" />
           </bpmn:extensionElements>
           <bpmn:incoming>Flow_05v65g0</bpmn:incoming>
@@ -602,9 +604,6 @@ execution.setVariable("lastWords", lastWordsLocal);
       <bpmndi:BPMNShape id="Event_05rgpu3_di" bpmnElement="Event_05rgpu3">
         <dc:Bounds x="152" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0wrz4qu_di" bpmnElement="Event_13rfbmu">
-        <dc:Bounds x="552" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jslasd_di" bpmnElement="Activity_0aa69ul" isExpanded="true">
         <dc:Bounds x="160" y="230" width="590" height="200" />
         <bpmndi:BPMNLabel />
@@ -676,6 +675,9 @@ execution.setVariable("lastWords", lastWordsLocal);
         <di:waypoint x="680" y="560" />
         <di:waypoint x="722" y="560" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0wrz4qu_di" bpmnElement="Event_13rfbmu">
+        <dc:Bounds x="552" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1g6kou7_di" bpmnElement="Flow_1g6kou7">
         <di:waypoint x="188" y="120" />
         <di:waypoint x="320" y="120" />

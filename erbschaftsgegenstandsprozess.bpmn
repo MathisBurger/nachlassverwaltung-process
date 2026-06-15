@@ -95,7 +95,7 @@
       <bpmn:outgoing>Flow_06413nq</bpmn:outgoing>
       <bpmn:script>const estateListRaw = JSON.parse(estateList.toString());
 
-const estate = {estateDocument, accessInformation};
+const estate = {title, estateDocument, accessInformation};
 estateListRaw.push(estate);
 
 execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:script>

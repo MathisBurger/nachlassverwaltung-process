@@ -9,14 +9,14 @@
 - [x] Nach Uniquitous Language prüfen
 - [ ] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
 - [x] Ubiquitous Language definieren
-- [ ] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
+- [x] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
 - [x] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
 - [ ] Method and Style prüfen
-- [ ] Zwei weitere DMN Modelle
+?? - [ ] Zwei weitere DMN Modelle
 - [x] Vorsorgedokumente merge testen
 - [x] Last words override testen
-- [ ] Die Erben auch nur Beerdigung einladen (Da kann man auch nochmal ordentlich eine Business Rule task einbauen)
-- [ ] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
+?? - [ ] Die Erben auch nur Beerdigung einladen (Da kann man auch nochmal ordentlich eine Business Rule task einbauen)
+- [x] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
 - [ ] Registration Escalation handeln
 - [ ] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
 - [x] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde

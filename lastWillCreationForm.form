@@ -19,8 +19,10 @@
         "row": "Row_1r6ea67",
         "columns": null
       },
-      "label": "Table",
+      "label": "Gewünschter Split",
+      "dataSource": "=normalizedEstateSplit",
       "rowCount": 10,
+      "id": "Field_1gp2gf7",
       "columns": [
         {
           "label": "Objekt",
@@ -34,9 +36,61 @@
           "label": "Anteil",
           "key": "percentage"
         }
+      ]
+    },
+    {
+      "type": "table",
+      "layout": {
+        "row": "Row_0v33qz0",
+        "columns": null
+      },
+      "label": "Erben",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Vorname",
+          "key": "firstName"
+        },
+        {
+          "label": "Nachname",
+          "key": "lastName"
+        },
+        {
+          "label": "Email",
+          "key": "email"
+        },
+        {
+          "label": "Ausweis ID",
+          "key": "idCardNumber"
+        }
       ],
-      "id": "Field_1gp2gf7",
-      "dataSource": "=normalizedEstateSplit"
+      "id": "Field_0fh1623",
+      "dataSource": "=heirsList"
+    },
+    {
+      "type": "table",
+      "layout": {
+        "row": "Row_0v33qz0",
+        "columns": null
+      },
+      "label": "Erbschaftsgegenstände",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Titel",
+          "key": "title"
+        },
+        {
+          "label": "Inhalt",
+          "key": "estateDocument"
+        },
+        {
+          "label": "Zugriffsinformationen",
+          "key": "accessInformation"
+        }
+      ],
+      "id": "Field_174sck9",
+      "dataSource": "=estateList"
     },
     {
       "label": "Ablehnungsgrund Notar",

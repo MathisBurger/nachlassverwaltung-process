@@ -1,6 +1,18 @@
 {
   "components": [
     {
+      "label": "Titel",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_186y6ah",
+        "columns": null
+      },
+      "id": "Field_0gwlq4n",
+      "key": "title",
+      "disabled": false,
+      "readonly": true
+    },
+    {
       "label": "Dokumenteninhalt",
       "type": "textarea",
       "layout": {
