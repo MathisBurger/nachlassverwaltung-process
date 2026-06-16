@@ -17,7 +17,6 @@
       <bpmn:extensionElements />
       <bpmn:outgoing>Flow_0tqufez</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1qmwy1u" sourceRef="Activity_0mtezji" targetRef="Activity_Feier" />
     <bpmn:sequenceFlow id="Flow_0cgx0e2" sourceRef="Activity_0dcyj4j" targetRef="Activity_1ciygxm" />
     <bpmn:sequenceFlow id="Flow_6" sourceRef="Activity_Feier" targetRef="EndEvent_Fertig" />
     <bpmn:receiveTask id="Activity_1ciygxm" name="Bestattungspräferenzen empfangen" messageRef="Message_1vjje9l">
@@ -143,57 +142,36 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
       <bpmn:outgoing>Flow_0i2ybvh</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ycqyhw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0i2ybvh" name="Nein" sourceRef="Gateway_0x41rwn" targetRef="Activity_0mtezji">
+    <bpmn:sequenceFlow id="Flow_0i2ybvh" name="Nein" sourceRef="Gateway_0x41rwn" targetRef="Activity_Feier">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${funeralOrder == null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0ycqyhw" name="Ja" sourceRef="Gateway_0x41rwn" targetRef="Activity_0oetiel">
+    <bpmn:sequenceFlow id="Flow_0ycqyhw" name="Ja" sourceRef="Gateway_0x41rwn" targetRef="Activity_0ooshf6">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${funeralOrder != null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:scriptTask id="Activity_0oetiel" name="Bestattungsauftrag aktualisieren" scriptFormat="JavaScript">
-      <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ok1czf</bpmn:outgoing>
-      <bpmn:script>var funeralPlanning = execution.getVariable("funeralDecision");
-
-const planningRaw = JSON.parse(funeralPlanning.toString());
-planningRaw["heirs"] = JSON.parse(heirsList.toString());
-
-execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:script>
-    </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_0ok1czf" sourceRef="Activity_0oetiel" targetRef="Activity_0ooshf6" />
-    <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
-      <bpmn:extensionElements>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
-        </camunda:executionListener>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0ok1czf</bpmn:incoming>
-      <bpmn:outgoing>Flow_025f80p</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_025f80p" sourceRef="Activity_0ooshf6" targetRef="Event_0vhxvz3" />
-    <bpmn:endEvent id="Event_0vhxvz3" name="Änderung erfolgreich durchgeführt">
-      <bpmn:incoming>Flow_025f80p</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:scriptTask id="Activity_0mtezji" name="Bestattungsauftrag verfassen" scriptFormat="JavaScript">
-      <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qmwy1u</bpmn:outgoing>
-      <bpmn:script>var funeralPlanning = execution.getVariable("funeralDecision");
-
-const planningRaw = JSON.parse(funeralPlanning.toString());
-planningRaw["heirs"] = JSON.parse(heirsList.toString());
-
-execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:script>
-    </bpmn:scriptTask>
     <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1qmwy1u</bpmn:incoming>
+      <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
       <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
+      <bpmn:outgoing>Flow_025f80p</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:endEvent id="EndEvent_Fertig" name="Bestattung vollständig geplant">
       <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0vhxvz3" name="Änderung erfolgreich durchgeführt">
+      <bpmn:incoming>Flow_025f80p</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
   <bpmn:message id="Message_1vjje9l" name="funeralPreference" />
@@ -202,7 +180,7 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_Beerdigung">
       <bpmndi:BPMNShape id="Participant_Angehoerige_di" bpmnElement="Participant_Angehoerige" isHorizontal="true">
-        <dc:Bounds x="120" y="180" width="2530" height="410" />
+        <dc:Bounds x="120" y="180" width="2400" height="410" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_Trauerfall_di" bpmnElement="StartEvent_Trauerfall">
@@ -223,6 +201,25 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
         <dc:Bounds x="295" y="355" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="280" y="325" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mbih4a_di" bpmnElement="Activity_Feier">
+        <dc:Bounds x="2090" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16a7q4q_di" bpmnElement="Activity_0ooshf6">
+        <dc:Bounds x="2210" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
+        <dc:Bounds x="2402" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2394" y="318" width="53" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vhxvz3_di" bpmnElement="Event_0vhxvz3">
+        <dc:Bounds x="2402" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2389" y="515" width="62" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02rauh0_di" bpmnElement="Activity_02rauh0" isExpanded="true">
@@ -304,42 +301,13 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
           <dc:Bounds x="1974.5" y="366.5" width="81" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0orjo0p_di" bpmnElement="Activity_0oetiel">
-        <dc:Bounds x="2050" y="450" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_16a7q4q_di" bpmnElement="Activity_0ooshf6">
-        <dc:Bounds x="2340" y="450" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0vhxvz3_di" bpmnElement="Event_0vhxvz3">
-        <dc:Bounds x="2542" y="472" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2529" y="515" width="62" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ask77i_di" bpmnElement="Activity_0mtezji">
-        <dc:Bounds x="2050" y="260" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mbih4a_di" bpmnElement="Activity_Feier">
-        <dc:Bounds x="2200" y="260" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_Fertig_di" bpmnElement="EndEvent_Fertig">
-        <dc:Bounds x="2542" y="282" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2534" y="318" width="53" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1qmwy1u_di" bpmnElement="Flow_1qmwy1u">
-        <di:waypoint x="2150" y="300" />
-        <di:waypoint x="2200" y="300" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0cgx0e2_di" bpmnElement="Flow_0cgx0e2">
         <di:waypoint x="520" y="380" />
         <di:waypoint x="560" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
-        <di:waypoint x="2300" y="300" />
-        <di:waypoint x="2542" y="300" />
+        <di:waypoint x="2190" y="300" />
+        <di:waypoint x="2402" y="300" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0tqufez_di" bpmnElement="Flow_0tqufez">
         <di:waypoint x="228" y="380" />
@@ -373,26 +341,22 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
       <bpmndi:BPMNEdge id="Flow_0i2ybvh_di" bpmnElement="Flow_0i2ybvh">
         <di:waypoint x="1940" y="355" />
         <di:waypoint x="1940" y="300" />
-        <di:waypoint x="2050" y="300" />
+        <di:waypoint x="2090" y="300" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1944" y="325" width="23" height="14" />
+          <dc:Bounds x="1941" y="251" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ycqyhw_di" bpmnElement="Flow_0ycqyhw">
         <di:waypoint x="1940" y="405" />
         <di:waypoint x="1940" y="490" />
-        <di:waypoint x="2050" y="490" />
+        <di:waypoint x="2210" y="490" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1949" y="445" width="12" height="14" />
+          <dc:Bounds x="1952" y="549" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ok1czf_di" bpmnElement="Flow_0ok1czf">
-        <di:waypoint x="2150" y="490" />
-        <di:waypoint x="2340" y="490" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_025f80p_di" bpmnElement="Flow_025f80p">
-        <di:waypoint x="2440" y="490" />
-        <di:waypoint x="2542" y="490" />
+        <di:waypoint x="2310" y="490" />
+        <di:waypoint x="2402" y="490" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_05h5wb4_di" bpmnElement="Participant_09uh32h" isHorizontal="true">
         <dc:Bounds x="1990" y="620" width="500" height="60" />
@@ -403,10 +367,10 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_16seaio_di" bpmnElement="Flow_16seaio">
-        <di:waypoint x="2250" y="340" />
-        <di:waypoint x="2250" y="620" />
+        <di:waypoint x="2140" y="340" />
+        <di:waypoint x="2140" y="620" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2256" y="368" width="67" height="27" />
+          <dc:Bounds x="2146" y="368" width="67" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dkqb08_di" bpmnElement="Flow_1dkqb08">
@@ -445,10 +409,10 @@ execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:scri
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0wp1dnd_di" bpmnElement="Flow_0wp1dnd">
-        <di:waypoint x="2390" y="530" />
-        <di:waypoint x="2390" y="620" />
+        <di:waypoint x="2260" y="530" />
+        <di:waypoint x="2260" y="620" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2396" y="553" width="88" height="14" />
+          <dc:Bounds x="2266" y="553" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

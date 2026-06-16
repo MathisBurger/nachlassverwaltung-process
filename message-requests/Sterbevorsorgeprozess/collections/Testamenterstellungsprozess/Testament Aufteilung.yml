@@ -23,7 +23,7 @@ runtime:
             "20 Mio Depot": {
                 "L0000001": 100
             }
-        }), "type": "Json"}
+        }), "type": "Json", "valueInfo": {"transient": true}}
           }
         })
 
