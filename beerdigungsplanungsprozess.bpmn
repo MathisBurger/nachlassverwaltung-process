@@ -152,8 +152,12 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:scriptTask id="Activity_0oetiel" name="Bestattungsauftrag aktualisieren" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
       <bpmn:outgoing>Flow_0ok1czf</bpmn:outgoing>
-      <bpmn:script>var updatedOrder = execution.getVariable("funeralDecision");
-execution.setVariable("funeralOrder", updatedOrder);</bpmn:script>
+      <bpmn:script>var funeralPlanning = execution.getVariable("funeralDecision");
+
+const planningRaw = JSON.parse(funeralPlanning.toString());
+planningRaw["heirs"] = JSON.parse(heirsList.toString());
+
+execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0ok1czf" sourceRef="Activity_0oetiel" targetRef="Activity_0ooshf6" />
     <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
@@ -173,7 +177,11 @@ execution.setVariable("funeralOrder", updatedOrder);</bpmn:script>
       <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
       <bpmn:outgoing>Flow_1qmwy1u</bpmn:outgoing>
       <bpmn:script>var funeralPlanning = execution.getVariable("funeralDecision");
-execution.setVariable("funeralOrder", funeralPlanning);</bpmn:script>
+
+const planningRaw = JSON.parse(funeralPlanning.toString());
+planningRaw["heirs"] = JSON.parse(heirsList.toString());
+
+execution.setVariable("funeralOrder",S(JSON.stringify(planningRaw)));</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>

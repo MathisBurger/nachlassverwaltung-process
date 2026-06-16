@@ -4,26 +4,18 @@
     <bpmn:participant id="Participant_0y99ssa" name="Sterbevorsorgeprozess" processRef="sterbevorsorgeprozess" />
     <bpmn:participant id="Participant_17istra" name="Erblasser" />
     <bpmn:messageFlow id="Flow_02um106" name="Registrierungsinformationen" sourceRef="Participant_17istra" targetRef="Event_1qte4uv" />
-    <bpmn:messageFlow id="Flow_0iem8lb" name="Stornierungsanfrage" sourceRef="Participant_17istra" targetRef="Event_1tzdvvp" />
-    <bpmn:textAnnotation id="TextAnnotation_0d7g2yo">
-      <bpmn:text>Hier noch einen alternativen Ansatz überlegen</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_1j0ow79">
-      <bpmn:text>Hier die Escalation handeln</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0fnecn3" associationDirection="None" sourceRef="Activity_1tthk6m" targetRef="TextAnnotation_0d7g2yo" />
-    <bpmn:association id="Association_16tof7m" associationDirection="None" sourceRef="Activity_09l5ttw" targetRef="TextAnnotation_1j0ow79" />
   </bpmn:collaboration>
   <bpmn:process id="sterbevorsorgeprozess" name="Sterbevorsorgeprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0nuvtsp">
       <bpmn:lane id="Lane_09hrwgi">
         <bpmn:flowNodeRef>Event_1qte4uv</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_135yoqb</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_09l5ttw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1dnyeqt</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0xvglbd</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0e92b8h</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1tthk6m</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_15oni8y</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1o6qwjn</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_135yoqb</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0ewc1dy</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1f6mhxm</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Event_1qte4uv" name="Registrierungsinformationen erhalten">
@@ -32,75 +24,37 @@
           <camunda:script scriptFormat="JavaScript">execution.setVariable("initialRegistrationInformation", S(JSON.stringify({username, password, email, birthday, idCardNumber})));</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_0zg8rze</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0tiungv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1lr6lcd" messageRef="Message_0krdok8" />
     </bpmn:startEvent>
-    <bpmn:subProcess id="Activity_1tthk6m" name="Nachrichten-Stornierungsprozess" triggeredByEvent="true">
-      <bpmn:startEvent id="Event_1tzdvvp" name="Verwaltung soll storniert werden">
-        <bpmn:outgoing>Flow_1fk7fo7</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_00y61n2" messageRef="Message_3bcv7he" />
-      </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_1fk7fo7" sourceRef="Event_1tzdvvp" targetRef="Event_1a19vor" />
-      <bpmn:endEvent id="Event_1a19vor" name="Nachlassverwaltung beendet">
-        <bpmn:incoming>Flow_1fk7fo7</bpmn:incoming>
-        <bpmn:compensateEventDefinition id="CompensateEventDefinition_1slw9z6" activityRef="Activity_15oni8y" />
-      </bpmn:endEvent>
-    </bpmn:subProcess>
-    <bpmn:transaction id="Activity_15oni8y" name="Nachlassverwaltungstransaktion">
-      <bpmn:incoming>Flow_0zg8rze</bpmn:incoming>
-      <bpmn:outgoing>Flow_0lbkysw</bpmn:outgoing>
-      <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass bis zum Tod verwalten" calledElement="estateManagementProcess">
-        <bpmn:extensionElements>
-          <camunda:in businessKey="#{execution.processBusinessKey}" />
-          <camunda:out source="funeralOrder" target="funeralOrder" />
-          <camunda:out source="advanceDirectiveContents" target="advanceDirectiveContents" />
-          <camunda:out source="signedLastWill" target="signedLastWill" />
-          <camunda:out source="lastWords" target="lastWords" />
-          <camunda:out source="heirsList" target="heirsList" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0es0hy5</bpmn:incoming>
-        <bpmn:outgoing>Flow_19pntx1</bpmn:outgoing>
-      </bpmn:callActivity>
-      <bpmn:callActivity id="Activity_09l5ttw" name="Registrierung durchführen" calledElement="registrationProcess">
-        <bpmn:extensionElements>
-          <camunda:in source="initialRegistrationInformation" target="initialRegistrationInformation" />
-          <camunda:in businessKey="#{execution.processBusinessKey}" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0f64sxr</bpmn:incoming>
-        <bpmn:outgoing>Flow_0es0hy5</bpmn:outgoing>
-      </bpmn:callActivity>
-      <bpmn:sequenceFlow id="Flow_0es0hy5" sourceRef="Activity_09l5ttw" targetRef="Activity_1dnyeqt" />
-      <bpmn:startEvent id="Event_0manuks">
-        <bpmn:outgoing>Flow_0f64sxr</bpmn:outgoing>
-      </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_0f64sxr" sourceRef="Event_0manuks" targetRef="Activity_09l5ttw" />
-      <bpmn:endEvent id="Event_16simrk">
-        <bpmn:incoming>Flow_19pntx1</bpmn:incoming>
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_19pntx1" sourceRef="Activity_1dnyeqt" targetRef="Event_16simrk" />
-    </bpmn:transaction>
-    <bpmn:endEvent id="Event_135yoqb" name="Bestattung und Nachlass Verwaltung abgeschlossen">
-      <bpmn:incoming>Flow_1ueaige</bpmn:incoming>
-    </bpmn:endEvent>
+    <bpmn:callActivity id="Activity_09l5ttw" name="Registrierung durchführen" calledElement="registrationProcess">
+      <bpmn:extensionElements>
+        <camunda:in source="initialRegistrationInformation" target="initialRegistrationInformation" />
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tiungv</bpmn:incoming>
+      <bpmn:outgoing>Flow_0es0hy5</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass bis zum Tod verwalten" calledElement="estateManagementProcess">
+      <bpmn:extensionElements>
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:out source="funeralOrder" target="funeralOrder" />
+        <camunda:out source="advanceDirectiveContents" target="advanceDirectiveContents" />
+        <camunda:out source="signedLastWill" target="signedLastWill" />
+        <camunda:out source="lastWords" target="lastWords" />
+        <camunda:out source="heirsList" target="heirsList" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0es0hy5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0524dvd</bpmn:outgoing>
+    </bpmn:callActivity>
     <bpmn:callActivity id="Activity_0xvglbd" name="Bestattung durchführen" calledElement="funeralProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="funeralOrder" target="funeralOrder" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0lbkysw</bpmn:incoming>
+      <bpmn:incoming>Flow_0524dvd</bpmn:incoming>
       <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:subProcess id="Activity_1o6qwjn" name="Eskalation-Stornierungsprozess" triggeredByEvent="true">
-      <bpmn:startEvent id="Event_0jtt5pq">
-        <bpmn:outgoing>Flow_0li3orl</bpmn:outgoing>
-        <bpmn:escalationEventDefinition id="EscalationEventDefinition_18djaak" escalationRef="Escalation_3m49ub8" />
-      </bpmn:startEvent>
-      <bpmn:endEvent id="Event_15kiah9" name="Nachlassverwaltung beendet">
-        <bpmn:incoming>Flow_0li3orl</bpmn:incoming>
-        <bpmn:compensateEventDefinition id="CompensateEventDefinition_07jjuji" activityRef="Activity_15oni8y" />
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0li3orl" sourceRef="Event_0jtt5pq" targetRef="Event_15kiah9" />
-    </bpmn:subProcess>
     <bpmn:callActivity id="Activity_0e92b8h" name="Nachlass freigeben" calledElement="estateReleaseProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
@@ -111,160 +65,109 @@
       <bpmn:incoming>Flow_10a685s</bpmn:incoming>
       <bpmn:outgoing>Flow_1ueaige</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sequenceFlow id="Flow_0zg8rze" sourceRef="Event_1qte4uv" targetRef="Activity_15oni8y" />
-    <bpmn:sequenceFlow id="Flow_0lbkysw" sourceRef="Activity_15oni8y" targetRef="Activity_0xvglbd" />
-    <bpmn:sequenceFlow id="Flow_1ueaige" sourceRef="Activity_0e92b8h" targetRef="Event_135yoqb" />
+    <bpmn:endEvent id="Event_135yoqb" name="Bestattung und Nachlass Verwaltung abgeschlossen">
+      <bpmn:incoming>Flow_1ueaige</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0ewc1dy" name="Registrierung war nicht erfolgreich">
+      <bpmn:incoming>Flow_1c6wpkw</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_1f6mhxm" name="Identität nicht valide" attachedToRef="Activity_09l5ttw">
+      <bpmn:outgoing>Flow_1c6wpkw</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0tqjhp6" escalationRef="Escalation_2ugn8le" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0tiungv" sourceRef="Event_1qte4uv" targetRef="Activity_09l5ttw" />
+    <bpmn:sequenceFlow id="Flow_0es0hy5" sourceRef="Activity_09l5ttw" targetRef="Activity_1dnyeqt" />
+    <bpmn:sequenceFlow id="Flow_0524dvd" sourceRef="Activity_1dnyeqt" targetRef="Activity_0xvglbd" />
     <bpmn:sequenceFlow id="Flow_10a685s" sourceRef="Activity_0xvglbd" targetRef="Activity_0e92b8h" />
+    <bpmn:sequenceFlow id="Flow_1ueaige" sourceRef="Activity_0e92b8h" targetRef="Event_135yoqb" />
+    <bpmn:sequenceFlow id="Flow_1c6wpkw" sourceRef="Event_1f6mhxm" targetRef="Event_0ewc1dy" />
   </bpmn:process>
   <bpmn:message id="Message_0krdok8" name="initialRegistrationInformation" />
-  <bpmn:escalation id="Escalation_3m49ub8" name="cancelationRequired" escalationCode="400" />
-  <bpmn:message id="Message_3bcv7he" name="globalCancelRequest" />
+  <bpmn:escalation id="Escalation_2ugn8le" name="identityInvalid" escalationCode="1400" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1tqngcs">
       <bpmndi:BPMNShape id="Participant_0y99ssa_di" bpmnElement="Participant_0y99ssa" isHorizontal="true">
-        <dc:Bounds x="120" y="150" width="1370" height="570" />
+        <dc:Bounds x="120" y="80" width="1120" height="350" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_09hrwgi_di" bpmnElement="Lane_09hrwgi" isHorizontal="true">
-        <dc:Bounds x="150" y="150" width="1340" height="570" />
+        <dc:Bounds x="150" y="80" width="1090" height="350" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_11oxeag_di" bpmnElement="Event_1qte4uv">
-        <dc:Bounds x="242" y="272" width="36" height="36" />
+        <dc:Bounds x="242" y="202" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="218" y="310" width="83" height="40" />
+          <dc:Bounds x="218" y="152" width="83" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0zl85x5" bpmnElement="Activity_1tthk6m" isExpanded="true">
-        <dc:Bounds x="210" y="420" width="260" height="160" />
+      <bpmndi:BPMNShape id="BPMNShape_1dwrn8n" bpmnElement="Activity_09l5ttw">
+        <dc:Bounds x="400" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1gubrqh" bpmnElement="Event_1tzdvvp">
-        <dc:Bounds x="250" y="482" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="228" y="445" width="79" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0147cc1_di" bpmnElement="Event_1a19vor">
-        <dc:Bounds x="372" y="482" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="347" y="525" width="87" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1fk7fo7_di" bpmnElement="Flow_1fk7fo7">
-        <di:waypoint x="286" y="500" />
-        <di:waypoint x="372" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_05nr6ta_di" bpmnElement="Activity_15oni8y" isExpanded="true">
-        <dc:Bounds x="350" y="190" width="550" height="200" />
+      <bpmndi:BPMNShape id="BPMNShape_0awcafa" bpmnElement="Activity_1dnyeqt">
+        <dc:Bounds x="570" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0wb9lw2" bpmnElement="Activity_1dnyeqt">
-        <dc:Bounds x="650" y="250" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_17ymvuf" bpmnElement="Activity_09l5ttw">
-        <dc:Bounds x="480" y="250" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0manuks_di" bpmnElement="Event_0manuks">
-        <dc:Bounds x="372" y="272" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_16simrk_di" bpmnElement="Event_16simrk">
-        <dc:Bounds x="822" y="272" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_14ggy6j" bpmnElement="Flow_0es0hy5">
-        <di:waypoint x="580" y="290" />
-        <di:waypoint x="650" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0f64sxr_di" bpmnElement="Flow_0f64sxr">
-        <di:waypoint x="408" y="290" />
-        <di:waypoint x="480" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19pntx1_di" bpmnElement="Flow_19pntx1">
-        <di:waypoint x="750" y="290" />
-        <di:waypoint x="822" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_0ubj7c8" bpmnElement="Event_135yoqb">
-        <dc:Bounds x="1302" y="272" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1283" y="315" width="75" height="53" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ijxqld_di" bpmnElement="Activity_0xvglbd">
-        <dc:Bounds x="990" y="250" width="100" height="80" />
+        <dc:Bounds x="740" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_17igy19" bpmnElement="Activity_1o6qwjn" isExpanded="true">
-        <dc:Bounds x="510" y="420" width="300" height="160" />
+      <bpmndi:BPMNShape id="Activity_17mu89q_di" bpmnElement="Activity_0e92b8h">
+        <dc:Bounds x="890" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_001j6fq_di" bpmnElement="Event_0jtt5pq">
-        <dc:Bounds x="542" y="482" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0qgnsue" bpmnElement="Event_15kiah9">
-        <dc:Bounds x="662" y="482" width="36" height="36" />
+      <bpmndi:BPMNShape id="BPMNShape_0ubj7c8" bpmnElement="Event_135yoqb">
+        <dc:Bounds x="1052" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="637" y="525" width="87" height="27" />
+          <dc:Bounds x="1033" y="255" width="75" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0li3orl_di" bpmnElement="Flow_0li3orl">
-        <di:waypoint x="578" y="500" />
-        <di:waypoint x="662" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_17mu89q_di" bpmnElement="Activity_0e92b8h">
-        <dc:Bounds x="1140" y="250" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Event_0ewc1dy_di" bpmnElement="Event_0ewc1dy">
+        <dc:Bounds x="1052" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1027" y="375" width="87" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0zg8rze_di" bpmnElement="Flow_0zg8rze">
-        <di:waypoint x="278" y="290" />
-        <di:waypoint x="350" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0lbkysw_di" bpmnElement="Flow_0lbkysw">
-        <di:waypoint x="900" y="290" />
-        <di:waypoint x="990" y="290" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1069x86_di" bpmnElement="Event_1f6mhxm">
+        <dc:Bounds x="482" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="528" y="256" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ueaige_di" bpmnElement="Flow_1ueaige">
-        <di:waypoint x="1240" y="290" />
-        <di:waypoint x="1302" y="290" />
+        <di:waypoint x="990" y="230" />
+        <di:waypoint x="1052" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10a685s_di" bpmnElement="Flow_10a685s">
-        <di:waypoint x="1090" y="290" />
-        <di:waypoint x="1140" y="290" />
+        <di:waypoint x="840" y="230" />
+        <di:waypoint x="890" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1kyvkfp" bpmnElement="Flow_0es0hy5">
+        <di:waypoint x="500" y="230" />
+        <di:waypoint x="570" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tiungv_di" bpmnElement="Flow_0tiungv">
+        <di:waypoint x="278" y="220" />
+        <di:waypoint x="400" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0524dvd_di" bpmnElement="Flow_0524dvd">
+        <di:waypoint x="670" y="230" />
+        <di:waypoint x="740" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c6wpkw_di" bpmnElement="Flow_1c6wpkw">
+        <di:waypoint x="500" y="288" />
+        <di:waypoint x="500" y="350" />
+        <di:waypoint x="1052" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1gek3uz_di" bpmnElement="Participant_17istra" isHorizontal="true">
-        <dc:Bounds x="170" y="750" width="300" height="60" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0d7g2yo_di" bpmnElement="TextAnnotation_0d7g2yo">
-        <dc:Bounds x="490" y="600" width="100" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1j0ow79_di" bpmnElement="TextAnnotation_1j0ow79">
-        <dc:Bounds x="580" y="80" width="100" height="55" />
+        <dc:Bounds x="140" y="450" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_02um106_di" bpmnElement="Flow_02um106">
-        <di:waypoint x="190" y="750" />
-        <di:waypoint x="190" y="290" />
-        <di:waypoint x="242" y="290" />
+        <di:waypoint x="260" y="450" />
+        <di:waypoint x="260" y="238" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="148" y="246" width="83" height="27" />
+          <dc:Bounds x="268" y="296" width="83" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0iem8lb_di" bpmnElement="Flow_0iem8lb">
-        <di:waypoint x="268" y="750" />
-        <di:waypoint x="268" y="518" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="279" y="629" width="82" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0fnecn3_di" bpmnElement="Association_0fnecn3">
-        <di:waypoint x="469" y="574" />
-        <di:waypoint x="514" y="600" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_16tof7m_di" bpmnElement="Association_16tof7m">
-        <di:waypoint x="551" y="250" />
-        <di:waypoint x="609" y="135" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

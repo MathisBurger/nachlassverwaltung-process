@@ -267,6 +267,7 @@ execution.setVariable("lastWords", lastWordsLocal);
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in sourceExpression="${null}" target="funeralPreference" />
         <camunda:in source="${null}" target="funeralOrder" />
+        <camunda:in source="heirsList" target="heirsList" />
         <camunda:out source="funeralOrder" target="funeralOrder" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10491i3</bpmn:incoming>

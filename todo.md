@@ -15,8 +15,8 @@
 - [x] Vorsorgedokumente merge testen
 - [x] Last words override testen
 - [x] Letzte Worte dem Testament in dem Freigabe Prozess anhängen
-- [ ] Registration Escalation handeln
-- [ ] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
+- [x] Registration Escalation handeln
+- [x] Erben, die nach der Bestattungsplanung hinzugefügt werden, sollen nicht automatisch in der Planung berücksichtigt werden (siehe Oben)
 - [x] Ein Angehöriger kann nicht angelegt werden, wenn nachlassanlageprozess gerade gestartet wurde
 - [ ] Bei Call Activities und Subprozessen substanzivieren
 - [ ] Angehörige und Testament aktualisieren als Subprozesse in Nachlassverwaltung
