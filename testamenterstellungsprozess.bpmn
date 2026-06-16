@@ -155,7 +155,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
     <bpmn:sendTask id="Activity_017n118" name="Bestätigung senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending last will updated confirmation to " +. execution.getProcessBusinessKey());</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending last will updated confirmation to " + execution.getProcessBusinessKey());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1p7rvss</bpmn:incoming>

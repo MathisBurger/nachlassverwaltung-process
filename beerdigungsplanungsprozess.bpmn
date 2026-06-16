@@ -152,7 +152,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralDecision.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
@@ -161,7 +161,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralOrder.toString());</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralDecision.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>

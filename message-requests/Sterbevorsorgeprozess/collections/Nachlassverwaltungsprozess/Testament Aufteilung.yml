@@ -16,7 +16,7 @@ runtime:
     - type: before-request
       code: |-
         req.setBody({
-          "messageName": "desiredSplitMessage",
+          "messageName": "updateLastWill",
           "businessKey": "L1234567",
           "processVariables": {
             "estateSplit": {"value": JSON.stringify({

@@ -1,5 +1,5 @@
 info:
-  name: Nächste Aktion
+  name: Erbschaftsgegenstand hinzufügen
   type: http
   seq: 3
 
@@ -10,10 +10,11 @@ http:
     type: json
     data: |-
       {
-        "messageName": "heirCreationNextAction",
+        "messageName": "estateUpdate",
         "businessKey": "L1234567",
         "processVariables": {
-          "continueNew": {"value": false, "type": "Boolean"}
+          "titleTransient": {"value": "Title", "type": "String", "valueInfo": {"transient": true}},
+          "estateDocumentTransient": {"value": "Hier mein Millionen Depot mit 80 Mio", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit
