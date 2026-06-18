@@ -280,6 +280,74 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmn:outgoing>Flow_0ld124p</bpmn:outgoing>
       </bpmn:callActivity>
     </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_13z4pik" name="Verwaltungsstornierunsprozess" triggeredByEvent="true">
+      <bpmn:scriptTask id="Activity_1w1xr2r" name="Daten löschen" scriptFormat="JavaScript">
+        <bpmn:incoming>Flow_1nxgk4u</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ahyn4h</bpmn:outgoing>
+        <bpmn:script>execution.removeVariable("advanceDirectiveContents");
+execution.removeVariable("estateList");
+execution.removeVariable("heirsList");
+execution.removeVariable("lastWords");
+execution.removeVariable("signedLastWill");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:startEvent id="Event_10x3vwf" name="Stornierungsauftrag erhalten">
+        <bpmn:outgoing>Flow_1nxgk4u</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1gaslol" messageRef="Message_0sgdi2r" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1nxgk4u" sourceRef="Event_10x3vwf" targetRef="Activity_1w1xr2r" />
+      <bpmn:sequenceFlow id="Flow_0ahyn4h" sourceRef="Activity_1w1xr2r" targetRef="Activity_05jfi3k" />
+      <bpmn:sequenceFlow id="Flow_1bn88tt" sourceRef="Activity_05jfi3k" targetRef="Event_0qaxzxd" />
+      <bpmn:subProcess id="Activity_05jfi3k" name="Bestattungsstornierung">
+        <bpmn:incoming>Flow_0ahyn4h</bpmn:incoming>
+        <bpmn:outgoing>Flow_1bn88tt</bpmn:outgoing>
+        <bpmn:startEvent id="Event_0okvn4y">
+          <bpmn:outgoing>Flow_1i7vxi8</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:exclusiveGateway id="Gateway_1lip7d1" name="Bestattungsauftrag vorhanden?">
+          <bpmn:incoming>Flow_1i7vxi8</bpmn:incoming>
+          <bpmn:outgoing>Flow_137sb7w</bpmn:outgoing>
+          <bpmn:outgoing>Flow_058mtlo</bpmn:outgoing>
+        </bpmn:exclusiveGateway>
+        <bpmn:sequenceFlow id="Flow_1i7vxi8" sourceRef="Event_0okvn4y" targetRef="Gateway_1lip7d1" />
+        <bpmn:sequenceFlow id="Flow_137sb7w" name="Ja" sourceRef="Gateway_1lip7d1" targetRef="Activity_1rah9be">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable("funeralOrder")}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+        <bpmn:sendTask id="Activity_1rah9be" name="Bestattung stornieren" camunda:expression="${1}">
+          <bpmn:extensionElements>
+            <camunda:executionListener event="start">
+              <camunda:script scriptFormat="JavaScript">print("Sending canelation of " + funeralOrder.toString() + " to undertaker")</camunda:script>
+            </camunda:executionListener>
+          </bpmn:extensionElements>
+          <bpmn:incoming>Flow_137sb7w</bpmn:incoming>
+          <bpmn:outgoing>Flow_0ac5nec</bpmn:outgoing>
+        </bpmn:sendTask>
+        <bpmn:sequenceFlow id="Flow_0ac5nec" sourceRef="Activity_1rah9be" targetRef="Activity_0s9heq1" />
+        <bpmn:receiveTask id="Activity_0s9heq1" name="Stornierungsbestätigung erhalten" messageRef="Message_31kpuu7">
+          <bpmn:incoming>Flow_0ac5nec</bpmn:incoming>
+          <bpmn:outgoing>Flow_0h9ba4n</bpmn:outgoing>
+        </bpmn:receiveTask>
+        <bpmn:sequenceFlow id="Flow_0h9ba4n" sourceRef="Activity_0s9heq1" targetRef="Activity_1jw8mxh" />
+        <bpmn:scriptTask id="Activity_1jw8mxh" name="Bestattungsdaten löschen" scriptFormat="JavaScript">
+          <bpmn:incoming>Flow_0h9ba4n</bpmn:incoming>
+          <bpmn:outgoing>Flow_1ofeq7p</bpmn:outgoing>
+          <bpmn:script>execution.removeVariable("funeralOrder");</bpmn:script>
+        </bpmn:scriptTask>
+        <bpmn:endEvent id="Event_1pt3p88" name="Bestattung storniert">
+          <bpmn:incoming>Flow_1ofeq7p</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_1ofeq7p" sourceRef="Activity_1jw8mxh" targetRef="Event_1pt3p88" />
+        <bpmn:endEvent id="Event_0eibnr1" name="Bestattung nicht geplant">
+          <bpmn:incoming>Flow_058mtlo</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_058mtlo" name="Nein" sourceRef="Gateway_1lip7d1" targetRef="Event_0eibnr1">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!execution.hasVariable("funeralOrder")}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+      </bpmn:subProcess>
+      <bpmn:endEvent id="Event_0qaxzxd" name="Nachlassdaten gelöscht">
+        <bpmn:incoming>Flow_1bn88tt</bpmn:incoming>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_0n5nm63" escalationRef="Escalation_10b2gir" />
+      </bpmn:endEvent>
+    </bpmn:subProcess>
   </bpmn:process>
   <bpmn:message id="Message_0oqp41o" name="deathCertificate" />
   <bpmn:message id="Message_2s646dm" name="heirAddition" />
@@ -288,6 +356,9 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
   <bpmn:message id="Message_3lsl8ml" name="funeralUpdate" />
   <bpmn:message id="Message_35ult04" name="estateUpdate" />
   <bpmn:message id="Message_0hqvdon" name="updateLastWill" />
+  <bpmn:message id="Message_0sgdi2r" name="canelationOrder" />
+  <bpmn:escalation id="Escalation_10b2gir" name="heritageDataDeleted" escalationCode="4242" />
+  <bpmn:message id="Message_31kpuu7" name="funeralOrderCanelationConfirmation" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0coxuzx">
       <bpmndi:BPMNShape id="Participant_01k12kj_di" bpmnElement="Participant_01k12kj" isHorizontal="true">
@@ -494,6 +565,42 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <di:waypoint x="690" y="1030" />
         <di:waypoint x="762" y="1030" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_0jqmav5" bpmnElement="Activity_13z4pik" isExpanded="true">
+        <dc:Bounds x="860" y="930" width="560" height="200" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yzyth4_di" bpmnElement="Activity_1w1xr2r">
+        <dc:Bounds x="1000" y="990" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_130rgjq_di" bpmnElement="Event_10x3vwf">
+        <dc:Bounds x="892" y="1012" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="868" y="1055" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nlsfax_di" bpmnElement="Event_0qaxzxd">
+        <dc:Bounds x="1312" y="1012" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1294" y="1055" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cmt9h5_di" bpmnElement="Activity_05jfi3k">
+        <dc:Bounds x="1140" y="990" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1nxgk4u_di" bpmnElement="Flow_1nxgk4u">
+        <di:waypoint x="928" y="1030" />
+        <di:waypoint x="1000" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ahyn4h_di" bpmnElement="Flow_0ahyn4h">
+        <di:waypoint x="1100" y="1030" />
+        <di:waypoint x="1140" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bn88tt_di" bpmnElement="Flow_1bn88tt">
+        <di:waypoint x="1240" y="1030" />
+        <di:waypoint x="1312" y="1030" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1g9iw37" bpmnElement="Flow_12j0i5v">
         <di:waypoint x="460" y="215" />
         <di:waypoint x="460" y="140" />
@@ -531,17 +638,20 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0bgrxpb_di" bpmnElement="Flow_0bgrxpb">
-        <di:waypoint x="918" y="1230" />
-        <di:waypoint x="918" y="808" />
+        <di:waypoint x="850" y="1230" />
+        <di:waypoint x="850" y="790" />
+        <di:waypoint x="900" y="790" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="918" y="1005" width="63" height="27" />
+          <dc:Bounds x="858" y="886" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1q28him_di" bpmnElement="Flow_1q28him">
-        <di:waypoint x="1240" y="830" />
-        <di:waypoint x="1240" y="1230" />
+        <di:waypoint x="1290" y="820" />
+        <di:waypoint x="1440" y="820" />
+        <di:waypoint x="1440" y="1260" />
+        <di:waypoint x="1380" y="1260" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1218" y="952" width="84" height="40" />
+          <dc:Bounds x="1418" y="956" width="84" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0m6nyoo_di" bpmnElement="Flow_0m6nyoo">
@@ -571,6 +681,71 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <di:waypoint x="640" y="1230" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="646" y="904" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_0gkktn0">
+    <bpmndi:BPMNPlane id="BPMNPlane_12gjd90" bpmnElement="Activity_05jfi3k">
+      <bpmndi:BPMNShape id="Event_0okvn4y_di" bpmnElement="Event_0okvn4y">
+        <dc:Bounds x="172" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1lip7d1_di" bpmnElement="Gateway_1lip7d1" isMarkerVisible="true">
+        <dc:Bounds x="265" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="249" y="57.5" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08n7209_di" bpmnElement="Activity_1rah9be">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x6176a_di" bpmnElement="Activity_0s9heq1">
+        <dc:Bounds x="600" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wvzl65_di" bpmnElement="Activity_1jw8mxh">
+        <dc:Bounds x="770" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1pt3p88_di" bpmnElement="Event_1pt3p88">
+        <dc:Bounds x="942" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="934" y="145" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0eibnr1_di" bpmnElement="Event_0eibnr1">
+        <dc:Bounds x="942" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="921" y="265" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1i7vxi8_di" bpmnElement="Flow_1i7vxi8">
+        <di:waypoint x="208" y="120" />
+        <di:waypoint x="265" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_137sb7w_di" bpmnElement="Flow_137sb7w">
+        <di:waypoint x="315" y="120" />
+        <di:waypoint x="430" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="367" y="102" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ac5nec_di" bpmnElement="Flow_0ac5nec">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="600" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h9ba4n_di" bpmnElement="Flow_0h9ba4n">
+        <di:waypoint x="700" y="120" />
+        <di:waypoint x="770" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ofeq7p_di" bpmnElement="Flow_1ofeq7p">
+        <di:waypoint x="870" y="120" />
+        <di:waypoint x="942" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_058mtlo_di" bpmnElement="Flow_058mtlo">
+        <di:waypoint x="290" y="145" />
+        <di:waypoint x="290" y="240" />
+        <di:waypoint x="942" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="294" y="190" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
