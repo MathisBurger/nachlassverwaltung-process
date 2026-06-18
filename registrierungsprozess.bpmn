@@ -33,7 +33,7 @@
     <bpmn:sendTask id="Activity_1r49j42" name="Identitätsprüfung anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting identify check for ID card " + initialRegistrationInformation.prop("idCardNumber").stringValue())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting identify check for ID card " + registrationInformation.prop("idCardNumber").stringValue())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1lugzyi</bpmn:incoming>
@@ -43,7 +43,7 @@
       <bpmn:incoming>Flow_1tttzoc</bpmn:incoming>
       <bpmn:outgoing>Flow_1q9nfog</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:exclusiveGateway id="Gateway_0a9m63a" name="Identität valide?" default="Flow_0qlsrx8">
+    <bpmn:exclusiveGateway id="Gateway_0a9m63a" name="Identität valide?">
       <bpmn:incoming>Flow_1q9nfog</bpmn:incoming>
       <bpmn:outgoing>Flow_0yu201o</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qlsrx8</bpmn:outgoing>
@@ -51,7 +51,7 @@
     <bpmn:sendTask id="Activity_0pi1wj9" name="Behörden Informieren" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Reporting fraud for ID card" + initialRegistrationInformation.prop("idCardNumber").stringValue())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Reporting fraud for ID card" + registrationInformation.prop("idCardNumber").stringValue())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0qlsrx8</bpmn:incoming>
@@ -62,13 +62,15 @@
     <bpmn:sequenceFlow id="Flow_0yu201o" name="Ja" sourceRef="Gateway_0a9m63a" targetRef="Activity_14hs9pc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${identityValid}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0qlsrx8" name="Nein" sourceRef="Gateway_0a9m63a" targetRef="Activity_0pi1wj9" />
+    <bpmn:sequenceFlow id="Flow_0qlsrx8" name="Nein" sourceRef="Gateway_0a9m63a" targetRef="Activity_0pi1wj9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${identityValid == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0wbm9f0" sourceRef="Activity_14hs9pc" targetRef="Event_14pip2o" />
     <bpmn:sequenceFlow id="Flow_1ef3752" sourceRef="Activity_0pi1wj9" targetRef="Event_0d4bkeh" />
     <bpmn:sendTask id="Activity_14hs9pc" name="Registrierungsbestätigung senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending Registration Success Message to " + initialRegistrationInformation.prop("email").stringValue())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending Registration Success Message to " + registrationInformation.prop("email").stringValue())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0yu201o</bpmn:incoming>
@@ -82,6 +84,14 @@
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_0a3bg1j" escalationRef="Escalation_0npharp" />
     </bpmn:endEvent>
     <bpmn:receiveTask id="Activity_0bvk3hj" name="Personalstammurkunden empfangen" messageRef="Message_1kohvqv">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="end">
+          <camunda:script scriptFormat="JavaScript">const regInfo = JSON.parse(registrationInformation.toString());
+regInfo["idCardNumber"] = idCardNumber;
+
+execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_06y1xpr</bpmn:incoming>
       <bpmn:outgoing>Flow_1lugzyi</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -89,7 +99,7 @@
     <bpmn:sendTask id="Activity_0crfdgo" name="Personalstammurkunden anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Requesting Personal Summary Records for ID Card " + initialRegistrationInformation.prop("idCardNumber").stringValue())</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Requesting Personal Summary Records for user " + registrationInformation.prop("email").stringValue())</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0nycjp4</bpmn:incoming>

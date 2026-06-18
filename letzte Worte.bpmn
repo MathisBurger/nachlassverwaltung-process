@@ -15,12 +15,14 @@
     <bpmn:sequenceFlow id="Flow_0waf4v8" sourceRef="Activity_17rp3s5" targetRef="Activity_1llhhrv" />
     <bpmn:sequenceFlow id="Flow_0q5qihi" sourceRef="Activity_06d36o4" targetRef="Activity_0hnitkl" />
     <bpmn:sequenceFlow id="Flow_02qc185" sourceRef="StartEvent_1" targetRef="Gateway_0ck407x" />
-    <bpmn:exclusiveGateway id="Gateway_0ck407x" name="Präferenz vorhanden?" default="Flow_0x52vjh">
+    <bpmn:exclusiveGateway id="Gateway_0ck407x" name="Präferenz vorhanden?">
       <bpmn:incoming>Flow_02qc185</bpmn:incoming>
       <bpmn:outgoing>Flow_0x52vjh</bpmn:outgoing>
       <bpmn:outgoing>Flow_0vjhzuj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0x52vjh" sourceRef="Gateway_0ck407x" targetRef="Activity_17rp3s5" />
+    <bpmn:sequenceFlow id="Flow_0x52vjh" name="Nein" sourceRef="Gateway_0ck407x" targetRef="Activity_17rp3s5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${preference == null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sendTask id="Activity_17rp3s5" name="Präferenz anfragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
@@ -47,7 +49,7 @@
       <bpmn:incoming>Flow_0q5qihi</bpmn:incoming>
       <bpmn:outgoing>Flow_1myo2pk</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:exclusiveGateway id="Gateway_05v592d" name="Letzte Worte gewünscht?" default="Flow_178zs9o">
+    <bpmn:exclusiveGateway id="Gateway_05v592d" name="Letzte Worte gewünscht?">
       <bpmn:incoming>Flow_0tl91a1</bpmn:incoming>
       <bpmn:outgoing>Flow_0thm2qx</bpmn:outgoing>
       <bpmn:outgoing>Flow_178zs9o</bpmn:outgoing>
@@ -66,12 +68,14 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${preference != null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1myo2pk" sourceRef="Activity_0hnitkl" targetRef="Event_0eacty8" />
-    <bpmn:exclusiveGateway id="Gateway_1v8ic4u" name="Letzte Worte existieren?" default="Flow_0hthqg4">
+    <bpmn:exclusiveGateway id="Gateway_1v8ic4u" name="Letzte Worte existieren?">
       <bpmn:incoming>Flow_178zs9o</bpmn:incoming>
       <bpmn:outgoing>Flow_0h9cg3d</bpmn:outgoing>
       <bpmn:outgoing>Flow_0hthqg4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_178zs9o" sourceRef="Gateway_05v592d" targetRef="Gateway_1v8ic4u" />
+    <bpmn:sequenceFlow id="Flow_178zs9o" name="Nein" sourceRef="Gateway_05v592d" targetRef="Gateway_1v8ic4u">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${preference == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0h9cg3d" name="Ja" sourceRef="Gateway_1v8ic4u" targetRef="Activity_03ub0yu">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${lastWords != ""}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -93,7 +97,9 @@
       <bpmn:incoming>Flow_1myo2pk</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1klshpl" sourceRef="Gateway_0719wwf" targetRef="Event_17plfn7" />
-    <bpmn:sequenceFlow id="Flow_0hthqg4" sourceRef="Gateway_1v8ic4u" targetRef="Gateway_0719wwf" />
+    <bpmn:sequenceFlow id="Flow_0hthqg4" name="Nein" sourceRef="Gateway_1v8ic4u" targetRef="Gateway_0719wwf">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${lastWords == ""}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmn:message id="Message_2g1pa17" name="lastWordsPreference" />
   <bpmn:message id="Message_2t03ppn" name="lastWords" />
@@ -112,7 +118,7 @@
       <bpmndi:BPMNShape id="Gateway_0ck407x_di" bpmnElement="Gateway_0ck407x" isMarkerVisible="true">
         <dc:Bounds x="305" y="325" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="300" y="287.5" width="59" height="27" />
+          <dc:Bounds x="300" y="288" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ef6lzb_di" bpmnElement="Activity_17rp3s5">
@@ -178,6 +184,9 @@
       <bpmndi:BPMNEdge id="Flow_0x52vjh_di" bpmnElement="Flow_0x52vjh">
         <di:waypoint x="355" y="350" />
         <di:waypoint x="430" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="381" y="332" width="23" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0thm2qx_di" bpmnElement="Flow_0thm2qx">
         <di:waypoint x="925" y="350" />
@@ -211,6 +220,9 @@
         <di:waypoint x="900" y="375" />
         <di:waypoint x="900" y="460" />
         <di:waypoint x="1025" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="904" y="415" width="23" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0h9cg3d_di" bpmnElement="Flow_0h9cg3d">
         <di:waypoint x="1075" y="460" />
@@ -232,6 +244,9 @@
         <di:waypoint x="1050" y="540" />
         <di:waypoint x="1370" y="540" />
         <di:waypoint x="1370" y="485" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1199" y="522" width="23" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1f7pcui_di" bpmnElement="Participant_0kmyb5w" isHorizontal="true">
         <dc:Bounds x="380" y="50" width="940" height="60" />

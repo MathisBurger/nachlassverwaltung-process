@@ -17,23 +17,24 @@
         <bpmn:flowNodeRef>Event_0ewc1dy</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1f6mhxm</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_063jzly</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0stubt2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_17rltt4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0stubt2</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Event_1qte4uv" name="Registrierungsinformationen erhalten">
       <bpmn:extensionElements>
         <camunda:executionListener event="end">
-          <camunda:script scriptFormat="JavaScript">execution.setVariable("initialRegistrationInformation", S(JSON.stringify({username, password, email, birthday, idCardNumber})));</camunda:script>
+          <camunda:script scriptFormat="JavaScript">execution.setVariable("registrationInformation", S(JSON.stringify({username, password, email, birthday})));</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0tiungv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1lr6lcd" messageRef="Message_0krdok8" />
     </bpmn:startEvent>
-    <bpmn:callActivity id="Activity_09l5ttw" name="Registrierung durchführen" calledElement="registrationProcess">
+    <bpmn:callActivity id="Activity_09l5ttw" name="Registrierung" calledElement="registrationProcess">
       <bpmn:extensionElements>
-        <camunda:in source="initialRegistrationInformation" target="initialRegistrationInformation" />
+        <camunda:in source="registrationInformation" target="registrationInformation" />
         <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:out source="registrationInformation" target="registrationInformation" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0tiungv</bpmn:incoming>
       <bpmn:outgoing>Flow_0es0hy5</bpmn:outgoing>
@@ -48,10 +49,10 @@
     <bpmn:sequenceFlow id="Flow_10a685s" sourceRef="Activity_0xvglbd" targetRef="Activity_0e92b8h" />
     <bpmn:sequenceFlow id="Flow_1ueaige" sourceRef="Activity_0e92b8h" targetRef="Event_135yoqb" />
     <bpmn:sequenceFlow id="Flow_1c6wpkw" sourceRef="Event_1f6mhxm" targetRef="Event_0ewc1dy" />
-    <bpmn:endEvent id="Event_135yoqb" name="Bestattung und Nachlass Verwaltung abgeschlossen">
+    <bpmn:endEvent id="Event_135yoqb" name="Erfolgreich Sterbevorsorge geleistet">
       <bpmn:incoming>Flow_1ueaige</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="Activity_0e92b8h" name="Nachlass freigeben" calledElement="estateReleaseProcess">
+    <bpmn:callActivity id="Activity_0e92b8h" name="Nachlassfreigabe" calledElement="estateReleaseProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="heirsList" target="heirsList" />
@@ -61,7 +62,7 @@
       <bpmn:incoming>Flow_10a685s</bpmn:incoming>
       <bpmn:outgoing>Flow_1ueaige</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:callActivity id="Activity_0xvglbd" name="Bestattung durchführen" calledElement="funeralProcess">
+    <bpmn:callActivity id="Activity_0xvglbd" name="Bestattung" calledElement="funeralProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="funeralOrder" target="funeralOrder" />
@@ -69,7 +70,7 @@
       <bpmn:incoming>Flow_0524dvd</bpmn:incoming>
       <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass bis zum Tod verwalten" calledElement="estateManagementProcess">
+    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlassverwaltung" calledElement="estateManagementProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:out source="funeralOrder" target="funeralOrder" />
@@ -89,15 +90,15 @@
       <bpmn:incoming>Flow_1c6wpkw</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1m6qr7w" sourceRef="Event_063jzly" targetRef="Activity_0stubt2" />
+    <bpmn:sequenceFlow id="Flow_1itvq3u" sourceRef="Activity_0stubt2" targetRef="Event_17rltt4" />
+    <bpmn:endEvent id="Event_17rltt4" name="Sterbevorsorge storniert">
+      <bpmn:incoming>Flow_1itvq3u</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:scriptTask id="Activity_0stubt2" name="Registrierungsinformationen löschen" scriptFormat="JavaScript">
       <bpmn:incoming>Flow_1m6qr7w</bpmn:incoming>
       <bpmn:outgoing>Flow_1itvq3u</bpmn:outgoing>
       <bpmn:script>execution.removeVariable("initialRegistrationInformation")</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_1itvq3u" sourceRef="Activity_0stubt2" targetRef="Event_17rltt4" />
-    <bpmn:endEvent id="Event_17rltt4" name="Sterbevorsorge storniert">
-      <bpmn:incoming>Flow_1itvq3u</bpmn:incoming>
-    </bpmn:endEvent>
   </bpmn:process>
   <bpmn:message id="Message_0krdok8" name="initialRegistrationInformation" />
   <bpmn:escalation id="Escalation_2ugn8le" name="identityInvalid" escalationCode="1400" />
@@ -121,23 +122,23 @@
         <dc:Bounds x="400" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0awcafa" bpmnElement="Activity_1dnyeqt">
-        <dc:Bounds x="570" y="190" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_0ubj7c8" bpmnElement="Event_135yoqb">
+        <dc:Bounds x="1052" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1033" y="255" width="76" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17mu89q_di" bpmnElement="Activity_0e92b8h">
+        <dc:Bounds x="890" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ijxqld_di" bpmnElement="Activity_0xvglbd">
         <dc:Bounds x="740" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17mu89q_di" bpmnElement="Activity_0e92b8h">
-        <dc:Bounds x="890" y="190" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_0awcafa" bpmnElement="Activity_1dnyeqt">
+        <dc:Bounds x="570" y="190" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0ubj7c8" bpmnElement="Event_135yoqb">
-        <dc:Bounds x="1052" y="212" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1033" y="255" width="75" height="53" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ewc1dy_di" bpmnElement="Event_0ewc1dy">
         <dc:Bounds x="1052" y="422" width="36" height="36" />
@@ -145,26 +146,26 @@
           <dc:Bounds x="1027" y="465.5" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0u3bxus_di" bpmnElement="Activity_0stubt2">
-        <dc:Bounds x="740" y="310" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_17rltt4_di" bpmnElement="Event_17rltt4">
         <dc:Bounds x="1052" y="332" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1032" y="375" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1069x86_di" bpmnElement="Event_1f6mhxm">
-        <dc:Bounds x="482" y="252" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="517" y="286" width="66" height="27" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_0u3bxus_di" bpmnElement="Activity_0stubt2">
+        <dc:Bounds x="790" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_06by842_di" bpmnElement="Event_063jzly">
         <dc:Bounds x="652" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="682.5" y="286" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1069x86_di" bpmnElement="Event_1f6mhxm">
+        <dc:Bounds x="482" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="517" y="286" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0tiungv_di" bpmnElement="Flow_0tiungv">
@@ -195,10 +196,10 @@
       <bpmndi:BPMNEdge id="Flow_1m6qr7w_di" bpmnElement="Flow_1m6qr7w">
         <di:waypoint x="670" y="288" />
         <di:waypoint x="670" y="350" />
-        <di:waypoint x="740" y="350" />
+        <di:waypoint x="790" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1itvq3u_di" bpmnElement="Flow_1itvq3u">
-        <di:waypoint x="840" y="350" />
+        <di:waypoint x="890" y="350" />
         <di:waypoint x="1052" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1gek3uz_di" bpmnElement="Participant_17istra" isHorizontal="true">

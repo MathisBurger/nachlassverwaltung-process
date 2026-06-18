@@ -16,8 +16,7 @@ http:
           "username": {"value": "Demo User", "type": "String", "valueInfo": {"transient": true}},
           "password": {"value": "Supersecret password", "type": "String", "valueInfo": {"transient": true}},
           "email": {"value": "user@demo.org", "type": "String", "valueInfo": {"transient": true}},
-          "birthday": {"value": "01.01.1970", "type": "String", "valueInfo": {"transient": true}},
-          "idCardNumber": {"value": "L1234567", "type": "String", "valueInfo": {"transient": true}}
+          "birthday": {"value": "01.01.1970", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit

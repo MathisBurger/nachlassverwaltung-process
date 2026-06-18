@@ -3,7 +3,7 @@
   <bpmn:collaboration id="Collaboration_0aukgm2">
     <bpmn:participant id="Participant_03t2a00" name="Vorsorgedokumentenverarbeitungsprozess" processRef="advanceDirectiveDocumentProcess" />
     <bpmn:participant id="Participant_1wcxv6a" name="Erblasser" />
-    <bpmn:messageFlow id="Flow_18lchom" name="Upload Anfrage" sourceRef="Activity_0dl58r3" targetRef="Participant_1wcxv6a" />
+    <bpmn:messageFlow id="Flow_18lchom" name="Dokumentenanfrage" sourceRef="Activity_0dl58r3" targetRef="Participant_1wcxv6a" />
     <bpmn:messageFlow id="Flow_1rk6h9n" name="Vorsorgedokument" sourceRef="Participant_1wcxv6a" targetRef="Activity_0n6ferf" />
   </bpmn:collaboration>
   <bpmn:process id="advanceDirectiveDocumentProcess" name="Vorsorgedokumentenverarbeitungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
@@ -15,7 +15,7 @@
     <bpmn:startEvent id="Event_09wbm5t" name="Vorsorgedokument ist zu verarbeiten">
       <bpmn:outgoing>Flow_1whjc1v</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:callActivity id="Activity_06mh516" name="Dokument beglaubigen" calledElement="notaryDocumentProcess">
+    <bpmn:callActivity id="Activity_06mh516" name="Dokumentenbeglaubigung" calledElement="notaryDocumentProcess">
       <bpmn:extensionElements>
         <camunda:in source="documentContent" target="documentContent" />
         <camunda:in source="documentId" target="documentId" />
@@ -124,7 +124,7 @@
         <di:waypoint x="450" y="250" />
         <di:waypoint x="450" y="140" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="372" y="192" width="76" height="14" />
+          <dc:Bounds x="359" y="192" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rk6h9n_di" bpmnElement="Flow_1rk6h9n">

@@ -13,7 +13,7 @@ http:
         "messageName": "personalSummaryRecord",
         "businessKey": "L1234567",
         "processVariables": {
-          "idCardCode": {"value": "Ausweiscode", "type": "String"},
+          "idCardNumber": {"value": "L1234567", "type": "String", "valueInfo": {"transient": true}},
           "birthCertificate": {"value": "Geburtsurkunde", "type": "String"}
         }
       }
