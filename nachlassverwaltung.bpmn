@@ -281,37 +281,26 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       </bpmn:callActivity>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_13z4pik" name="Verwaltungsstornierunsprozess" triggeredByEvent="true">
-      <bpmn:scriptTask id="Activity_1w1xr2r" name="Daten löschen" scriptFormat="JavaScript">
-        <bpmn:incoming>Flow_1nxgk4u</bpmn:incoming>
-        <bpmn:outgoing>Flow_0ahyn4h</bpmn:outgoing>
-        <bpmn:script>execution.removeVariable("advanceDirectiveContents");
-execution.removeVariable("estateList");
-execution.removeVariable("heirsList");
-execution.removeVariable("lastWords");
-execution.removeVariable("signedLastWill");</bpmn:script>
-      </bpmn:scriptTask>
-      <bpmn:startEvent id="Event_10x3vwf" name="Stornierungsauftrag erhalten">
-        <bpmn:outgoing>Flow_1nxgk4u</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_1gaslol" messageRef="Message_0sgdi2r" />
-      </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_1nxgk4u" sourceRef="Event_10x3vwf" targetRef="Activity_1w1xr2r" />
-      <bpmn:sequenceFlow id="Flow_0ahyn4h" sourceRef="Activity_1w1xr2r" targetRef="Activity_05jfi3k" />
-      <bpmn:sequenceFlow id="Flow_1bn88tt" sourceRef="Activity_05jfi3k" targetRef="Event_0qaxzxd" />
       <bpmn:subProcess id="Activity_05jfi3k" name="Bestattungsstornierung">
         <bpmn:incoming>Flow_0ahyn4h</bpmn:incoming>
         <bpmn:outgoing>Flow_1bn88tt</bpmn:outgoing>
-        <bpmn:startEvent id="Event_0okvn4y">
-          <bpmn:outgoing>Flow_1i7vxi8</bpmn:outgoing>
-        </bpmn:startEvent>
-        <bpmn:exclusiveGateway id="Gateway_1lip7d1" name="Bestattungsauftrag vorhanden?">
-          <bpmn:incoming>Flow_1i7vxi8</bpmn:incoming>
-          <bpmn:outgoing>Flow_137sb7w</bpmn:outgoing>
-          <bpmn:outgoing>Flow_058mtlo</bpmn:outgoing>
-        </bpmn:exclusiveGateway>
-        <bpmn:sequenceFlow id="Flow_1i7vxi8" sourceRef="Event_0okvn4y" targetRef="Gateway_1lip7d1" />
-        <bpmn:sequenceFlow id="Flow_137sb7w" name="Ja" sourceRef="Gateway_1lip7d1" targetRef="Activity_1rah9be">
-          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable("funeralOrder")}</bpmn:conditionExpression>
-        </bpmn:sequenceFlow>
+        <bpmn:endEvent id="Event_0eibnr1" name="Bestattung nicht geplant">
+          <bpmn:incoming>Flow_058mtlo</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:endEvent id="Event_1pt3p88" name="Bestattung storniert">
+          <bpmn:incoming>Flow_1ofeq7p</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:scriptTask id="Activity_1jw8mxh" name="Bestattungsdaten löschen" scriptFormat="JavaScript">
+          <bpmn:incoming>Flow_0h9ba4n</bpmn:incoming>
+          <bpmn:outgoing>Flow_1ofeq7p</bpmn:outgoing>
+          <bpmn:script>execution.removeVariable("funeralOrder");</bpmn:script>
+        </bpmn:scriptTask>
+        <bpmn:sequenceFlow id="Flow_1ofeq7p" sourceRef="Activity_1jw8mxh" targetRef="Event_1pt3p88" />
+        <bpmn:receiveTask id="Activity_0s9heq1" name="Stornierungsbestätigung erhalten" messageRef="Message_31kpuu7">
+          <bpmn:incoming>Flow_0ac5nec</bpmn:incoming>
+          <bpmn:outgoing>Flow_0h9ba4n</bpmn:outgoing>
+        </bpmn:receiveTask>
+        <bpmn:sequenceFlow id="Flow_0h9ba4n" sourceRef="Activity_0s9heq1" targetRef="Activity_1jw8mxh" />
         <bpmn:sendTask id="Activity_1rah9be" name="Bestattung stornieren" camunda:expression="${1}">
           <bpmn:extensionElements>
             <camunda:executionListener event="start">
@@ -322,31 +311,42 @@ execution.removeVariable("signedLastWill");</bpmn:script>
           <bpmn:outgoing>Flow_0ac5nec</bpmn:outgoing>
         </bpmn:sendTask>
         <bpmn:sequenceFlow id="Flow_0ac5nec" sourceRef="Activity_1rah9be" targetRef="Activity_0s9heq1" />
-        <bpmn:receiveTask id="Activity_0s9heq1" name="Stornierungsbestätigung erhalten" messageRef="Message_31kpuu7">
-          <bpmn:incoming>Flow_0ac5nec</bpmn:incoming>
-          <bpmn:outgoing>Flow_0h9ba4n</bpmn:outgoing>
-        </bpmn:receiveTask>
-        <bpmn:sequenceFlow id="Flow_0h9ba4n" sourceRef="Activity_0s9heq1" targetRef="Activity_1jw8mxh" />
-        <bpmn:scriptTask id="Activity_1jw8mxh" name="Bestattungsdaten löschen" scriptFormat="JavaScript">
-          <bpmn:incoming>Flow_0h9ba4n</bpmn:incoming>
-          <bpmn:outgoing>Flow_1ofeq7p</bpmn:outgoing>
-          <bpmn:script>execution.removeVariable("funeralOrder");</bpmn:script>
-        </bpmn:scriptTask>
-        <bpmn:endEvent id="Event_1pt3p88" name="Bestattung storniert">
-          <bpmn:incoming>Flow_1ofeq7p</bpmn:incoming>
-        </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_1ofeq7p" sourceRef="Activity_1jw8mxh" targetRef="Event_1pt3p88" />
-        <bpmn:endEvent id="Event_0eibnr1" name="Bestattung nicht geplant">
-          <bpmn:incoming>Flow_058mtlo</bpmn:incoming>
-        </bpmn:endEvent>
+        <bpmn:exclusiveGateway id="Gateway_1lip7d1" name="Bestattungsauftrag vorhanden?">
+          <bpmn:incoming>Flow_1i7vxi8</bpmn:incoming>
+          <bpmn:outgoing>Flow_058mtlo</bpmn:outgoing>
+          <bpmn:outgoing>Flow_137sb7w</bpmn:outgoing>
+        </bpmn:exclusiveGateway>
         <bpmn:sequenceFlow id="Flow_058mtlo" name="Nein" sourceRef="Gateway_1lip7d1" targetRef="Event_0eibnr1">
           <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!execution.hasVariable("funeralOrder")}</bpmn:conditionExpression>
         </bpmn:sequenceFlow>
+        <bpmn:sequenceFlow id="Flow_137sb7w" name="Ja" sourceRef="Gateway_1lip7d1" targetRef="Activity_1rah9be">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable("funeralOrder")}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+        <bpmn:startEvent id="Event_0okvn4y">
+          <bpmn:outgoing>Flow_1i7vxi8</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:sequenceFlow id="Flow_1i7vxi8" sourceRef="Event_0okvn4y" targetRef="Gateway_1lip7d1" />
       </bpmn:subProcess>
       <bpmn:endEvent id="Event_0qaxzxd" name="Nachlassdaten gelöscht">
         <bpmn:incoming>Flow_1bn88tt</bpmn:incoming>
         <bpmn:escalationEventDefinition id="EscalationEventDefinition_0n5nm63" escalationRef="Escalation_10b2gir" />
       </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1bn88tt" sourceRef="Activity_05jfi3k" targetRef="Event_0qaxzxd" />
+      <bpmn:startEvent id="Event_10x3vwf" name="Stornierungsauftrag erhalten">
+        <bpmn:outgoing>Flow_139x85f</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1gaslol" messageRef="Message_0sgdi2r" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_139x85f" sourceRef="Event_10x3vwf" targetRef="Activity_1w1xr2r" />
+      <bpmn:scriptTask id="Activity_1w1xr2r" name="Daten löschen" scriptFormat="JavaScript">
+        <bpmn:incoming>Flow_139x85f</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ahyn4h</bpmn:outgoing>
+        <bpmn:script>execution.removeVariable("advanceDirectiveContents");
+execution.removeVariable("estateList");
+execution.removeVariable("heirsList");
+execution.removeVariable("lastWords");
+execution.removeVariable("signedLastWill");</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0ahyn4h" sourceRef="Activity_1w1xr2r" targetRef="Activity_05jfi3k" />
     </bpmn:subProcess>
   </bpmn:process>
   <bpmn:message id="Message_0oqp41o" name="deathCertificate" />
@@ -589,10 +589,6 @@ execution.removeVariable("signedLastWill");</bpmn:script>
         <dc:Bounds x="1140" y="990" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1nxgk4u_di" bpmnElement="Flow_1nxgk4u">
-        <di:waypoint x="928" y="1030" />
-        <di:waypoint x="1000" y="1030" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ahyn4h_di" bpmnElement="Flow_0ahyn4h">
         <di:waypoint x="1100" y="1030" />
         <di:waypoint x="1140" y="1030" />
@@ -600,6 +596,10 @@ execution.removeVariable("signedLastWill");</bpmn:script>
       <bpmndi:BPMNEdge id="Flow_1bn88tt_di" bpmnElement="Flow_1bn88tt">
         <di:waypoint x="1240" y="1030" />
         <di:waypoint x="1312" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_139x85f_di" bpmnElement="Flow_139x85f">
+        <di:waypoint x="928" y="1030" />
+        <di:waypoint x="1000" y="1030" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1g9iw37" bpmnElement="Flow_12j0i5v">
         <di:waypoint x="460" y="215" />

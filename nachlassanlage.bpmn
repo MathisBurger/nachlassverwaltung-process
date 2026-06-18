@@ -57,9 +57,9 @@ execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));</camunda:scrip
         <bpmn:extensionElements>
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const list = [];
-if (advanceDecisionToRefuseTreatment) list.push("advanceDecisionToRefuseTreatment");
-if (powerOfAttorney) list.push("powerOfAttorney");
-if (nominationOfGuardian) list.push("nominationOfGuardian");
+if (execution.getVariable("advanceDecisionToRefuseTreatment") ?? false) list.push("advanceDecisionToRefuseTreatment");
+if (execution.getVariable("powerOfAttorney") ?? false) list.push("powerOfAttorney");
+if (execution.getVariable("nominationOfGuardian") ?? false) list.push("nominationOfGuardian");
 
 execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</camunda:script>
           </camunda:executionListener>
@@ -155,6 +155,10 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNShape id="BPMNShape_06bkzeh" bpmnElement="Gateway_1w9b210">
         <dc:Bounds x="305" y="415" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0cf59pe" bpmnElement="Activity_0rdll59">
+        <dc:Bounds x="400" y="300" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1pw4ora" bpmnElement="Activity_17pu7b7">
         <dc:Bounds x="400" y="500" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -163,10 +167,6 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1sz32qi" bpmnElement="Event_0bwm6br">
         <dc:Bounds x="672" y="422" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0cf59pe" bpmnElement="Activity_0rdll59">
-        <dc:Bounds x="400" y="300" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0prn2m4" bpmnElement="Flow_0orxbx6">
         <di:waypoint x="330" y="415" />
@@ -219,84 +219,84 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
   <bpmndi:BPMNDiagram id="BPMNDiagram_1kjlos0">
     <bpmndi:BPMNPlane id="BPMNPlane_1whyaf1" bpmnElement="Activity_0rdll59">
       <bpmndi:BPMNShape id="BPMNShape_07cusc3" bpmnElement="Event_0mgg4f4">
-        <dc:Bounds x="207" y="242" width="36" height="36" />
+        <dc:Bounds x="207" y="162" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="180" y="285" width="90" height="40" />
+          <dc:Bounds x="180" y="205" width="90" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_04fdrou" bpmnElement="Event_0va1d63">
-        <dc:Bounds x="1287" y="232" width="36" height="36" />
+        <dc:Bounds x="1287" y="152" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1260" y="275" width="90" height="40" />
+          <dc:Bounds x="1260" y="195" width="90" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0j2l99a" bpmnElement="Event_1e3zoix">
-        <dc:Bounds x="1287" y="402" width="36" height="36" />
+        <dc:Bounds x="1287" y="322" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1261" y="446" width="88" height="27" />
+          <dc:Bounds x="1261" y="366" width="88" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1tbolh5" bpmnElement="Gateway_0nyr33z" isMarkerVisible="true">
-        <dc:Bounds x="650" y="235" width="50" height="50" />
+        <dc:Bounds x="650" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="638" y="180" width="74" height="40" />
+          <dc:Bounds x="638" y="100" width="74" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_03rnl92" bpmnElement="Activity_193rmu7">
-        <dc:Bounds x="295" y="220" width="100" height="80" />
+        <dc:Bounds x="295" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_11xrg1v" bpmnElement="Activity_1e8jhen">
-        <dc:Bounds x="455" y="220" width="100" height="80" />
+        <dc:Bounds x="455" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0psm1ip" bpmnElement="Activity_127njpj" isExpanded="true">
-        <dc:Bounds x="830" y="160" width="385" height="200" />
+        <dc:Bounds x="830" y="80" width="385" height="200" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_071an9z" bpmnElement="Event_1v1mkjz">
-        <dc:Bounds x="867" y="242" width="36" height="36" />
+        <dc:Bounds x="867" y="162" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_017wg80" bpmnElement="Event_01jufgh">
-        <dc:Bounds x="1107" y="242" width="36" height="36" />
+        <dc:Bounds x="1107" y="162" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_16olr1v" bpmnElement="Activity_0s8h49w">
-        <dc:Bounds x="955" y="220" width="100" height="80" />
+        <dc:Bounds x="955" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_10rdrn0" bpmnElement="Flow_0ftxxot">
-        <di:waypoint x="903" y="260" />
-        <di:waypoint x="955" y="260" />
+        <di:waypoint x="903" y="180" />
+        <di:waypoint x="955" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1smvreo" bpmnElement="Flow_1ri2gut">
-        <di:waypoint x="1055" y="260" />
-        <di:waypoint x="1107" y="260" />
+        <di:waypoint x="1055" y="180" />
+        <di:waypoint x="1107" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0p3h223" bpmnElement="Flow_0ou1j6c">
-        <di:waypoint x="243" y="260" />
-        <di:waypoint x="295" y="260" />
+        <di:waypoint x="243" y="180" />
+        <di:waypoint x="295" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_18h8qd5" bpmnElement="Flow_0asulu5">
-        <di:waypoint x="1215" y="250" />
-        <di:waypoint x="1287" y="250" />
+        <di:waypoint x="1215" y="170" />
+        <di:waypoint x="1287" y="170" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_13sz0va" bpmnElement="Flow_1oz0edi">
-        <di:waypoint x="675" y="285" />
-        <di:waypoint x="675" y="420" />
-        <di:waypoint x="1287" y="420" />
+        <di:waypoint x="675" y="205" />
+        <di:waypoint x="675" y="340" />
+        <di:waypoint x="1287" y="340" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0wt0e04" bpmnElement="Flow_1nhec1g">
-        <di:waypoint x="555" y="260" />
-        <di:waypoint x="650" y="260" />
+        <di:waypoint x="555" y="180" />
+        <di:waypoint x="650" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_096vlut" bpmnElement="Flow_0lllva9">
-        <di:waypoint x="700" y="260" />
-        <di:waypoint x="830" y="260" />
+        <di:waypoint x="700" y="180" />
+        <di:waypoint x="830" y="180" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="728" y="242" width="12" height="14" />
+          <dc:Bounds x="728" y="162" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1ejb25p" bpmnElement="Flow_1wcxwna">
-        <di:waypoint x="395" y="260" />
-        <di:waypoint x="455" y="260" />
+        <di:waypoint x="395" y="180" />
+        <di:waypoint x="455" y="180" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

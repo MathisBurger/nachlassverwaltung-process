@@ -1,0 +1,22 @@
+info:
+  name: Verwaltungsstornierung
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "canelationOrder",
+        "businessKey": "L1234567"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

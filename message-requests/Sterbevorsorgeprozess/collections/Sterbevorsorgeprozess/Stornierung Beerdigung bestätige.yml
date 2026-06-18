@@ -1,0 +1,22 @@
+info:
+  name: Stornierung Beerdigung bestätige
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/engine-rest/message
+  body:
+    type: json
+    data: |-
+      {
+        "messageName": "funeralOrderCanelationConfirmation",
+        "businessKey": "L1234567"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
