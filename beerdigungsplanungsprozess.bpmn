@@ -11,6 +11,10 @@
     <bpmn:messageFlow id="Flow_1wpgwup" name="Änderungswunsch" sourceRef="Participant_11qf0vh" targetRef="Event_19c9atk" />
     <bpmn:messageFlow id="Flow_1g6ap3l" name="Bestätigung" sourceRef="Participant_11qf0vh" targetRef="Event_07j6aif" />
     <bpmn:messageFlow id="Flow_0wp1dnd" name="Auftragsänderung" sourceRef="Activity_0ooshf6" targetRef="Participant_09uh32h" />
+    <bpmn:textAnnotation id="TextAnnotation_0353s3q">
+      <bpmn:text>Bis Entscheidung bestätigt</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1lrf9wu" associationDirection="None" sourceRef="Activity_02rauh0" targetRef="TextAnnotation_0353s3q" />
   </bpmn:collaboration>
   <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_Trauerfall" name="Beerdigung soll geplant werden">
@@ -372,6 +376,10 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
         <dc:Bounds x="120" y="80" width="1510" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1lrf9wu_di" bpmnElement="Association_1lrf9wu">
+        <di:waypoint x="1326" y="500" />
+        <di:waypoint x="1421" y="650" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16seaio_di" bpmnElement="Flow_16seaio">
         <di:waypoint x="2140" y="340" />
         <di:waypoint x="2140" y="620" />
@@ -421,6 +429,10 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
           <dc:Bounds x="2266" y="553" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0353s3q_di" bpmnElement="TextAnnotation_0353s3q">
+        <dc:Bounds x="1380" y="650" width="100" height="55" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

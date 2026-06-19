@@ -35,6 +35,7 @@
         <camunda:in source="registrationInformation" target="registrationInformation" />
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:out source="registrationInformation" target="registrationInformation" />
+        <camunda:out source="birthCertificate" target="birthCertificate" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0tiungv</bpmn:incoming>
       <bpmn:outgoing>Flow_0es0hy5</bpmn:outgoing>
@@ -70,9 +71,10 @@
       <bpmn:incoming>Flow_0524dvd</bpmn:incoming>
       <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlassverwaltung" calledElement="estateManagementProcess">
+    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass- und Bestattungsverwaltung" calledElement="estateManagementProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in source="birthCertificate" target="birthCertificate" />
         <camunda:out source="funeralOrder" target="funeralOrder" />
         <camunda:out source="advanceDirectiveContents" target="advanceDirectiveContents" />
         <camunda:out source="signedLastWill" target="signedLastWill" />

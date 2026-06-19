@@ -211,18 +211,18 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
       <bpmndi:BPMNShape id="Participant_0vtm8da_di" bpmnElement="Participant_0jlko7g" isHorizontal="true">
         <dc:Bounds x="660" y="190" width="340" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
-        <dc:Bounds x="1020" y="190" width="408" height="60" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_0naagqx_di" bpmnElement="Participant_1h8gyvy" isHorizontal="true">
         <dc:Bounds x="310" y="80" width="1350" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
+        <dc:Bounds x="1000" y="760" width="408" height="60" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0ncuzmc_di" bpmnElement="Flow_0ncuzmc">
-        <di:waypoint x="1320" y="570" />
-        <di:waypoint x="1320" y="250" />
+        <di:waypoint x="1320" y="650" />
+        <di:waypoint x="1320" y="760" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1229" y="402" width="81" height="14" />
+          <dc:Bounds x="1329" y="698" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1imrrpk_di" bpmnElement="Flow_1imrrpk">

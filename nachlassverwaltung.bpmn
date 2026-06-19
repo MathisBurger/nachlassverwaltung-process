@@ -151,6 +151,7 @@ execution.setVariable("lastWords", lastWordsLocal);
           <camunda:in source="signedLastWill" target="lastWillContent" />
           <camunda:in source="heirsList" target="heirsList" />
           <camunda:in source="desiredEstateSplit" target="estateSplit" />
+          <camunda:in source="birthCertificate" target="birthCertificate" />
           <camunda:out source="signedLastWill" target="signedLastWill" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0j7x502</bpmn:incoming>

@@ -7,7 +7,7 @@
 - [x] Abbruch Transaktion
 - [x] Alle Sendenen Events in die Konsole printen lassen ;)  
 - [x] Nach Uniquitous Language prüfen
-- [ ] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
+- [x] Dokumentation schreiben, was die zentralen Entscheidungen in dem Prozess waren
 - [x] Ubiquitous Language definieren
 - [x] In dem Testament Entwurf View alle Erben und alle Erbschaftsgegenstände auch auflisten
 - [x] Nach neuem Angehörigen angelegt nachträglich das Testament erstellen, falls schon geschehen. Vielleicht brauchen wir hier eine ähnliche Lösung wie bei den Erbschaftsgegenständen
@@ -22,7 +22,7 @@
 - [x] Angehörige und Testament aktualisieren als Subprozesse in Nachlassverwaltung
 - [x] Keine Transaktion aber alle Daten löschen und Bestattung canceln
 - [x] SUbprozesse beschriften und deren Endereignisse
-- [ ] Datenobjekte bei Mehrfachinstanzmarkeirungen
+- [x] Datenobjekte bei Mehrfachinstanzmarkeirungen
 - [x] Default Flows eliminieren
 
 

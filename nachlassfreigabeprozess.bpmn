@@ -89,6 +89,11 @@
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_17xg5wl</bpmn:incoming>
         <bpmn:outgoing>Flow_0c7rtf2</bpmn:outgoing>
+        <bpmn:property id="Property_0cbdk1a" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_12ub7f2">
+          <bpmn:sourceRef>DataObjectReference_1b0t8m4</bpmn:sourceRef>
+          <bpmn:targetRef>Property_0cbdk1a</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_0c7rtf2" sourceRef="Activity_0gdd4rn" targetRef="Activity_1bvjat3" />
@@ -96,6 +101,11 @@
         <bpmn:extensionElements />
         <bpmn:incoming>Flow_0c7rtf2</bpmn:incoming>
         <bpmn:outgoing>Flow_0r2l95i</bpmn:outgoing>
+        <bpmn:property id="Property_0pf9gv3" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_1ea3978">
+          <bpmn:sourceRef>DataObjectReference_1b0t8m4</bpmn:sourceRef>
+          <bpmn:targetRef>Property_0pf9gv3</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_0x0tflq">
           <bpmn:extensionElements>
@@ -136,6 +146,11 @@ execution.setVariable("appointmentVotes", S(JSON.stringify(votes)));</bpmn:scrip
       <bpmn:subProcess id="Activity_10tn0v8" name="Einladungsversendung">
         <bpmn:incoming>Flow_1d6sgwk</bpmn:incoming>
         <bpmn:outgoing>Flow_1v5kpu5</bpmn:outgoing>
+        <bpmn:property id="Property_1xtyf88" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_09xcf4r">
+          <bpmn:sourceRef>DataObjectReference_1b0t8m4</bpmn:sourceRef>
+          <bpmn:targetRef>Property_1xtyf88</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_0yhzzx5">
           <bpmn:extensionElements>
@@ -213,6 +228,8 @@ execution.setVariable("decidedNotaryAppointment", largestKey);</bpmn:script>
         <bpmn:incoming>Flow_1lz98gf</bpmn:incoming>
         <bpmn:outgoing>Flow_1d6sgwk</bpmn:outgoing>
       </bpmn:sendTask>
+      <bpmn:dataObjectReference id="DataObjectReference_1b0t8m4" name="Erbenliste" dataObjectRef="DataObject_1q8ww81" />
+      <bpmn:dataObject id="DataObject_1q8ww81" isCollection="true" />
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_0qa1g79" name="Ermittlung der gesetzlichen Erbfolge">
       <bpmn:incoming>Flow_0vmis6z</bpmn:incoming>
@@ -318,11 +335,21 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1f8wz8i</bpmn:incoming>
         <bpmn:outgoing>Flow_0p8loxg</bpmn:outgoing>
+        <bpmn:property id="Property_186suqu" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_00gxrgs">
+          <bpmn:sourceRef>DataObjectReference_1wb59y6</bpmn:sourceRef>
+          <bpmn:targetRef>Property_186suqu</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
       </bpmn:sendTask>
       <bpmn:subProcess id="Activity_0v3zmbl" name="Einholung der Erben-Zustimmung">
         <bpmn:incoming>Flow_0p8loxg</bpmn:incoming>
         <bpmn:outgoing>Flow_000b4j6</bpmn:outgoing>
+        <bpmn:property id="Property_1r2q26c" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_1nseayf">
+          <bpmn:sourceRef>DataObjectReference_1wb59y6</bpmn:sourceRef>
+          <bpmn:targetRef>Property_1r2q26c</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
         <bpmn:multiInstanceLoopCharacteristics camunda:collection="${heirsList.elements()}" camunda:elementVariable="heir" />
         <bpmn:startEvent id="Event_1xfqc1i">
           <bpmn:extensionElements>
@@ -388,6 +415,8 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmn:sequenceFlow id="Flow_1f8wz8i" sourceRef="Event_1qqsgwt" targetRef="Activity_06phryc" />
       <bpmn:sequenceFlow id="Flow_0p8loxg" sourceRef="Activity_06phryc" targetRef="Activity_0v3zmbl" />
       <bpmn:sequenceFlow id="Flow_000b4j6" sourceRef="Activity_0v3zmbl" targetRef="Event_1iygbq7" />
+      <bpmn:dataObjectReference id="DataObjectReference_1wb59y6" name="Erbenliste" dataObjectRef="DataObject_1ts4hx0" />
+      <bpmn:dataObject id="DataObject_1ts4hx0" isCollection="true" />
     </bpmn:subProcess>
     <bpmn:sendTask id="Activity_15gv4bz" name="Notar mit der Auszahlung beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
@@ -787,6 +816,12 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNShape id="Activity_0a62zkg_di" bpmnElement="Activity_0gdd4rn">
         <dc:Bounds x="840" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1b0t8m4_di" bpmnElement="DataObjectReference_1b0t8m4">
+        <dc:Bounds x="1322" y="415" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1316" y="472" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1xubl5s_di" bpmnElement="Activity_1bvjat3" isExpanded="true">
         <dc:Bounds x="1030" y="80" width="510" height="200" />
         <bpmndi:BPMNLabel />
@@ -907,6 +942,18 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="610" y="180" />
         <di:waypoint x="680" y="180" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_12ub7f2_di" bpmnElement="DataInputAssociation_12ub7f2">
+        <di:waypoint x="1322" y="430" />
+        <di:waypoint x="940" y="209" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1ea3978_di" bpmnElement="DataInputAssociation_1ea3978">
+        <di:waypoint x="1335" y="415" />
+        <di:waypoint x="1306" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_09xcf4r_di" bpmnElement="DataInputAssociation_09xcf4r">
+        <di:waypoint x="1358" y="436" />
+        <di:waypoint x="2078" y="280" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1q7wrn2">
@@ -916,6 +963,12 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_11ry61z" bpmnElement="Activity_06phryc">
         <dc:Bounds x="288" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1wb59y6_di" bpmnElement="DataObjectReference_1wb59y6">
+        <dc:Bounds x="222" y="355" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="216" y="412" width="49" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0f47ibu" bpmnElement="Activity_0v3zmbl" isExpanded="true">
         <dc:Bounds x="508" y="50" width="820" height="490" />
@@ -1011,6 +1064,14 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNEdge id="BPMNEdge_0ob9bnx" bpmnElement="Flow_000b4j6">
         <di:waypoint x="1328" y="300" />
         <di:waypoint x="1480" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_00gxrgs_di" bpmnElement="DataInputAssociation_00gxrgs">
+        <di:waypoint x="252" y="355" />
+        <di:waypoint x="329" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1nseayf_di" bpmnElement="DataInputAssociation_1nseayf">
+        <di:waypoint x="258" y="375" />
+        <di:waypoint x="508" y="301" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

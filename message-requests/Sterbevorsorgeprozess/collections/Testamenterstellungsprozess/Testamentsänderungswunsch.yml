@@ -21,8 +21,8 @@ runtime:
           "processVariables": {
             "estateSplit": {"value": JSON.stringify({
             "estateObj1": {
-                "hugo.habicht@demo.org": 75,
-                "sugi.sorglos@demomail.org": 25
+                "L0000001": 75,
+                "L0000002": 25
             }
         }), "type": "Json"}
           }
