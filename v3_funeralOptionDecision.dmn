@@ -1,0 +1,1897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="determineFuneralPlanCleaned" name="DRD - Bereinigte Bestattungsplanung v2" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <inputData id="funeralType" name="Bestattungsart" />
+  <inputData id="budget" name="Budget" />
+  <inputData id="maxAmountGuests" name="Anzahl der Trauergäste" />
+  <decision id="determineServiceLevel" name="Service-Level bestimmen" camunda:historyTimeToLive="180">
+    <informationRequirement id="InformationRequirement_0001">
+      <requiredInput href="#budget" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_ServiceLevel">
+      <input id="InputClause_0002" label="Budget" biodi:width="192" camunda:inputVariable="budget">
+        <inputExpression id="InputExpression_0003" typeRef="integer">
+          <text>budget</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0004" label="Servicepaket" name="serviceLevel" typeRef="string" biodi:width="192">
+        <outputValues id="UnaryTests_06fiz6g">
+          <text>"premium","comfort","standard","basic"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_0005">
+        <inputEntry id="UnaryTests_0006">
+          <text>[0..2500[</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0007">
+          <text>"basic"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0008">
+        <inputEntry id="UnaryTests_0009">
+          <text>[2500..5000[</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0010">
+          <text>"standard"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0011">
+        <inputEntry id="UnaryTests_0012">
+          <text>[5000..8000[  </text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0013">
+          <text>"comfort"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0014">
+        <inputEntry id="UnaryTests_0015">
+          <text>&gt;= 8000  </text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0016">
+          <text>"premium"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="planCeremony" name="Trauerfeier planen" camunda:historyTimeToLive="180">
+    <informationRequirement id="InformationRequirement_0017">
+      <requiredInput href="#maxAmountGuests" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_Ceremony">
+      <input id="InputClause_0018" label="Anzahl der Trauergäste" camunda:inputVariable="maxAmountGuests">
+        <inputExpression id="InputExpression_0019" typeRef="integer">
+          <text>maxAmountGuests</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0020" label="Art der Trauerfeier" name="ceremonyType" typeRef="string" />
+      <rule id="DecisionRule_0024">
+        <inputEntry id="UnaryTests_0025">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0026">
+          <text>"silent"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0030">
+        <inputEntry id="UnaryTests_0031">
+          <text>[1..15]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0032">
+          <text>"small"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0036">
+        <inputEntry id="UnaryTests_0037">
+          <text>]15..50]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0038">
+          <text>"medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0042">
+        <inputEntry id="UnaryTests_0043">
+          <text>&gt;50</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0044">
+          <text>"large"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="finalFuneralDecision" name="Finalen Bestattungsauftrag erstellen" camunda:historyTimeToLive="180">
+    <informationRequirement id="InformationRequirement_19x2t5v">
+      <requiredInput href="#funeralType" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0bgn28b">
+      <requiredDecision href="#planCeremony" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0yqyr9t">
+      <requiredDecision href="#determineServiceLevel" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0gljupv">
+      <requiredDecision href="#calculateProcessingTime" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_FinalFuneralOrder">
+      <input id="InputClause_0111" label="Bestattungsart" camunda:inputVariable="funeralType">
+        <inputExpression id="InputExpression_0112" typeRef="string">
+          <text>funeralType</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0113" label="Servicepaket" camunda:inputVariable="serviceLevel">
+        <inputExpression id="InputExpression_0114" typeRef="string">
+          <text>serviceLevel</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0115" label="Art der Trauerfeier" camunda:inputVariable="ceremonyType">
+        <inputExpression id="InputExpression_0116" typeRef="string">
+          <text>ceremonyType</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0gp96dy" label="Bearbeitungszeit in Minuten" biodi:width="192" camunda:inputVariable="processTimeInMinutes">
+        <inputExpression id="LiteralExpression_0sqq1yf" typeRef="integer">
+          <text>processTimeInMinutes</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0117" label="Bezeichnung des Bestattungsauftrags" name="funeralOrderTitle" typeRef="string" />
+      <output id="OutputClause_0118" label="Bestattungspaket" name="funeralPackage" typeRef="string" />
+      <output id="OutputClause_0uup7bk" label="Ausgewähltes Bestattungsobjekt" name="objectToOrder" typeRef="string" />
+      <output id="OutputClause_0120" label="Ort der Trauerfeier" name="ceremonyLocation" typeRef="string" />
+      <output id="OutputClause_0121" label="Anweisung für das Bestattungsinstitut" name="undertakerInstruction" typeRef="string" />
+      <output id="OutputClause_0pi983m" label="externer Dienstleister" name="serviceProviderRequired" typeRef="string" />
+      <rule id="DecisionRule_0123">
+        <inputEntry id="UnaryTests_0124">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0125">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0126">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ty9bd6">
+          <text>&gt;=130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0127">
+          <text>"Manuelle Raumplanung erforderlich"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0128">
+          <text>"Kein automatisches Paket"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1yb1l43">
+          <text>"Es ist kein Bestattungsobjekt verfügbar"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0130">
+          <text>"Manuelle Raumplanung erforderlich"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0131">
+          <text>"Gästezahl und Raumkapazität manuell prüfen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1jju6k4">
+          <text>"ja"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0133">
+        <inputEntry id="UnaryTests_0134">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0135">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0136">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_139gx88">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0137">
+          <text>"Basic-Erdbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0138">
+          <text>"Basic Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_00hetsf">
+          <text>"Schlichter Kiefernsarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0140">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0141">
+          <text>"Sarg bestellen, Friedhof abstimmen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_18hxn4p">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0143">
+        <inputEntry id="UnaryTests_0144">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0145">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0146">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1fuvwnz">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0147">
+          <text>"Basic-Erdbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0148">
+          <text>"Basic Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_09we6z6">
+          <text>"Schlichter Kiefernsarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0150">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0151">
+          <text>"Sarg bestellen, Friedhof abstimmen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1vrwsuu">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0153">
+        <inputEntry id="UnaryTests_0154">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0155">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0156">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ykkayz">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0157">
+          <text>"Basic-Erdbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0158">
+          <text>"Basic Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_18uw5rn">
+          <text>"Schlichter Kiefernsarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0160">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0161">
+          <text>"Sarg bestellen, Friedhof abstimmen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0izaols">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0163">
+        <inputEntry id="UnaryTests_0164">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0165">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0166">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xlpau6">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0167">
+          <text>"Basic-Erdbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0168">
+          <text>"Basic Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1a6m6rp">
+          <text>"Schlichter Kiefernsarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0170">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0171">
+          <text>"Sarg bestellen, Friedhof abstimmen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0k76bhb">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0173">
+        <inputEntry id="UnaryTests_0174">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0175">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0176">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0y7qclj">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0177">
+          <text>"Standard-Erdbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0178">
+          <text>"Standard Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_16qmhf5">
+          <text>"Standardsarg Eiche"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0180">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0181">
+          <text>"Sarg bestellen, Friedhof abstimmen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0dqedf2">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0183">
+        <inputEntry id="UnaryTests_0184">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0185">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0186">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07cbkkk">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0187">
+          <text>"Standard-Erdbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0188">
+          <text>"Standard Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1fkmwyh">
+          <text>"Standardsarg Eiche"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0190">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0191">
+          <text>"Sarg bestellen, Friedhof abstimmen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_073qjcl">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0193">
+        <inputEntry id="UnaryTests_0194">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0195">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0196">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_163eplc">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0197">
+          <text>"Standard-Erdbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0198">
+          <text>"Standard Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0zkjr15">
+          <text>"Standardsarg Eiche"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0200">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0201">
+          <text>"Sarg bestellen, Friedhof abstimmen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0ch1942">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0203">
+        <inputEntry id="UnaryTests_0204">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0205">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0206">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0w8ij68">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0207">
+          <text>"Standard-Erdbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0208">
+          <text>"Standard Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0q84r73">
+          <text>"Standardsarg Eiche"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0210">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0211">
+          <text>"Sarg bestellen, Friedhof abstimmen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0esy1hx">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0213">
+        <inputEntry id="UnaryTests_0214">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0215">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0216">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1d2lg4n">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0217">
+          <text>"Komfort-Erdbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0218">
+          <text>"Comfort Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0h2tzgb">
+          <text>"Hochwertiger Eichensarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0220">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0221">
+          <text>"Sarg bestellen, Friedhof abstimmen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1d4re26">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0223">
+        <inputEntry id="UnaryTests_0224">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0225">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0226">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1f6px4z">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0227">
+          <text>"Komfort-Erdbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0228">
+          <text>"Comfort Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0axr2gf">
+          <text>"Hochwertiger Eichensarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0230">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0231">
+          <text>"Sarg bestellen, Friedhof abstimmen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1velqvr">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0233">
+        <inputEntry id="UnaryTests_0234">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0235">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0236">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04ork9u">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0237">
+          <text>"Komfort-Erdbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0238">
+          <text>"Comfort Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0m88j5v">
+          <text>"Hochwertiger Eichensarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0240">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0241">
+          <text>"Sarg bestellen, Friedhof abstimmen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1m55ga4">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0243">
+        <inputEntry id="UnaryTests_0244">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0245">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0246">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1c4f35z">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0247">
+          <text>"Komfort-Erdbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0248">
+          <text>"Comfort Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0j11bb6">
+          <text>"Hochwertiger Eichensarg"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0250">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0251">
+          <text>"Sarg bestellen, Friedhof abstimmen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0fgrj9u">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0253">
+        <inputEntry id="UnaryTests_0254">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0255">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0256">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1bj8m8i">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0257">
+          <text>"Premium-Erdbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0258">
+          <text>"Premium Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0lbjxxa">
+          <text>"Premium-Sarg mit individueller Ausstattung"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0260">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0261">
+          <text>"Sarg bestellen, Friedhof abstimmen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_00q2vt3">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0263">
+        <inputEntry id="UnaryTests_0264">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0265">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0266">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_079gj28">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0267">
+          <text>"Premium-Erdbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0268">
+          <text>"Premium Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1pmwtz9">
+          <text>"Premium-Sarg mit individueller Ausstattung"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0270">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0271">
+          <text>"Sarg bestellen, Friedhof abstimmen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1nh5tjc">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0273">
+        <inputEntry id="UnaryTests_0274">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0275">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0276">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0l3c13h">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0277">
+          <text>"Premium-Erdbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0278">
+          <text>"Premium Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0mdowyu">
+          <text>"Premium-Sarg mit individueller Ausstattung"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0280">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0281">
+          <text>"Sarg bestellen, Friedhof abstimmen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1hp6m65">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0283">
+        <inputEntry id="UnaryTests_0284">
+          <text>"burial"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0285">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0286">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1w4yd4y">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0287">
+          <text>"Premium-Erdbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0288">
+          <text>"Premium Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0c87uhe">
+          <text>"Premium-Sarg mit individueller Ausstattung"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0290">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0291">
+          <text>"Sarg bestellen, Friedhof abstimmen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0kpl8e5">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0293">
+        <inputEntry id="UnaryTests_0294">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0295">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0296">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0novpc8">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0297">
+          <text>"Basic-Feuerbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0298">
+          <text>"Basic Cremation Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_02e3arl">
+          <text>"Schlichte Basisurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0300">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0301">
+          <text>"Krematorium anfragen, Urne bestellen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1vcu6g8">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0303">
+        <inputEntry id="UnaryTests_0304">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0305">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0306">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_110qzd0">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0307">
+          <text>"Basic-Feuerbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0308">
+          <text>"Basic Cremation Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_10dfq0a">
+          <text>"Schlichte Basisurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0310">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0311">
+          <text>"Krematorium anfragen, Urne bestellen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1bs5ok5">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0313">
+        <inputEntry id="UnaryTests_0314">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0315">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0316">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vwwb9p">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0317">
+          <text>"Basic-Feuerbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0318">
+          <text>"Basic Cremation Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1nhoc13">
+          <text>"Schlichte Basisurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0320">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0321">
+          <text>"Krematorium anfragen, Urne bestellen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_18bg8jk">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0323">
+        <inputEntry id="UnaryTests_0324">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0325">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0326">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10i9aox">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0327">
+          <text>"Basic-Feuerbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0328">
+          <text>"Basic Cremation Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_11v0ogc">
+          <text>"Schlichte Basisurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0330">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0331">
+          <text>"Krematorium anfragen, Urne bestellen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1qijrbd">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0333">
+        <inputEntry id="UnaryTests_0334">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0335">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0336">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bmkwpd">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0337">
+          <text>"Standard-Feuerbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0338">
+          <text>"Standard Cremation Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0qv82ci">
+          <text>"Keramikurne Standard"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0340">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0341">
+          <text>"Krematorium anfragen, Urne bestellen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0dxlfqv">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0343">
+        <inputEntry id="UnaryTests_0344">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0345">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0346">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_042k5y9">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0347">
+          <text>"Standard-Feuerbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0348">
+          <text>"Standard Cremation Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1u1qb3e">
+          <text>"Keramikurne Standard"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0350">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0351">
+          <text>"Krematorium anfragen, Urne bestellen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0w1ykpa">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0353">
+        <inputEntry id="UnaryTests_0354">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0355">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0356">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0f58n92">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0357">
+          <text>"Standard-Feuerbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0358">
+          <text>"Standard Cremation Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_16ihumz">
+          <text>"Keramikurne Standard"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0360">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0361">
+          <text>"Krematorium anfragen, Urne bestellen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1psaf5q">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0363">
+        <inputEntry id="UnaryTests_0364">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0365">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0366">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02mym4p">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0367">
+          <text>"Standard-Feuerbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0368">
+          <text>"Standard Cremation Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1wleier">
+          <text>"Keramikurne Standard"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0370">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0371">
+          <text>"Krematorium anfragen, Urne bestellen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0lklo08">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0373">
+        <inputEntry id="UnaryTests_0374">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0375">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0376">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1415rnn">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0377">
+          <text>"Komfort-Feuerbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0378">
+          <text>"Comfort Cremation Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_08letro">
+          <text>"Hochwertige Schmuckurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0380">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0381">
+          <text>"Krematorium anfragen, Urne bestellen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1f8mjdj">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0383">
+        <inputEntry id="UnaryTests_0384">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0385">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0386">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0nli9dl">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0387">
+          <text>"Komfort-Feuerbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0388">
+          <text>"Comfort Cremation Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1f3oaro">
+          <text>"Hochwertige Schmuckurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0390">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0391">
+          <text>"Krematorium anfragen, Urne bestellen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_11psjpj">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0393">
+        <inputEntry id="UnaryTests_0394">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0395">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0396">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0qdlxf9">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0397">
+          <text>"Komfort-Feuerbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0398">
+          <text>"Comfort Cremation Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_14vyyiv">
+          <text>"Hochwertige Schmuckurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0400">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0401">
+          <text>"Krematorium anfragen, Urne bestellen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0oam2k9">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0403">
+        <inputEntry id="UnaryTests_0404">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0405">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0406">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1255g7f">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0407">
+          <text>"Komfort-Feuerbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0408">
+          <text>"Comfort Cremation Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0lt7bmy">
+          <text>"Hochwertige Schmuckurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0410">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0411">
+          <text>"Krematorium anfragen, Urne bestellen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0spe1jf">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0413">
+        <inputEntry id="UnaryTests_0414">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0415">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0416">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hrlvuw">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0417">
+          <text>"Premium-Feuerbestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0418">
+          <text>"Premium Cremation Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0nt69xc">
+          <text>"Individuell gestaltete Premiumurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0420">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0421">
+          <text>"Krematorium anfragen, Urne bestellen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_04r8bci">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0423">
+        <inputEntry id="UnaryTests_0424">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0425">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0426">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04e8zzb">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0427">
+          <text>"Premium-Feuerbestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0428">
+          <text>"Premium Cremation Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_16b02td">
+          <text>"Individuell gestaltete Premiumurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0430">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0431">
+          <text>"Krematorium anfragen, Urne bestellen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0emor7i">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0433">
+        <inputEntry id="UnaryTests_0434">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0435">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0436">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hoyudh">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0437">
+          <text>"Premium-Feuerbestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0438">
+          <text>"Premium Cremation Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1khw6ra">
+          <text>"Individuell gestaltete Premiumurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0440">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0441">
+          <text>"Krematorium anfragen, Urne bestellen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_17lz68a">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0443">
+        <inputEntry id="UnaryTests_0444">
+          <text>"cremation"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0445">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0446">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1p27cwt">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0447">
+          <text>"Premium-Feuerbestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0448">
+          <text>"Premium Cremation Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1f0d2tq">
+          <text>"Individuell gestaltete Premiumurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0450">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0451">
+          <text>"Krematorium anfragen, Urne bestellen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0tf0mbq">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0453">
+        <inputEntry id="UnaryTests_0454">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0455">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0456">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0db8wap">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0457">
+          <text>"Basic-Seebestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0458">
+          <text>"Basic Sea Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0jzt8n9">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0460">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0461">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_01crkr6">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0463">
+        <inputEntry id="UnaryTests_0464">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0465">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0466">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jikbnl">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0467">
+          <text>"Basic-Seebestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0468">
+          <text>"Basic Sea Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0nhso6w">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0470">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0471">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1pxe5b8">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0473">
+        <inputEntry id="UnaryTests_0474">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0475">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0476">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0utzdff">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0477">
+          <text>"Basic-Seebestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0478">
+          <text>"Basic Sea Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0o71e28">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0480">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0481">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1dsvywk">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0483">
+        <inputEntry id="UnaryTests_0484">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0485">
+          <text>"basic"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0486">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01lnxi7">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0487">
+          <text>"Basic-Seebestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0488">
+          <text>"Basic Sea Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_02532b9">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0490">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0491">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1peyixn">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0493">
+        <inputEntry id="UnaryTests_0494">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0495">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0496">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bd70l8">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0497">
+          <text>"Standard-Seebestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0498">
+          <text>"Standard Sea Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0udjm9y">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0500">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0501">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0f2jte7">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0503">
+        <inputEntry id="UnaryTests_0504">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0505">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0506">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1cjt04e">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0507">
+          <text>"Standard-Seebestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0508">
+          <text>"Standard Sea Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1vl1wzz">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0510">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0511">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0bsproc">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0513">
+        <inputEntry id="UnaryTests_0514">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0515">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0516">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vrwyjb">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0517">
+          <text>"Standard-Seebestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0518">
+          <text>"Standard Sea Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1li9t7l">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0520">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0521">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0huqi72">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0523">
+        <inputEntry id="UnaryTests_0524">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0525">
+          <text>"standard"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0526">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xd9gxc">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0527">
+          <text>"Standard-Seebestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0528">
+          <text>"Standard Sea Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_06sx8as">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0530">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0531">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_11cc8me">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0533">
+        <inputEntry id="UnaryTests_0534">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0535">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0536">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10aycu1">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0537">
+          <text>"Komfort-Seebestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0538">
+          <text>"Comfort Sea Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0nex7gn">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0540">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0541">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_17t0gvc">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0543">
+        <inputEntry id="UnaryTests_0544">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0545">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0546">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0m6tsn5">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0547">
+          <text>"Komfort-Seebestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0548">
+          <text>"Comfort Sea Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1s3cwrp">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0550">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0551">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0fllw98">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0553">
+        <inputEntry id="UnaryTests_0554">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0555">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0556">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_08o9hia">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0557">
+          <text>"Komfort-Seebestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0558">
+          <text>"Comfort Sea Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1yns1wy">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0560">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0561">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1g1azb5">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0563">
+        <inputEntry id="UnaryTests_0564">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0565">
+          <text>"comfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0566">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ocwwxq">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0567">
+          <text>"Komfort-Seebestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0568">
+          <text>"Comfort Sea Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0ydtzv8">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0570">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0571">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_08c9vte">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0573">
+        <inputEntry id="UnaryTests_0574">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0575">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0576">
+          <text>"silent"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12om95a">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0577">
+          <text>"Premium-Seebestattung ohne Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0578">
+          <text>"Premium Sea Burial Silent"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1gu3aj2">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0580">
+          <text>"Keine Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0581">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, keine Trauerfeier reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0exfisp">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0583">
+        <inputEntry id="UnaryTests_0584">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0585">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0586">
+          <text>"small"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_00zfgrq">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0587">
+          <text>"Premium-Seebestattung mit kleiner Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0588">
+          <text>"Premium Sea Burial Small Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0w1fje7">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0590">
+          <text>"Abschiedsraum klein"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0591">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, kleinen Abschiedsraum reservieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_123fawz">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0593">
+        <inputEntry id="UnaryTests_0594">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0595">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0596">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1cpqut5">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0597">
+          <text>"Premium-Seebestattung mit Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0598">
+          <text>"Premium Sea Burial Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_14caljm">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0600">
+          <text>"Trauerraum im Bestattungsinstitut"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0601">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, Trauerraum reservieren und Ablauf abstimmen"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_04b4361">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0603">
+        <inputEntry id="UnaryTests_0604">
+          <text>"sea"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0605">
+          <text>"premium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0606">
+          <text>"large"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_17a8nrz">
+          <text>&lt;130</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0607">
+          <text>"Premium-Seebestattung mit großer Trauerfeier"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0608">
+          <text>"Premium Sea Burial Large Ceremony"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_19lyvc6">
+          <text>"Wasserlösliche Seeurne"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0610">
+          <text>"Kapelle oder große Trauerhalle"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0611">
+          <text>"Seeurne bestellen, Reederei oder Seebestatter anfragen, große Trauerhalle oder Kapelle reservieren und Ablauf vollständig koordinieren"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0gjixdx">
+          <text>"nein"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="calculateProcessingTime" name="Bearbeitungszeit bestimmen" camunda:historyTimeToLive="180">
+    <informationRequirement id="InformationRequirement_0cythny">
+      <requiredInput href="#budget" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0b6tna1">
+      <requiredInput href="#maxAmountGuests" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_16m2ke3" hitPolicy="COLLECT" aggregation="SUM">
+      <input id="InputClause_0605h55" label="Budget" biodi:width="192" camunda:inputVariable="budget">
+        <inputExpression id="LiteralExpression_1ov58gl" typeRef="integer">
+          <text>budget</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0bmfwyy" label="Anzahl der Trauergäste" biodi:width="192" camunda:inputVariable="maxAmountGuests">
+        <inputExpression id="LiteralExpression_1lbx78t" typeRef="integer">
+          <text>maxAmountGuests</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0ehf1qw" label="Bearbeitungszeit in Minuten" name="processTimeInMinutes" typeRef="integer" />
+      <rule id="DecisionRule_1hkf5uv">
+        <inputEntry id="UnaryTests_18sbjj2">
+          <text>[0..2500[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1uflx7n">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1b61lqe">
+          <text>15</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_12t7pgn">
+        <inputEntry id="UnaryTests_0mtwfac">
+          <text>[2500..5000[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0la3hyi">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0pkxpom">
+          <text>25</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1k0qhav">
+        <inputEntry id="UnaryTests_1ym21i8">
+          <text>[5000..8000[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16usxb0">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0isv6qb">
+          <text>40</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1a72pr8">
+        <inputEntry id="UnaryTests_1ozyxc1">
+          <text>&gt;= 8000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0uxirrw">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0nnz0yx">
+          <text>60</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_110xmwb">
+        <inputEntry id="UnaryTests_15iagy1">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0uddldw">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1r21f34">
+          <text>5</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0s0rh0e">
+        <inputEntry id="UnaryTests_13f5zol">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zjo922">
+          <text>[1..15]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1k9gza4">
+          <text>20</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0nequux">
+        <inputEntry id="UnaryTests_1aet4a1">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ak37lo">
+          <text>]15..50]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1evde39">
+          <text>40</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1nhdidq">
+        <inputEntry id="UnaryTests_1nkbed1">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16dgrug">
+          <text>]50..120]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0vsvwpp">
+          <text>70</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0i6l84s">
+        <inputEntry id="UnaryTests_1tdojn1">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1y4cics">
+          <text>&gt; 120</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0hq1uqg">
+          <text>130</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_Cleaned">
+      <dmndi:DMNShape id="funeralType_di" dmnElementRef="funeralType">
+        <dc:Bounds height="45" width="125" x="157" y="97" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="budget_di" dmnElementRef="budget">
+        <dc:Bounds height="45" width="125" x="372" y="407" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="maxAmountGuests_di" dmnElementRef="maxAmountGuests">
+        <dc:Bounds height="45" width="150" x="615" y="247" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="determineServiceLevel_di" dmnElementRef="determineServiceLevel">
+        <dc:Bounds height="80" width="190" x="340" y="230" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="planCeremony_di" dmnElementRef="planCeremony">
+        <dc:Bounds height="80" width="190" x="595" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="finalFuneralDecision_di" dmnElementRef="finalFuneralDecision">
+        <dc:Bounds height="80" width="230" x="320" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="InformationRequirement_0001_di" dmnElementRef="InformationRequirement_0001">
+        <di:waypoint x="435" y="407" />
+        <di:waypoint x="435" y="330" />
+        <di:waypoint x="435" y="310" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="InformationRequirement_0017_di" dmnElementRef="InformationRequirement_0017">
+        <di:waypoint x="690" y="247" />
+        <di:waypoint x="690" y="180" />
+        <di:waypoint x="690" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_16jvwrq" dmnElementRef="InformationRequirement_19x2t5v">
+        <di:waypoint x="282" y="120" />
+        <di:waypoint x="300" y="120" />
+        <di:waypoint x="320" y="120" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0frs65w" dmnElementRef="InformationRequirement_0bgn28b">
+        <di:waypoint x="595" y="120" />
+        <di:waypoint x="570" y="120" />
+        <di:waypoint x="550" y="120" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0z85d7i" dmnElementRef="InformationRequirement_0yqyr9t">
+        <di:waypoint x="435" y="230" />
+        <di:waypoint x="397" y="180" />
+        <di:waypoint x="397" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0juoblv" dmnElementRef="InformationRequirement_0cythny">
+        <di:waypoint x="497" y="430" />
+        <di:waypoint x="580" y="430" />
+        <di:waypoint x="600" y="430" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0xb8bf3" dmnElementRef="InformationRequirement_0b6tna1">
+        <di:waypoint x="690" y="292" />
+        <di:waypoint x="690" y="370" />
+        <di:waypoint x="690" y="390" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1vrq5y8" dmnElementRef="calculateProcessingTime">
+        <dc:Bounds height="80" width="180" x="600" y="390" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0de4brg" dmnElementRef="InformationRequirement_0gljupv">
+        <di:waypoint x="780" y="430" />
+        <di:waypoint x="830" y="430" />
+        <di:waypoint x="830" y="60" />
+        <di:waypoint x="540" y="60" />
+        <di:waypoint x="527" y="80" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
