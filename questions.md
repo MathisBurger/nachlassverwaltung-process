@@ -17,17 +17,17 @@
 
 ### Question Session 02
 
-- [ ] nachlassanlage.bpmn: Muss ich den Subprozess in Vorsorge Dokumente gedöns beschriften?
-- [ ] Vllt Ergäzend daran: Muss wirklich jeder Subprozess eine Bezeichnung haben oder reicht es in manchen Fällen den weg zu lassen, wenn klar ist was passiert?
+- [x] nachlassanlage.bpmn: Muss ich den Subprozess in Vorsorge Dokumente gedöns beschriften?
+- [x] Vllt Ergäzend daran: Muss wirklich jeder Subprozess eine Bezeichnung haben oder reicht es in manchen Fällen den weg zu lassen, wenn klar ist was passiert?
 - ANtwort: ALle subprozesse. Deren Startereignisse nicht, aber Endereignisse schon
-- [ ] Wo muss ich überall Datenobjekte und Data Stores nutzen und wo nicht?
+- [x] Wo muss ich überall Datenobjekte und Data Stores nutzen und wo nicht?
 - Antwort: Bei den Mehrfachinstanzmarkierungen muss das dran sein, ansonsten eben nicht
-- [ ] Müssen Default Flows auch beschriftet werden?
+- [x] Müssen Default Flows auch beschriftet werden?
 - Antwort: Default Flows eliminieren und einfach richtig beschriften
 - [x] Angehörigen Anlage: Kann man die End Events so machen?
 - [x] Was genau aus dem 3. Semester ist relevant?
-- [ ] Wie viele Business Rule Tasks sind notwenig? 4? Oder sind in den Anforderungen 4 Entscheidungen gemeint?
-- [ ] Bei dem Eingebetteten Prozess, dann entsprechend selbst Logik, die Prüft, was storniert werden muss, oder?:wq
+- [x] Wie viele Business Rule Tasks sind notwenig? 4? Oder sind in den Anforderungen 4 Entscheidungen gemeint?
+- [x] Bei dem Eingebetteten Prozess, dann entsprechend selbst Logik, die Prüft, was storniert werden muss, oder?:wq
 
 
 ### Question Session 03
