@@ -76,7 +76,6 @@
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="birthCertificate" target="birthCertificate" />
         <camunda:out source="funeralOrder" target="funeralOrder" />
-        <camunda:out source="advanceDirectiveContents" target="advanceDirectiveContents" />
         <camunda:out source="signedLastWill" target="signedLastWill" />
         <camunda:out source="lastWords" target="lastWords" />
         <camunda:out source="heirsList" target="heirsList" />
