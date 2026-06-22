@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ctkbel" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0coxuzx">
-    <bpmn:participant id="Participant_01k12kj" name="Nachlass- und Bestattungsverwaltungsprozess" processRef="estateManagementProcess" />
+    <bpmn:participant id="Participant_01k12kj" name="Nachlass- und Bestattungsverwaltung" processRef="heritageAndFuneralManagementProcess" />
     <bpmn:participant id="Participant_0ejx3ng" name="Erblasser" />
     <bpmn:participant id="Participant_07jarhr" name="Bestattungsinstitut" />
     <bpmn:participant id="Participant_0k66661" name="Standesamt" />
@@ -19,7 +19,7 @@
     <bpmn:messageFlow id="Flow_0biyv8h" name="Stornierungsbestätigung" sourceRef="Participant_07jarhr" targetRef="Activity_05jfi3k" />
     <bpmn:messageFlow id="Flow_08sxrhb" name="Sterbeurkunde" sourceRef="Participant_0k66661" targetRef="Activity_17m6k59" />
   </bpmn:collaboration>
-  <bpmn:process id="estateManagementProcess" name="Nachlassverwaltungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="heritageAndFuneralManagementProcess" name="Nachlass- und Bestattungsverwaltung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:callActivity id="Activity_1x1aepy" name="Idelle-Nachlass-Anlage" calledElement="heritageRegistrationProzess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
@@ -139,7 +139,7 @@ execution.setVariable("lastWords", lastWordsLocal);
       <bpmn:sequenceFlow id="Flow_0son526" sourceRef="Activity_1uuwysd" targetRef="Event_1kfw4lm" />
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_09z36n0" name="Testamentaktualisierungsprozess" triggeredByEvent="true">
-      <bpmn:callActivity id="Activity_182a6n1" name="Testamentaktualisierung" calledElement="lastWillCreationProcess">
+      <bpmn:callActivity id="Activity_182a6n1" name="Testamenthandhabung" calledElement="lastWillCreationProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
           <camunda:in source="estateList" target="estateList" />
@@ -159,7 +159,7 @@ execution.setVariable("lastWords", lastWordsLocal);
         <bpmn:outgoing>Flow_0j7x502</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_0k28elf" messageRef="Message_0hqvdon" />
       </bpmn:startEvent>
-      <bpmn:endEvent id="Event_09w85nt" name="Testament aktualisiert">
+      <bpmn:endEvent id="Event_09w85nt" name="Testament bearbeitet">
         <bpmn:incoming>Flow_05m8fh8</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0j7x502" sourceRef="Event_1nfds78" targetRef="Activity_182a6n1" />
@@ -192,7 +192,7 @@ execution.setVariableLocal("funeralPreference", funeralPreference);</camunda:scr
         <bpmn:incoming>Flow_0kr6pww</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0kr6pww" sourceRef="Activity_1c5l92s" targetRef="Event_0dyturh" />
-      <bpmn:callActivity id="Activity_1o1v49c" name="Bestattungsänderung" calledElement="funeralPlanningProcess">
+      <bpmn:callActivity id="Activity_1o1v49c" name="Bestattungsplanung" calledElement="funeralPlanningProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
           <camunda:in source="funeralOrder" target="funeralOrder" />
@@ -273,7 +273,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmn:sequenceFlow id="Flow_0u4rx65" sourceRef="Event_0i4i23g" targetRef="Activity_0mbohb5" />
       <bpmn:sequenceFlow id="Flow_0ld124p" sourceRef="Activity_0mbohb5" targetRef="Activity_0f0f26s" />
       <bpmn:sequenceFlow id="Flow_1xccn2q" sourceRef="Activity_0f0f26s" targetRef="Event_0n8waag" />
-      <bpmn:callActivity id="Activity_0mbohb5" name="Vorsorgedokumenteänderung" calledElement="advanceDirectiveDocumentProcess">
+      <bpmn:callActivity id="Activity_0mbohb5" name="Vorsorgedokumentenverarbeitung" calledElement="advanceDirectiveDocumentProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
           <camunda:in source="documentIdLocal" target="documentId" />
@@ -340,7 +340,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <bpmn:messageEventDefinition id="MessageEventDefinition_1gaslol" messageRef="Message_0sgdi2r" />
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_139x85f" sourceRef="Event_10x3vwf" targetRef="Activity_1w1xr2r" />
-      <bpmn:scriptTask id="Activity_1w1xr2r" name="Daten löschen" scriptFormat="JavaScript">
+      <bpmn:scriptTask id="Activity_1w1xr2r" name="Nachlassdaten löschen" scriptFormat="JavaScript">
         <bpmn:incoming>Flow_139x85f</bpmn:incoming>
         <bpmn:outgoing>Flow_0ahyn4h</bpmn:outgoing>
         <bpmn:script>execution.removeVariable("advanceDirectiveContents");
@@ -477,7 +477,7 @@ execution.removeVariable("signedLastWill");</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_0vcltt7" bpmnElement="Event_09w85nt">
         <dc:Bounds x="1372" y="612" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1364" y="655" width="53" height="27" />
+          <dc:Bounds x="1365" y="655" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0w9i9vb" bpmnElement="Flow_0j7x502">
@@ -642,6 +642,10 @@ execution.removeVariable("signedLastWill");</bpmn:script>
         <di:waypoint x="770" y="230" />
         <di:waypoint x="770" y="305" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pgd6wa_di" bpmnElement="Flow_0pgd6wa">
+        <di:waypoint x="328" y="330" />
+        <di:waypoint x="435" y="330" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_19fppnu" bpmnElement="Flow_10491i3">
         <di:waypoint x="460" y="355" />
         <di:waypoint x="460" y="450" />
@@ -655,10 +659,6 @@ execution.removeVariable("signedLastWill");</bpmn:script>
       <bpmndi:BPMNEdge id="BPMNEdge_052m5z8" bpmnElement="Flow_0afumfh">
         <di:waypoint x="795" y="330" />
         <di:waypoint x="880" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0pgd6wa_di" bpmnElement="Flow_0pgd6wa">
-        <di:waypoint x="328" y="330" />
-        <di:waypoint x="435" y="330" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1v0zc78_di" bpmnElement="Flow_1v0zc78">
         <di:waypoint x="980" y="330" />

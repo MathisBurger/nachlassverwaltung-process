@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1qwlczi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1bqzlhf">
-    <bpmn:participant id="Participant_0dd0tdg" name="Registrierungprozess" processRef="registrationProcess" />
+    <bpmn:participant id="Participant_0dd0tdg" name="Registrierung" processRef="registrationProcess" />
     <bpmn:participant id="Participant_0jlko7g" name="Einwohnermeldeamt" />
     <bpmn:participant id="Participant_09nou9v" name="Strafverfolgungsbehörden" />
     <bpmn:participant id="Participant_1h8gyvy" name="Erblasser" />
@@ -12,7 +12,7 @@
     <bpmn:messageFlow id="Flow_1oadd5b" name="Personalstammurkunden" sourceRef="Participant_1h8gyvy" targetRef="Activity_0bvk3hj" />
     <bpmn:messageFlow id="Flow_0hbxsjs" name="Personalstammurkundenanfrage" sourceRef="Activity_0crfdgo" targetRef="Participant_1h8gyvy" />
   </bpmn:collaboration>
-  <bpmn:process id="registrationProcess" name="Registrierungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="registrationProcess" name="Registrierung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0dg1zx1">
       <bpmn:lane id="Lane_19jrqrc">
         <bpmn:flowNodeRef>Event_07ktm1q</bpmn:flowNodeRef>
@@ -211,12 +211,12 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
       <bpmndi:BPMNShape id="Participant_0vtm8da_di" bpmnElement="Participant_0jlko7g" isHorizontal="true">
         <dc:Bounds x="660" y="190" width="340" height="60" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
+        <dc:Bounds x="1000" y="760" width="408" height="60" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_0naagqx_di" bpmnElement="Participant_1h8gyvy" isHorizontal="true">
         <dc:Bounds x="310" y="80" width="1350" height="60" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
-        <dc:Bounds x="1000" y="760" width="408" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0ncuzmc_di" bpmnElement="Flow_0ncuzmc">
         <di:waypoint x="1320" y="650" />

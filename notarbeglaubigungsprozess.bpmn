@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ee46cs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0mai67a">
-    <bpmn:participant id="Participant_03lmtam" name="Notarbeglaubigungsprozess" processRef="notaryDocumentProcess" />
+    <bpmn:participant id="Participant_03lmtam" name="Dokumentenbeglaubigung" processRef="notaryDocumentProcess" />
     <bpmn:participant id="Participant_1ex9m8e" name="Notar" />
     <bpmn:participant id="Participant_09fxiy0" name="Erblasser" />
     <bpmn:messageFlow id="Flow_0uquul0" name="Dokument" sourceRef="Activity_0go60ul" targetRef="Participant_1ex9m8e" />
@@ -9,7 +9,7 @@
     <bpmn:messageFlow id="Flow_02a8kry" name="Invaliditätsbestätigung" sourceRef="Participant_1ex9m8e" targetRef="Event_0n6mgeh" />
     <bpmn:messageFlow id="Flow_17y72rn" name="Invaliditätsinformationen" sourceRef="Activity_0z2yj83" targetRef="Participant_09fxiy0" />
   </bpmn:collaboration>
-  <bpmn:process id="notaryDocumentProcess" name="Notar-Dokumente-Prozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="notaryDocumentProcess" name="Dokumentenbeglaubigung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_137o5em">
       <bpmn:lane id="Lane_0deq9rt">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>

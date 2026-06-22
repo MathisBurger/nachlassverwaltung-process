@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_164pdsl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0aukgm2">
-    <bpmn:participant id="Participant_03t2a00" name="Vorsorgedokumentenverarbeitungsprozess" processRef="advanceDirectiveDocumentProcess" />
+    <bpmn:participant id="Participant_03t2a00" name="Vorsorgedokumentenverarbeitung" processRef="advanceDirectiveDocumentProcess" />
     <bpmn:participant id="Participant_1wcxv6a" name="Erblasser" />
     <bpmn:messageFlow id="Flow_18lchom" name="Dokumentenanfrage" sourceRef="Activity_0dl58r3" targetRef="Participant_1wcxv6a" />
     <bpmn:messageFlow id="Flow_1rk6h9n" name="Vorsorgedokument" sourceRef="Participant_1wcxv6a" targetRef="Activity_0n6ferf" />
   </bpmn:collaboration>
-  <bpmn:process id="advanceDirectiveDocumentProcess" name="Vorsorgedokumentenverarbeitungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="advanceDirectiveDocumentProcess" name="Vorsorgedokumentenverarbeitung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:exclusiveGateway id="Gateway_1i6k7hh">
       <bpmn:incoming>Flow_0jp2ryj</bpmn:incoming>
       <bpmn:incoming>Flow_1whjc1v</bpmn:incoming>

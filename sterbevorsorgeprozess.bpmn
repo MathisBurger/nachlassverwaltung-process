@@ -74,7 +74,7 @@
       <bpmn:incoming>Flow_0524dvd</bpmn:incoming>
       <bpmn:outgoing>Flow_10a685s</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass- und Bestattungsverwaltung" calledElement="estateManagementProcess">
+    <bpmn:callActivity id="Activity_1dnyeqt" name="Nachlass- und Bestattungsverwaltung" calledElement="heritageAndFuneralManagementProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="birthCertificate" target="birthCertificate" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1sytx6a" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0f3naan">
-    <bpmn:participant id="Participant_11umzak" name="Nachlassfreigabeprozess" processRef="estateReleaseProcess" />
+    <bpmn:participant id="Participant_11umzak" name="Nachlassfreigabe" processRef="estateReleaseProcess" />
     <bpmn:participant id="Participant_08hs5v2" name="Nachlassgericht" />
     <bpmn:participant id="Participant_0stz0bz" name="Notar" />
     <bpmn:participant id="Participant_1nzb2ic" name="Erbe" />
@@ -23,7 +23,7 @@
     <bpmn:messageFlow id="Flow_133m9zg" name="Auszahlungsbestätigung" sourceRef="Activity_0plhu0m" targetRef="Participant_0stz0bz" />
     <bpmn:messageFlow id="Flow_1fyholi" name="Letze Worte" sourceRef="Activity_1ga9qaz" targetRef="Participant_0stz0bz" />
   </bpmn:collaboration>
-  <bpmn:process id="estateReleaseProcess" name="Nachlassfreigabeprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="estateReleaseProcess" name="Nachlassfreigabe" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Der Nachlass ist bereit zur Freigabe">
       <bpmn:outgoing>Flow_17woj1z</bpmn:outgoing>
     </bpmn:startEvent>
@@ -816,12 +816,6 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNShape id="Activity_0a62zkg_di" bpmnElement="Activity_0gdd4rn">
         <dc:Bounds x="840" y="140" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjectReference_1b0t8m4_di" bpmnElement="DataObjectReference_1b0t8m4">
-        <dc:Bounds x="1322" y="415" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1316" y="472" width="49" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1xubl5s_di" bpmnElement="Activity_1bvjat3" isExpanded="true">
         <dc:Bounds x="1030" y="80" width="510" height="200" />
         <bpmndi:BPMNLabel />
@@ -906,17 +900,35 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <dc:Bounds x="1740" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1b0t8m4_di" bpmnElement="DataObjectReference_1b0t8m4">
+        <dc:Bounds x="1322" y="415" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1316" y="472" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_17xg5wl_di" bpmnElement="Flow_17xg5wl">
         <di:waypoint x="780" y="180" />
         <di:waypoint x="840" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_12ub7f2_di" bpmnElement="DataInputAssociation_12ub7f2">
+        <di:waypoint x="1322" y="430" />
+        <di:waypoint x="940" y="209" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0c7rtf2_di" bpmnElement="Flow_0c7rtf2">
         <di:waypoint x="940" y="180" />
         <di:waypoint x="1030" y="180" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1ea3978_di" bpmnElement="DataInputAssociation_1ea3978">
+        <di:waypoint x="1335" y="415" />
+        <di:waypoint x="1306" y="280" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1d6sgwk_di" bpmnElement="Flow_1d6sgwk">
         <di:waypoint x="1840" y="180" />
         <di:waypoint x="1910" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_09xcf4r_di" bpmnElement="DataInputAssociation_09xcf4r">
+        <di:waypoint x="1358" y="436" />
+        <di:waypoint x="2078" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1v5kpu5_di" bpmnElement="Flow_1v5kpu5">
         <di:waypoint x="2430" y="180" />
@@ -942,18 +954,6 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
         <di:waypoint x="610" y="180" />
         <di:waypoint x="680" y="180" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataInputAssociation_12ub7f2_di" bpmnElement="DataInputAssociation_12ub7f2">
-        <di:waypoint x="1322" y="430" />
-        <di:waypoint x="940" y="209" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataInputAssociation_1ea3978_di" bpmnElement="DataInputAssociation_1ea3978">
-        <di:waypoint x="1335" y="415" />
-        <di:waypoint x="1306" y="280" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataInputAssociation_09xcf4r_di" bpmnElement="DataInputAssociation_09xcf4r">
-        <di:waypoint x="1358" y="436" />
-        <di:waypoint x="2078" y="280" />
-      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1q7wrn2">
@@ -963,12 +963,6 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_11ry61z" bpmnElement="Activity_06phryc">
         <dc:Bounds x="288" y="110" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjectReference_1wb59y6_di" bpmnElement="DataObjectReference_1wb59y6">
-        <dc:Bounds x="222" y="355" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="216" y="412" width="49" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0f47ibu" bpmnElement="Activity_0v3zmbl" isExpanded="true">
         <dc:Bounds x="508" y="50" width="820" height="490" />
@@ -1053,6 +1047,20 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
           <dc:Bounds x="1462" y="325" width="73" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1wb59y6_di" bpmnElement="DataObjectReference_1wb59y6">
+        <dc:Bounds x="222" y="355" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="216" y="412" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataInputAssociation_00gxrgs_di" bpmnElement="DataInputAssociation_00gxrgs">
+        <di:waypoint x="252" y="355" />
+        <di:waypoint x="329" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1nseayf_di" bpmnElement="DataInputAssociation_1nseayf">
+        <di:waypoint x="258" y="375" />
+        <di:waypoint x="508" y="301" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1fehmy4" bpmnElement="Flow_1f8wz8i">
         <di:waypoint x="216" y="150" />
         <di:waypoint x="288" y="150" />
@@ -1064,14 +1072,6 @@ execution.setVariable("splitInfo", splitInfo);</bpmn:script>
       <bpmndi:BPMNEdge id="BPMNEdge_0ob9bnx" bpmnElement="Flow_000b4j6">
         <di:waypoint x="1328" y="300" />
         <di:waypoint x="1480" y="300" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataInputAssociation_00gxrgs_di" bpmnElement="DataInputAssociation_00gxrgs">
-        <di:waypoint x="252" y="355" />
-        <di:waypoint x="329" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataInputAssociation_1nseayf_di" bpmnElement="DataInputAssociation_1nseayf">
-        <di:waypoint x="258" y="375" />
-        <di:waypoint x="508" y="301" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

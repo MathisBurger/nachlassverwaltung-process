@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_Beerdigung">
-    <bpmn:participant id="Participant_Angehoerige" name="Bestattungsplanungsprozess" processRef="funeralPlanningProcess" />
+    <bpmn:participant id="Participant_Angehoerige" name="Bestattungsplanung" processRef="funeralPlanningProcess" />
     <bpmn:participant id="Participant_09uh32h" name="Bestattungsinstitut" />
     <bpmn:participant id="Participant_11qf0vh" name="Erblasser" />
     <bpmn:messageFlow id="Flow_16seaio" name="Zukünftige Beauftragung" sourceRef="Activity_Feier" targetRef="Participant_09uh32h" />
@@ -16,7 +16,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1lrf9wu" associationDirection="None" sourceRef="Activity_02rauh0" targetRef="TextAnnotation_0353s3q" />
   </bpmn:collaboration>
-  <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_Trauerfall" name="Beerdigung soll geplant werden">
       <bpmn:extensionElements />
       <bpmn:outgoing>Flow_0tqufez</bpmn:outgoing>

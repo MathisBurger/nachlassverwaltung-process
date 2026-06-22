@@ -34,7 +34,7 @@
 
 - [x] Kann man den Prozess zum aktualisieren und Erstellen des Testaments so nennen, wie wir es haben???
 - [x] Beerdigungsplanung: Funktioniert das mit dem Label Matching?
-- [ ] Muss es auch label Matching zwischen Prozessname und Call Activity geben?
+- [x] Muss es auch label Matching zwischen Prozessname und Call Activity geben?
 - Antwort: Prozessnamen müssen matchen: Testamentbehandlungsprozess
 - [x] Subprozessnamung in dem Bestattungsprozess
 - [x] Labels des Event Subprozesses in der Nachlassverwaltung

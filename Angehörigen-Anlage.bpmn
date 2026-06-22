@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ubjunt" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0qmqyad">
-    <bpmn:participant id="Participant_058ocbk" name="Erbender Anlageprozess" processRef="heirCreationProcess" />
+    <bpmn:participant id="Participant_058ocbk" name="Erbenergänzung" processRef="heirCreationProcess" />
     <bpmn:participant id="Participant_1bmn3pi" name="Erblasser" />
     <bpmn:participant id="Participant_0kjtfwp" name="Einwohnermeldeamt" />
     <bpmn:messageFlow id="Flow_0ycd6r4" name="Personendaten" sourceRef="Activity_0ug0am1" targetRef="Participant_0kjtfwp" />
@@ -10,7 +10,7 @@
     <bpmn:messageFlow id="Flow_1iypefl" name="Duplikatsnachricht" sourceRef="Activity_0mb13i2" targetRef="Participant_1bmn3pi" />
     <bpmn:messageFlow id="Flow_12wf0rv" name="Anlagebestätigung" sourceRef="Activity_0a4glnp" targetRef="Participant_1bmn3pi" />
   </bpmn:collaboration>
-  <bpmn:process id="heirCreationProcess" name="Erbender Anlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="heirCreationProcess" name="Erbenergänzung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0hkb6sj" />
     <bpmn:sequenceFlow id="Flow_0o9pxop" name="Ja" sourceRef="Gateway_1hut2rj" targetRef="Activity_0as00t3">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${citizenIsValid}</bpmn:conditionExpression>

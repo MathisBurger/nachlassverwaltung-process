@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0kw8ck3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1fabmpg">
-    <bpmn:participant id="Participant_0191ftt" name="Erbschaftsgegenstandsanlageprozess" processRef="estateCreationProcess" />
+    <bpmn:participant id="Participant_0191ftt" name="Erbschaftsgegenstandsergänzung" processRef="estateCreationProcess" />
     <bpmn:participant id="Participant_0gzbno1" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1kq1z1o" name="Zugriffsinformationen Anfrage" sourceRef="Activity_118orjh" targetRef="Participant_0gzbno1" />
     <bpmn:messageFlow id="Flow_18u43r2" name="Zugriffsinformationen" sourceRef="Participant_0gzbno1" targetRef="Activity_1869ygx" />
   </bpmn:collaboration>
-  <bpmn:process id="estateCreationProcess" name="Erbschaftsgegenstandsanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="estateCreationProcess" name="Erbschaftsgegenstandsergänzung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_197w1sr">
       <bpmn:lane id="Lane_0onnnql" name="Verwalter">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
