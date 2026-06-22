@@ -20,8 +20,9 @@ runtime:
           "businessKey": "L1234567",
           "processVariables": {
             "estateSplit": {"value": JSON.stringify({
-            "20 Mio Depot": {
-                "L0000001": 100
+            "Millionen Depot": {
+                "L0000001": 75,
+                "L0000002": 25
             }
         }), "type": "Json", "valueInfo": {"transient": true}}
           }

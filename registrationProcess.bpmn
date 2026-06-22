@@ -11,13 +11,12 @@
     <bpmn:messageFlow id="Flow_1lhy6qu" name="Registrierungsbestätigung" sourceRef="Activity_14hs9pc" targetRef="Participant_1h8gyvy" />
     <bpmn:messageFlow id="Flow_1oadd5b" name="Personalstammurkunden" sourceRef="Participant_1h8gyvy" targetRef="Activity_0bvk3hj" />
     <bpmn:messageFlow id="Flow_0hbxsjs" name="Personalstammurkundenanfrage" sourceRef="Activity_0crfdgo" targetRef="Participant_1h8gyvy" />
+    <bpmn:messageFlow id="Flow_0fq3brs" name="Stornierungsauftrag" sourceRef="Participant_1h8gyvy" targetRef="Event_10x3vwf" />
   </bpmn:collaboration>
   <bpmn:process id="registrationProcess" name="Registrierung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0dg1zx1">
       <bpmn:lane id="Lane_19jrqrc">
         <bpmn:flowNodeRef>Event_07ktm1q</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0crfdgo</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0bvk3hj</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1r49j42</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1ex7j68</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0a9m63a</bpmn:flowNodeRef>
@@ -25,9 +24,16 @@
         <bpmn:flowNodeRef>Activity_14hs9pc</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_14pip2o</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0d4bkeh</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0bvk3hj</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0crfdgo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_13z4pik</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="Event_07ktm1q" name="Erblasser will sich vollständig registrieren">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;idCardNumber&#34;, &#34;&#34;)}" event="start" />
+        <camunda:executionListener expression="${execution.setVariable(&#34;birthCertificate&#34;, &#34;&#34;)}" event="start" />
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0nycjp4</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sendTask id="Activity_1r49j42" name="Identitätsprüfung anfragen" camunda:expression="${1}">
@@ -107,18 +113,32 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_06y1xpr" sourceRef="Activity_0crfdgo" targetRef="Activity_0bvk3hj" />
     <bpmn:sequenceFlow id="Flow_0nycjp4" sourceRef="Event_07ktm1q" targetRef="Activity_0crfdgo" />
+    <bpmn:subProcess id="Activity_13z4pik" name="Verwaltungsstornierunsprozess" triggeredByEvent="true">
+      <bpmn:endEvent id="Event_0qaxzxd" name="Registrierung storniert">
+        <bpmn:incoming>Flow_139x85f</bpmn:incoming>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_0n5nm63" escalationRef="Escalation_10b2gir" />
+      </bpmn:endEvent>
+      <bpmn:startEvent id="Event_10x3vwf" name="Stornierungsauftrag erhalten">
+        <bpmn:outgoing>Flow_139x85f</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1gaslol" messageRef="Message_0sgdi2r" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_139x85f" sourceRef="Event_10x3vwf" targetRef="Event_0qaxzxd" />
+    </bpmn:subProcess>
   </bpmn:process>
   <bpmn:message id="Message_1kohvqv" name="personalSummaryRecord" />
   <bpmn:message id="Message_2kaen0c" name="identifyCheckResponse" />
   <bpmn:escalation id="Escalation_0npharp" name="identityInvalid" escalationCode="1400" />
+  <bpmn:escalation id="Escalation_10b2gir" name="cancelationOrderSignal" escalationCode="4243" />
+  <bpmn:message id="Message_0sgdi2r" name="canelationOrder" />
+  <bpmn:message id="Message_31kpuu7" name="funeralOrderCanelationConfirmation" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1bqzlhf">
       <bpmndi:BPMNShape id="Participant_0dd0tdg_di" bpmnElement="Participant_0dd0tdg" isHorizontal="true">
-        <dc:Bounds x="160" y="270" width="1500" height="420" />
+        <dc:Bounds x="160" y="270" width="1500" height="530" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_19jrqrc_di" bpmnElement="Lane_19jrqrc" isHorizontal="true">
-        <dc:Bounds x="190" y="270" width="1470" height="420" />
+        <dc:Bounds x="190" y="270" width="1470" height="530" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1dpa3n3_di" bpmnElement="Event_07ktm1q">
         <dc:Bounds x="242" y="432" width="36" height="36" />
@@ -165,6 +185,26 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
         <dc:Bounds x="330" y="410" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0jqmav5" bpmnElement="Activity_13z4pik" isExpanded="true">
+        <dc:Bounds x="440" y="540" width="310" height="200" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_130rgjq_di" bpmnElement="Event_10x3vwf">
+        <dc:Bounds x="472" y="622" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="447" y="667.5" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nlsfax_di" bpmnElement="Event_0qaxzxd">
+        <dc:Bounds x="602" y="622" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="588" y="665" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_139x85f_di" bpmnElement="Flow_139x85f">
+        <di:waypoint x="508" y="640" />
+        <di:waypoint x="602" y="640" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tttzoc_di" bpmnElement="Flow_1tttzoc">
         <di:waypoint x="790" y="450" />
         <di:waypoint x="850" y="450" />
@@ -211,18 +251,18 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
       <bpmndi:BPMNShape id="Participant_0vtm8da_di" bpmnElement="Participant_0jlko7g" isHorizontal="true">
         <dc:Bounds x="660" y="190" width="340" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
-        <dc:Bounds x="1000" y="760" width="408" height="60" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_0naagqx_di" bpmnElement="Participant_1h8gyvy" isHorizontal="true">
         <dc:Bounds x="310" y="80" width="1350" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_14yxd3e_di" bpmnElement="Participant_09nou9v" isHorizontal="true">
+        <dc:Bounds x="1020" y="810" width="408" height="60" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0ncuzmc_di" bpmnElement="Flow_0ncuzmc">
         <di:waypoint x="1320" y="650" />
-        <di:waypoint x="1320" y="760" />
+        <di:waypoint x="1320" y="810" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1329" y="698" width="81" height="14" />
+          <dc:Bounds x="1329" y="723" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1imrrpk_di" bpmnElement="Flow_1imrrpk">
@@ -258,6 +298,13 @@ execution.setVariable("registrationInformation", S(JSON.stringify(regInfo)));</c
         <di:waypoint x="380" y="140" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="286" y="290" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fq3brs_di" bpmnElement="Flow_0fq3brs">
+        <di:waypoint x="490" y="140" />
+        <di:waypoint x="490" y="622" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="463" y="378" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

@@ -162,7 +162,7 @@ execution.setVariable("appointmentVotes", S(JSON.stringify(votes)));</bpmn:scrip
         <bpmn:scriptTask id="Activity_0boznz0" name="Termineinladung generieren" scriptFormat="JavaScript">
           <bpmn:incoming>Flow_1tm158h</bpmn:incoming>
           <bpmn:outgoing>Flow_0gsqhg1</bpmn:outgoing>
-          <bpmn:script>const invitation = `${heir.prop("firstName").stringValue()} ${heir.prop("lastName").stringValue()}, sie sind eingeladen am ${decidedNotaryAppointment} mit der Dauer ${durationInMinutes}.`;
+          <bpmn:script>const invitation = `${heir.prop("firstName").stringValue()} ${heir.prop("lastName").stringValue()}, sie sind eingeladen am ${decidedNotaryAppointment} mit der Dauer ${durationInMinutes} Minuten.`;
 execution.setVariableLocal("invitation", invitation);</bpmn:script>
         </bpmn:scriptTask>
         <bpmn:sendTask id="Activity_18rjyjj" name="Termineinladung versenden" camunda:expression="${1}">

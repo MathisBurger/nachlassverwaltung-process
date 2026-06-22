@@ -4,6 +4,10 @@
     <bpmn:participant id="Participant_0y99ssa" name="Sterbevorsorgeprozess" processRef="main" />
     <bpmn:participant id="Participant_17istra" name="Erblasser" />
     <bpmn:messageFlow id="Flow_02um106" name="Registrierungsinformationen" sourceRef="Participant_17istra" targetRef="Event_1qte4uv" />
+    <bpmn:textAnnotation id="TextAnnotation_073m4ng">
+      <bpmn:text>Explizit ohne Gateway, da ansonsten verwirrend</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1przvir" associationDirection="None" sourceRef="Flow_1yzmh7z" targetRef="TextAnnotation_073m4ng" />
   </bpmn:collaboration>
   <bpmn:process id="main" name="Sterbevorsorgeprozess" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_0nuvtsp">
@@ -15,9 +19,10 @@
         <bpmn:flowNodeRef>Activity_0e92b8h</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_135yoqb</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0ewc1dy</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1f6mhxm</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_063jzly</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_17rltt4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1f6mhxm</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0johajs</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0stubt2</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
@@ -43,10 +48,6 @@
       <bpmn:incoming>Flow_0tiungv</bpmn:incoming>
       <bpmn:outgoing>Flow_0es0hy5</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:boundaryEvent id="Event_1f6mhxm" name="Identität nicht valide" attachedToRef="Activity_09l5ttw">
-      <bpmn:outgoing>Flow_1c6wpkw</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0tqjhp6" escalationRef="Escalation_2ugn8le" />
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0tiungv" sourceRef="Event_1qte4uv" targetRef="Activity_09l5ttw" />
     <bpmn:sequenceFlow id="Flow_0es0hy5" sourceRef="Activity_09l5ttw" targetRef="Activity_1dnyeqt" />
     <bpmn:sequenceFlow id="Flow_0524dvd" sourceRef="Activity_1dnyeqt" targetRef="Activity_0xvglbd" />
@@ -87,26 +88,37 @@
       <bpmn:outgoing>Flow_0524dvd</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:boundaryEvent id="Event_063jzly" name="Nachlassdaten gelöscht" attachedToRef="Activity_1dnyeqt">
-      <bpmn:outgoing>Flow_1m6qr7w</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0nrl35t</bpmn:outgoing>
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_0dnzpp4" escalationRef="Escalation_1e7104e" />
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_0ewc1dy" name="Registrierung war nicht erfolgreich">
       <bpmn:incoming>Flow_1c6wpkw</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1m6qr7w" sourceRef="Event_063jzly" targetRef="Activity_0stubt2" />
-    <bpmn:sequenceFlow id="Flow_1itvq3u" sourceRef="Activity_0stubt2" targetRef="Event_17rltt4" />
     <bpmn:endEvent id="Event_17rltt4" name="Sterbevorsorge storniert">
-      <bpmn:incoming>Flow_1itvq3u</bpmn:incoming>
+      <bpmn:incoming>Flow_0au87tf</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_1f6mhxm" name="Identität nicht valide" attachedToRef="Activity_09l5ttw">
+      <bpmn:outgoing>Flow_1c6wpkw</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0tqjhp6" escalationRef="Escalation_2ugn8le" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0johajs" name="Registrierung storniert" attachedToRef="Activity_09l5ttw">
+      <bpmn:outgoing>Flow_1yzmh7z</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0fprwgy" escalationRef="Escalation_0q7ihpe" />
+    </bpmn:boundaryEvent>
     <bpmn:scriptTask id="Activity_0stubt2" name="Registrierungsinformationen löschen" scriptFormat="JavaScript">
-      <bpmn:incoming>Flow_1m6qr7w</bpmn:incoming>
-      <bpmn:outgoing>Flow_1itvq3u</bpmn:outgoing>
+      <bpmn:incoming>Flow_0nrl35t</bpmn:incoming>
+      <bpmn:incoming>Flow_1yzmh7z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0au87tf</bpmn:outgoing>
       <bpmn:script>execution.removeVariable("initialRegistrationInformation")</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0au87tf" sourceRef="Activity_0stubt2" targetRef="Event_17rltt4" />
+    <bpmn:sequenceFlow id="Flow_0nrl35t" sourceRef="Event_063jzly" targetRef="Activity_0stubt2" />
+    <bpmn:sequenceFlow id="Flow_1yzmh7z" sourceRef="Event_0johajs" targetRef="Activity_0stubt2" />
   </bpmn:process>
   <bpmn:message id="Message_0krdok8" name="initialRegistrationInformation" />
   <bpmn:escalation id="Escalation_2ugn8le" name="identityInvalid" escalationCode="1400" />
   <bpmn:escalation id="Escalation_1e7104e" name="heritageDataDeleted" escalationCode="4242" />
+  <bpmn:escalation id="Escalation_0q7ihpe" name="cancelationOrderSignal" escalationCode="4243" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1tqngcs">
       <bpmndi:BPMNShape id="Participant_0y99ssa_di" bpmnElement="Participant_0y99ssa" isHorizontal="true">
@@ -157,7 +169,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0u3bxus_di" bpmnElement="Activity_0stubt2">
-        <dc:Bounds x="790" y="310" width="100" height="80" />
+        <dc:Bounds x="890" y="310" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_06by842_di" bpmnElement="Event_063jzly">
@@ -167,6 +179,12 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1069x86_di" bpmnElement="Event_1f6mhxm">
+        <dc:Bounds x="382" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="417" y="286" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_14akeoq" bpmnElement="Event_0johajs">
         <dc:Bounds x="482" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="517" y="286" width="66" height="27" />
@@ -193,23 +211,32 @@
         <di:waypoint x="1052" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1c6wpkw_di" bpmnElement="Flow_1c6wpkw">
-        <di:waypoint x="500" y="288" />
-        <di:waypoint x="500" y="440" />
+        <di:waypoint x="400" y="288" />
+        <di:waypoint x="400" y="440" />
         <di:waypoint x="1052" y="440" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1m6qr7w_di" bpmnElement="Flow_1m6qr7w">
+      <bpmndi:BPMNEdge id="Flow_0au87tf_di" bpmnElement="Flow_0au87tf">
+        <di:waypoint x="990" y="350" />
+        <di:waypoint x="1052" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nrl35t_di" bpmnElement="Flow_0nrl35t">
         <di:waypoint x="670" y="288" />
         <di:waypoint x="670" y="350" />
-        <di:waypoint x="790" y="350" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1itvq3u_di" bpmnElement="Flow_1itvq3u">
         <di:waypoint x="890" y="350" />
-        <di:waypoint x="1052" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yzmh7z_di" bpmnElement="Flow_1yzmh7z">
+        <di:waypoint x="500" y="288" />
+        <di:waypoint x="500" y="350" />
+        <di:waypoint x="890" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1gek3uz_di" bpmnElement="Participant_17istra" isHorizontal="true">
         <dc:Bounds x="130" y="560" width="300" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1przvir_di" bpmnElement="Association_1przvir">
+        <di:waypoint x="664" y="350" />
+        <di:waypoint x="731" y="460" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02um106_di" bpmnElement="Flow_02um106">
         <di:waypoint x="260" y="560" />
         <di:waypoint x="260" y="238" />
@@ -217,6 +244,10 @@
           <dc:Bounds x="268" y="333" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_073m4ng_di" bpmnElement="TextAnnotation_073m4ng">
+        <dc:Bounds x="690" y="460" width="160" height="40" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

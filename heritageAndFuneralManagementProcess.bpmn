@@ -711,7 +711,7 @@ execution.removeVariable("signedLastWill");</bpmn:script>
         <di:waypoint x="850" y="880" />
         <di:waypoint x="900" y="880" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="858" y="976" width="63" height="27" />
+          <dc:Bounds x="858" y="994" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1q28him_di" bpmnElement="Flow_1q28him">

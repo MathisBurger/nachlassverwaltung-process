@@ -28,7 +28,8 @@
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})));
 
-execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));</camunda:script>
+execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));
+execution.setVariableLocal("documentContent", "");</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0ou1j6c</bpmn:outgoing>
@@ -82,8 +83,8 @@ execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</ca
       <bpmn:callActivity id="Activity_0s8h49w" name="Vorsorgedokumentenverarbeitung" calledElement="advanceDirectiveDocumentProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
-          <camunda:in sourceExpression="${execution.setVariableLocal(&#34;documentId&#34;, documentIdRaw.stringValue())}" target="documentId" />
-          <camunda:out sourceExpression="null" target="documentContent" />
+          <camunda:in sourceExpression="${documentIdRaw.stringValue()}" target="documentId" />
+          <camunda:out source="documentContent" target="documentContent" />
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = JSON.parse(advanceDirectiveContents.toString());
 advanceDirectiveContentsRaw[documentId] = documentContent;

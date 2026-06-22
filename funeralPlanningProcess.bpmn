@@ -30,6 +30,11 @@
 
 execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
         </camunda:executionListener>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="funeralType">${null}</camunda:inputParameter>
+          <camunda:inputParameter name="maxAmountGuests">${null}</camunda:inputParameter>
+          <camunda:inputParameter name="budget">${null}</camunda:inputParameter>
+        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0cgx0e2</bpmn:incoming>
       <bpmn:outgoing>Flow_1tdnw2y</bpmn:outgoing>
