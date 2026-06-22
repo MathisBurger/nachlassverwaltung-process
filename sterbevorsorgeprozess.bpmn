@@ -26,6 +26,9 @@
         <camunda:executionListener event="end">
           <camunda:script scriptFormat="JavaScript">execution.setVariable("registrationInformation", S(JSON.stringify({username, password, email, birthday})));</camunda:script>
         </camunda:executionListener>
+        <camunda:properties>
+          <camunda:property name="needsAuth" value="true" />
+        </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0tiungv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1lr6lcd" messageRef="Message_0krdok8" />
