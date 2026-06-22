@@ -169,7 +169,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
       <bpmn:outgoing>Flow_03s5sms</bpmn:outgoing>
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_0qod0d9" escalationRef="Escalation_0tjkbn0" />
     </bpmn:boundaryEvent>
-    <bpmn:sendTask id="Activity_1g4hu39" name="Geburtsurkunde senden">
+    <bpmn:sendTask id="Activity_1g4hu39" name="Geburtsurkunde senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">print("Sending birthcertificate of " + execution.getProcessBusinessKey() + " with content " + birthCertificate + " to notary");</camunda:script>
