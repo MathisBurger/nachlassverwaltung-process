@@ -106,7 +106,7 @@ execution.setVariable("lastWords", lastWordsLocal);
         <bpmn:outgoing>Flow_08e5ab1</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_1d3mm4o" messageRef="Message_35ult04" />
       </bpmn:startEvent>
-      <bpmn:endEvent id="Event_1amjsfm" name="Ersbschaftsgegenstand angelegt">
+      <bpmn:endEvent id="Event_1amjsfm" name="Ersbschaftsgegenstand verarbeitet">
         <bpmn:incoming>Flow_12iyhx6</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_08e5ab1" sourceRef="Event_0zis8vm" targetRef="Activity_10dt71o" />
@@ -132,7 +132,7 @@ execution.setVariable("lastWords", lastWordsLocal);
         <bpmn:incoming>Flow_14kdlms</bpmn:incoming>
         <bpmn:outgoing>Flow_0son526</bpmn:outgoing>
       </bpmn:callActivity>
-      <bpmn:endEvent id="Event_1kfw4lm" name="Erbe angelegt">
+      <bpmn:endEvent id="Event_1kfw4lm" name="Erbenergänzung verarbeitet">
         <bpmn:incoming>Flow_0son526</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_14kdlms" sourceRef="Event_1ubt0lv" targetRef="Activity_1uuwysd" />
@@ -449,7 +449,7 @@ execution.removeVariable("signedLastWill");</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_0a6qyt8" bpmnElement="Event_1kfw4lm">
         <dc:Bounds x="972" y="612" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="956" y="655" width="69" height="14" />
+          <dc:Bounds x="950" y="655" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0652dbp" bpmnElement="Flow_14kdlms">

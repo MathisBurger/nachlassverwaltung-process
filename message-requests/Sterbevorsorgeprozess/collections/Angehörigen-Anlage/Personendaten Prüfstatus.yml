@@ -13,7 +13,7 @@ http:
         "messageName": "citizenDataCheckResponse",
         "businessKey": "L1234567",
         "correlationKeys": {
-          "idCardNumber": {"value": "L0000002", "type": "String"}
+          "idCardNumber": {"value": "L0000001", "type": "String"}
         },
         "processVariables": {
           "citizenIsValid": {"value": true, "type": "Boolean"}
