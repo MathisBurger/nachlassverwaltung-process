@@ -13,11 +13,11 @@ http:
         "messageName": "heirAddition",
         "businessKey": "L1234567",
         "processVariables": {
-          "firstName": {"value": "Susi", "type": "String", "valueInfo": {"transient": true}},
-          "lastName": {"value": "Sorglos", "type": "String", "valueInfo": {"transient": true}},
-          "email": {"value": "susi.sorglos@demomail.org", "type": "String", "valueInfo": {"transient": true}},
+          "firstName": {"value": "Hugo", "type": "String", "valueInfo": {"transient": true}},
+          "lastName": {"value": "Habicht", "type": "String", "valueInfo": {"transient": true}},
+          "email": {"value": "hugo.habicht@demomail.org", "type": "String", "valueInfo": {"transient": true}},
           "birthday": {"value": "01.01.1990", "type": "String", "valueInfo": {"transient": true}},
-          "idCardNumber": {"value": "L0000002", "type": "String", "valueInfo": {"transient": true}}
+          "idCardNumber": {"value": "L0000001", "type": "String", "valueInfo": {"transient": true}}
         }
       }
   auth: inherit

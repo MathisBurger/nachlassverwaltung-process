@@ -13,9 +13,9 @@ http:
         "messageName": "funeralPreference",
         "businessKey": "L1234567",
         "processVariables": {
-          "funeralType": {"value": "sea", "type": "String", "valueInfo": {"transient": true}},
-          "maxAmountGuests": {"value": 50, "type": "Integer", "valueInfo": {"transient": true}},
-          "budget": {"value": 1000000, "type": "Integer", "valueInfo": {"transient": true}}
+          "funeralType": {"value": "sea", "type": "String"},
+          "maxAmountGuests": {"value": 50, "type": "Integer"},
+          "budget": {"value": 1000, "type": "Integer"}
         }
       }
   auth: inherit

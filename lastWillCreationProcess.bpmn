@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0rypu8s" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1wdbp3p">
-    <bpmn:participant id="Participant_18zrp9m" name="Testamenterstellungsprozess" processRef="lastWillCreationProcess" />
+    <bpmn:participant id="Participant_18zrp9m" name="Testamenthandhabung" processRef="lastWillCreationProcess" />
     <bpmn:participant id="Participant_1svgu2v" name="Erblasser" />
     <bpmn:participant id="Participant_02mu7hc" name="Notar" />
     <bpmn:messageFlow id="Flow_02j793v" name="Testamententwurf" sourceRef="Activity_1mhvpqa" targetRef="Participant_1svgu2v" />
@@ -15,7 +15,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0jidcpm" associationDirection="None" sourceRef="Activity_0f28pqm" targetRef="TextAnnotation_0lvh2c6" />
   </bpmn:collaboration>
-  <bpmn:process id="lastWillCreationProcess" name="Testamenterstellungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="lastWillCreationProcess" name="Testamenthandhabung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_18g8z07">
       <bpmn:lane id="Lane_1axqpai" name="Verwalter">
         <bpmn:flowNodeRef>Gateway_1sgfmay</bpmn:flowNodeRef>
@@ -155,7 +155,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_05pvb23" sourceRef="Activity_166fnvw" targetRef="Activity_1g4hu39" />
     <bpmn:sequenceFlow id="Flow_0fgwuct" sourceRef="Activity_1g4hu39" targetRef="Activity_18tq0sr" />
-    <bpmn:callActivity id="Activity_18tq0sr" name="Testamentbeglaubigung" calledElement="notaryDocumentProcess">
+    <bpmn:callActivity id="Activity_18tq0sr" name="Dokumentengeblaubigung" calledElement="notaryDocumentProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
         <camunda:in source="signedLastWill" target="documentContent" />
@@ -169,7 +169,7 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
       <bpmn:outgoing>Flow_03s5sms</bpmn:outgoing>
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_0qod0d9" escalationRef="Escalation_0tjkbn0" />
     </bpmn:boundaryEvent>
-    <bpmn:sendTask id="Activity_1g4hu39" name="Geburtsurkunde senden">
+    <bpmn:sendTask id="Activity_1g4hu39" name="Geburtsurkunde senden" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="JavaScript">print("Sending birthcertificate of " + execution.getProcessBusinessKey() + " with content " + birthCertificate + " to notary");</camunda:script>
@@ -210,23 +210,6 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
         <bpmndi:BPMNLabel>
           <dc:Bounds x="222" y="361" width="57" height="40" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_16dmlhk" bpmnElement="Event_1fyjjla">
-        <dc:Bounds x="2317" y="338" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2292" y="381" width="87" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_074lr1k_di" bpmnElement="Activity_017n118">
-        <dc:Bounds x="2135" y="316" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1el4qnd" bpmnElement="Activity_18tq0sr">
-        <dc:Bounds x="1945" y="311" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0b4w98x_di" bpmnElement="Activity_1g4hu39">
-        <dc:Bounds x="1780" y="311" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0f28pqm_di" bpmnElement="Activity_0f28pqm" isExpanded="true">
         <dc:Bounds x="475" y="236" width="820" height="230" />
@@ -300,6 +283,23 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
         <di:waypoint x="551" y="336" />
         <di:waypoint x="585" y="336" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_16dmlhk" bpmnElement="Event_1fyjjla">
+        <dc:Bounds x="2317" y="338" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2292" y="381" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_074lr1k_di" bpmnElement="Activity_017n118">
+        <dc:Bounds x="2135" y="316" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1el4qnd" bpmnElement="Activity_18tq0sr">
+        <dc:Bounds x="1945" y="311" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0b4w98x_di" bpmnElement="Activity_1g4hu39">
+        <dc:Bounds x="1780" y="311" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0szkvss" bpmnElement="Event_04zbo7v">
         <dc:Bounds x="2027" y="373" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -394,16 +394,16 @@ execution.setVariableLocal("normalizedEstateSplit", S(JSON.stringify(normalizedE
           <dc:Bounds x="1428" y="246" width="84" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0jidcpm_di" bpmnElement="Association_0jidcpm">
-        <di:waypoint x="928" y="466" />
-        <di:waypoint x="974" y="590" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0wa02rh_di" bpmnElement="Flow_0wa02rh">
         <di:waypoint x="1830" y="311" />
         <di:waypoint x="1830" y="110" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1860" y="154" width="79" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0jidcpm_di" bpmnElement="Association_0jidcpm">
+        <di:waypoint x="928" y="466" />
+        <di:waypoint x="974" y="590" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

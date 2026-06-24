@@ -6,7 +6,7 @@
     <bpmn:messageFlow id="Flow_0rfvuqm" name="Dokumentenauswahlanfrage" sourceRef="Activity_0rdll59" targetRef="Participant_18jmyqt" />
     <bpmn:messageFlow id="Flow_0kz25bv" name="Dokumentenauswahl" sourceRef="Participant_18jmyqt" targetRef="Activity_0rdll59" />
   </bpmn:collaboration>
-  <bpmn:process id="heritageRegistrationProzess" name="Nachlassanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="heritageRegistrationProzess" name="Idelle-Nachlass-Anlage" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Der Nachlass muss angelegt werden">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
@@ -28,7 +28,8 @@
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">execution.setVariable("advanceDirectiveContents", S(JSON.stringify({})));
 
-execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));</camunda:script>
+execution.setVariableLocal("selectedAdvanceDirectives", S("[]"));
+execution.setVariableLocal("documentContent", "");</camunda:script>
           </camunda:executionListener>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0ou1j6c</bpmn:outgoing>
@@ -82,8 +83,8 @@ execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</ca
       <bpmn:callActivity id="Activity_0s8h49w" name="Vorsorgedokumentenverarbeitung" calledElement="advanceDirectiveDocumentProcess">
         <bpmn:extensionElements>
           <camunda:in businessKey="#{execution.processBusinessKey}" />
-          <camunda:in sourceExpression="${execution.setVariableLocal(&#34;documentId&#34;, documentIdRaw.stringValue())}" target="documentId" />
-          <camunda:out sourceExpression="null" target="documentContent" />
+          <camunda:in sourceExpression="${documentIdRaw.stringValue()}" target="documentId" />
+          <camunda:out source="documentContent" target="documentContent" />
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = JSON.parse(advanceDirectiveContents.toString());
 advanceDirectiveContentsRaw[documentId] = documentContent;
@@ -125,7 +126,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
     <bpmn:sequenceFlow id="Flow_1jl03xz" sourceRef="Activity_17pu7b7" targetRef="Gateway_1fux41a" />
     <bpmn:sequenceFlow id="Flow_0nuygj4" sourceRef="Gateway_1fux41a" targetRef="Event_0bwm6br" />
     <bpmn:sequenceFlow id="Flow_110x42t" sourceRef="StartEvent_1" targetRef="Gateway_1w9b210" />
-    <bpmn:endEvent id="Event_0bwm6br" name="Geistiger Nachlass angelegt">
+    <bpmn:endEvent id="Event_0bwm6br" name="Ideller Nachlass angelegt">
       <bpmn:incoming>Flow_0nuygj4</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
@@ -161,7 +162,7 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
       <bpmndi:BPMNShape id="BPMNShape_1sz32qi" bpmnElement="Event_0bwm6br">
         <dc:Bounds x="672" y="422" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="667" y="465" width="46" height="40" />
+          <dc:Bounds x="651" y="465" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0prn2m4" bpmnElement="Flow_0orxbx6">
@@ -256,6 +257,10 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
           <dc:Bounds x="631" y="142" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0rchc5u_di" bpmnElement="DataOutputAssociation_0rchc5u">
+        <di:waypoint x="542" y="260" />
+        <di:waypoint x="658" y="135" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0p3h223" bpmnElement="Flow_0ou1j6c">
         <di:waypoint x="243" y="300" />
         <di:waypoint x="295" y="300" />
@@ -283,17 +288,13 @@ execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirect
         <di:waypoint x="395" y="300" />
         <di:waypoint x="455" y="300" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ixj8kk_di" bpmnElement="Flow_0ixj8kk">
-        <di:waypoint x="920" y="300" />
-        <di:waypoint x="1002" y="300" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_0rchc5u_di" bpmnElement="DataOutputAssociation_0rchc5u">
-        <di:waypoint x="542" y="260" />
-        <di:waypoint x="658" y="135" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataInputAssociation_0n4nd91_di" bpmnElement="DataInputAssociation_0n4nd91">
         <di:waypoint x="693" y="129" />
         <di:waypoint x="823" y="263" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ixj8kk_di" bpmnElement="Flow_0ixj8kk">
+        <di:waypoint x="920" y="300" />
+        <di:waypoint x="1002" y="300" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

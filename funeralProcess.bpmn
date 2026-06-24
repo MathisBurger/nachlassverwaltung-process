@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_077lff8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1oy1zo7">
-    <bpmn:participant id="Participant_1apn0t4" name="Bestattungsprozess" processRef="funeralProcess" />
+    <bpmn:participant id="Participant_1apn0t4" name="Bestattung" processRef="funeralProcess" />
     <bpmn:participant id="Participant_1pla1ex" name="Bestattungsinstitut" />
     <bpmn:messageFlow id="Flow_0z6rw98" name="Bestattungsauftrag" sourceRef="Activity_0ig0z2d" targetRef="Participant_1pla1ex" />
     <bpmn:messageFlow id="Flow_0u7267x" name="Erinnerung" sourceRef="Activity_0i4b6dt" targetRef="Participant_1pla1ex" />
     <bpmn:messageFlow id="Flow_0f2y8gy" name="Rückmeldung" sourceRef="Participant_1pla1ex" targetRef="Activity_1ivnsmj" />
     <bpmn:messageFlow id="Flow_16vqq4a" name="Abschlussbestätigung" sourceRef="Participant_1pla1ex" targetRef="Activity_1i2gi2p" />
   </bpmn:collaboration>
-  <bpmn:process id="funeralProcess" name="Bestattungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="funeralProcess" name="Bestattung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="Event_0855fug" name="Todesfall bestätigt">
       <bpmn:outgoing>Flow_0lqii47</bpmn:outgoing>
     </bpmn:startEvent>
@@ -96,16 +96,6 @@
         <dc:Bounds x="480" y="380" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ofrnku_di" bpmnElement="Activity_1ivnsmj">
-        <dc:Bounds x="930" y="380" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1isu4z8_di" bpmnElement="Event_1isu4z8">
-        <dc:Bounds x="1082" y="402" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1057" y="445" width="87" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0s29keh" bpmnElement="Activity_1xu4or2" isExpanded="true">
         <dc:Bounds x="600" y="170" width="375" height="200" />
         <bpmndi:BPMNLabel />
@@ -134,6 +124,16 @@
         <di:waypoint x="815" y="280" />
         <di:waypoint x="867" y="280" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1ofrnku_di" bpmnElement="Activity_1ivnsmj">
+        <dc:Bounds x="930" y="380" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1isu4z8_di" bpmnElement="Event_1isu4z8">
+        <dc:Bounds x="1082" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1057" y="445" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0d922wm" bpmnElement="Flow_15brruh">
         <di:waypoint x="438" y="420" />
         <di:waypoint x="480" y="420" />

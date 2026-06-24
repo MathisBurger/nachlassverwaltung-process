@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0j3v7ff" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0jqtivz">
-    <bpmn:participant id="Participant_18zenm2" name="Letzte-Worte-Prozess" processRef="lastWordsProcess" />
+    <bpmn:participant id="Participant_18zenm2" name="Letzte-Worte-Aufnahme" processRef="lastWordsProcess" />
     <bpmn:participant id="Participant_0kmyb5w" name="Erblasser" />
     <bpmn:messageFlow id="Flow_0om8og8" name="Letzte Worte Präferenz Anfrage" sourceRef="Activity_17rp3s5" targetRef="Participant_0kmyb5w" />
     <bpmn:messageFlow id="Flow_0fht59e" name="Letzte Worte Präferenz" sourceRef="Participant_0kmyb5w" targetRef="Activity_1llhhrv" />
     <bpmn:messageFlow id="Flow_05nf3zx" name="Letze Worte" sourceRef="Participant_0kmyb5w" targetRef="Activity_0hnitkl" />
     <bpmn:messageFlow id="Flow_1vcpz0c" name="Letze Worte Anfrage" sourceRef="Activity_06d36o4" targetRef="Participant_0kmyb5w" />
   </bpmn:collaboration>
-  <bpmn:process id="lastWordsProcess" name="Letzte-Worte-Prozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="lastWordsProcess" name="Letzte-Worte-Aufnahme" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Letzte Worte sind zu berücksichtigen">
       <bpmn:outgoing>Flow_02qc185</bpmn:outgoing>
     </bpmn:startEvent>

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ee46cs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0mai67a">
-    <bpmn:participant id="Participant_03lmtam" name="Notar-Dokumente-Prozess" processRef="notardokumenteprozess" />
+    <bpmn:participant id="Participant_03lmtam" name="Dokumentenbeglaubigung" processRef="notaryDocumentProcess" />
     <bpmn:participant id="Participant_1ex9m8e" name="Notar" />
+    <bpmn:participant id="Participant_09fxiy0" name="Erblasser" />
     <bpmn:messageFlow id="Flow_0uquul0" name="Dokument" sourceRef="Activity_0go60ul" targetRef="Participant_1ex9m8e" />
     <bpmn:messageFlow id="Flow_05zlr0n" name="Beglaubigung" sourceRef="Participant_1ex9m8e" targetRef="Event_19ejq5l" />
     <bpmn:messageFlow id="Flow_02a8kry" name="Invaliditätsbestätigung" sourceRef="Participant_1ex9m8e" targetRef="Event_0n6mgeh" />
+    <bpmn:messageFlow id="Flow_17y72rn" name="Invaliditätsinformationen" sourceRef="Activity_0z2yj83" targetRef="Participant_09fxiy0" />
   </bpmn:collaboration>
-  <bpmn:process id="notardokumenteprozess" name="Notar-Dokumente-Prozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="notaryDocumentProcess" name="Dokumentenbeglaubigung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_137o5em">
       <bpmn:lane id="Lane_0deq9rt">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
@@ -15,15 +17,21 @@
         <bpmn:flowNodeRef>Gateway_0ac5u03</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_19ejq5l</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0n6mgeh</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0zpaeh7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0z2yj83</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_07f5jre</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0zpaeh7</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1" name="Dokument versandtbereit">
       <bpmn:outgoing>Flow_1t543rk</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1t543rk" sourceRef="StartEvent_1" targetRef="Activity_0go60ul" />
-    <bpmn:sendTask id="Activity_0go60ul" name="Dokument an den Notar senden">
+    <bpmn:sendTask id="Activity_0go60ul" name="Dokument an den Notar senden" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Requesting notarization of document " + documentId + " with content " + documentContent + " for " + execution.getProcessBusinessKey())</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1t543rk</bpmn:incoming>
       <bpmn:outgoing>Flow_11ne0fs</bpmn:outgoing>
     </bpmn:sendTask>
@@ -37,32 +45,46 @@
     <bpmn:intermediateCatchEvent id="Event_19ejq5l" name="Beglaubigung empfangen">
       <bpmn:incoming>Flow_0r84bhk</bpmn:incoming>
       <bpmn:outgoing>Flow_1ksarzq</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_11m76sp" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_11m76sp" messageRef="Message_3h6sja7" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_0l2plot" sourceRef="Gateway_0ac5u03" targetRef="Event_0n6mgeh" />
     <bpmn:intermediateCatchEvent id="Event_0n6mgeh" name="Invaliditätsbestätigung">
       <bpmn:incoming>Flow_0l2plot</bpmn:incoming>
-      <bpmn:outgoing>Flow_1c4oqnr</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0syh8nt" />
+      <bpmn:outgoing>Flow_1e4qu4t</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0syh8nt" messageRef="Message_0qqs9ap" />
     </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1ksarzq" sourceRef="Event_19ejq5l" targetRef="Event_0zpaeh7" />
+    <bpmn:sequenceFlow id="Flow_1e4qu4t" sourceRef="Event_0n6mgeh" targetRef="Activity_0z2yj83" />
+    <bpmn:sendTask id="Activity_0z2yj83" name="Invaliditätsinformationen senden" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Sending invalidity information for document " + documentId + " with reason " + reason + " to " + execution.getProcessBusinessKey())</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1e4qu4t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1c9tx7d</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="Event_07f5jre" name="Dokument invalide">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1c9tx7d</bpmn:incoming>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_03qf2gy" escalationRef="Escalation_2bstv34" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1c9tx7d" sourceRef="Activity_0z2yj83" targetRef="Event_07f5jre" />
     <bpmn:endEvent id="Event_0zpaeh7" name="Dokument erfolgreich verwahrt">
       <bpmn:incoming>Flow_1ksarzq</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1ksarzq" sourceRef="Event_19ejq5l" targetRef="Event_0zpaeh7" />
-    <bpmn:sequenceFlow id="Flow_1c4oqnr" sourceRef="Event_0n6mgeh" targetRef="Event_07f5jre" />
-    <bpmn:endEvent id="Event_07f5jre" name="Dokument invalide">
-      <bpmn:incoming>Flow_1c4oqnr</bpmn:incoming>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_03qf2gy" />
-    </bpmn:endEvent>
   </bpmn:process>
+  <bpmn:escalation id="Escalation_2bstv34" name="documentCannotBeNotarized" escalationCode="400" />
+  <bpmn:message id="Message_3h6sja7" name="documentNotarized" />
+  <bpmn:message id="Message_0qqs9ap" name="documentNotNotarized" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0mai67a">
       <bpmndi:BPMNShape id="Participant_03lmtam_di" bpmnElement="Participant_03lmtam" isHorizontal="true">
-        <dc:Bounds x="132" y="210" width="798" height="270" />
+        <dc:Bounds x="132" y="210" width="1006" height="270" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0deq9rt_di" bpmnElement="Lane_0deq9rt" isHorizontal="true">
-        <dc:Bounds x="162" y="210" width="768" height="270" />
+        <dc:Bounds x="162" y="210" width="976" height="270" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="232" y="312" width="36" height="36" />
@@ -88,16 +110,19 @@
           <dc:Bounds x="689" y="425" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0zpaeh7_di" bpmnElement="Event_0zpaeh7">
-        <dc:Bounds x="832" y="242" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="824" y="285" width="52" height="40" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_1br58u1_di" bpmnElement="Activity_0z2yj83">
+        <dc:Bounds x="840" y="360" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0x52n7n_di" bpmnElement="Event_07f5jre">
-        <dc:Bounds x="832" y="382" width="36" height="36" />
+        <dc:Bounds x="1012" y="382" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="825" y="425" width="51" height="27" />
+          <dc:Bounds x="1005" y="425" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zpaeh7_di" bpmnElement="Event_0zpaeh7">
+        <dc:Bounds x="1012" y="242" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1004" y="285" width="52" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1t543rk_di" bpmnElement="Flow_1t543rk">
@@ -120,14 +145,22 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ksarzq_di" bpmnElement="Flow_1ksarzq">
         <di:waypoint x="678" y="260" />
-        <di:waypoint x="832" y="260" />
+        <di:waypoint x="1012" y="260" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1c4oqnr_di" bpmnElement="Flow_1c4oqnr">
+      <bpmndi:BPMNEdge id="Flow_1e4qu4t_di" bpmnElement="Flow_1e4qu4t">
         <di:waypoint x="748" y="400" />
-        <di:waypoint x="832" y="400" />
+        <di:waypoint x="840" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c9tx7d_di" bpmnElement="Flow_1c9tx7d">
+        <di:waypoint x="940" y="400" />
+        <di:waypoint x="1012" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_09sxvxd_di" bpmnElement="Participant_1ex9m8e" isHorizontal="true">
         <dc:Bounds x="300" y="100" width="520" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_0a9yb2b_di" bpmnElement="Participant_09fxiy0" isHorizontal="true">
+        <dc:Bounds x="538" y="540" width="600" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0uquul0_di" bpmnElement="Flow_0uquul0">
@@ -149,6 +182,13 @@
         <di:waypoint x="730" y="382" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="739" y="336" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17y72rn_di" bpmnElement="Flow_17y72rn">
+        <di:waypoint x="890" y="440" />
+        <di:waypoint x="890" y="540" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="908" y="501" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

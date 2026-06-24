@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_Funeral_Final" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_Beerdigung">
-    <bpmn:participant id="Participant_Angehoerige" name="Bestattungsplanungsprozess" processRef="funeralPlanningProcess" />
+    <bpmn:participant id="Participant_Angehoerige" name="Bestattungsplanung" processRef="funeralPlanningProcess" />
     <bpmn:participant id="Participant_09uh32h" name="Bestattungsinstitut" />
     <bpmn:participant id="Participant_11qf0vh" name="Erblasser" />
     <bpmn:messageFlow id="Flow_16seaio" name="Zukünftige Beauftragung" sourceRef="Activity_Feier" targetRef="Participant_09uh32h" />
@@ -16,7 +16,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1lrf9wu" associationDirection="None" sourceRef="Activity_02rauh0" targetRef="TextAnnotation_0353s3q" />
   </bpmn:collaboration>
-  <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanungsprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="funeralPlanningProcess" name="Bestattungsplanung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_Trauerfall" name="Beerdigung soll geplant werden">
       <bpmn:extensionElements />
       <bpmn:outgoing>Flow_0tqufez</bpmn:outgoing>
@@ -30,6 +30,11 @@
 
 execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
         </camunda:executionListener>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="funeralType">${null}</camunda:inputParameter>
+          <camunda:inputParameter name="maxAmountGuests">${null}</camunda:inputParameter>
+          <camunda:inputParameter name="budget">${null}</camunda:inputParameter>
+        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0cgx0e2</bpmn:incoming>
       <bpmn:outgoing>Flow_1tdnw2y</bpmn:outgoing>
@@ -158,7 +163,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sendTask id="Activity_Feier" name="Bestattungsinstitut beauftragen" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralDecision.toString());</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending funeral order to undertaker: " + funeralDecision.toString() + " with planning parameters " + funeralPreference.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0i2ybvh</bpmn:incoming>
@@ -167,7 +172,7 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
     <bpmn:sendTask id="Activity_0ooshf6" name="Bestattungsauftrag ändern" camunda:expression="${1}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralDecision.toString());</camunda:script>
+          <camunda:script scriptFormat="JavaScript">print("Sending updated funeral order to undertaker: " + funeralDecision.toString()+ " with planning parameters " + funeralPreference.toString());</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ycqyhw</bpmn:incoming>
@@ -376,10 +381,10 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
         <dc:Bounds x="120" y="80" width="1510" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1lrf9wu_di" bpmnElement="Association_1lrf9wu">
-        <di:waypoint x="1326" y="500" />
-        <di:waypoint x="1421" y="650" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0353s3q_di" bpmnElement="TextAnnotation_0353s3q">
+        <dc:Bounds x="1380" y="650" width="100" height="55" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_16seaio_di" bpmnElement="Flow_16seaio">
         <di:waypoint x="2140" y="340" />
         <di:waypoint x="2140" y="620" />
@@ -429,10 +434,10 @@ execution.setVariable("funeralPreference", funeralPreference);</camunda:script>
           <dc:Bounds x="2266" y="553" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_0353s3q_di" bpmnElement="TextAnnotation_0353s3q">
-        <dc:Bounds x="1380" y="650" width="100" height="55" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1lrf9wu_di" bpmnElement="Association_1lrf9wu">
+        <di:waypoint x="1326" y="500" />
+        <di:waypoint x="1421" y="650" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

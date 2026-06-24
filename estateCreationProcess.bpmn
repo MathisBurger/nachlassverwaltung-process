@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0kw8ck3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1fabmpg">
-    <bpmn:participant id="Participant_0191ftt" name="Erbschaftsgegenstandsanlageprozess" processRef="estateCreationProcess" />
+    <bpmn:participant id="Participant_0191ftt" name="Erbschaftsgegenstandsergänzung" processRef="estateCreationProcess" />
     <bpmn:participant id="Participant_0gzbno1" name="Erblasser" />
     <bpmn:messageFlow id="Flow_1kq1z1o" name="Zugriffsinformationen Anfrage" sourceRef="Activity_118orjh" targetRef="Participant_0gzbno1" />
     <bpmn:messageFlow id="Flow_18u43r2" name="Zugriffsinformationen" sourceRef="Participant_0gzbno1" targetRef="Activity_1869ygx" />
   </bpmn:collaboration>
-  <bpmn:process id="estateCreationProcess" name="Erbschaftsgegenstandsanlageprozess" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="estateCreationProcess" name="Erbschaftsgegenstandsergänzung" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_197w1sr">
       <bpmn:lane id="Lane_0onnnql" name="Verwalter">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_1bs65wg</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0hqc3es</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_154umow</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0091fhj</bpmn:flowNodeRef>
@@ -20,6 +19,8 @@
         <bpmn:flowNodeRef>Gateway_0cw2e7h</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0xli25u</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0m4m26y</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_01wqncg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0ipuw3h</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1" name="Erbschafts-gegenstand soll erfasst werden">
@@ -28,7 +29,7 @@
           <camunda:script scriptFormat="JavaScript">execution.setVariable("accessInformation", null);</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_1ytp4go</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1s14xi6</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0a13uze" name="Ja" sourceRef="Gateway_154umow" targetRef="Activity_118orjh">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isAccessInformationRequired}</bpmn:conditionExpression>
@@ -40,22 +41,12 @@
     <bpmn:sequenceFlow id="Flow_0fu8d44" name="Ja" sourceRef="Gateway_0cw2e7h" targetRef="Gateway_154umow">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isDocuentValid == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0h9h1jj" name="Nein" sourceRef="Gateway_0cw2e7h" targetRef="Gateway_1bs65wg">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isDocuentValid == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06njirw" sourceRef="Activity_0hqc3es" targetRef="Gateway_0cw2e7h" />
-    <bpmn:sequenceFlow id="Flow_1ytp4go" sourceRef="StartEvent_1" targetRef="Gateway_1bs65wg" />
-    <bpmn:sequenceFlow id="Flow_09is580" sourceRef="Gateway_1bs65wg" targetRef="Activity_0hqc3es" />
     <bpmn:sequenceFlow id="Flow_0y5nat4" sourceRef="Activity_0091fhj" targetRef="Activity_0m4m26y" />
     <bpmn:sequenceFlow id="Flow_09hyad5" sourceRef="Activity_0m4m26y" targetRef="Event_0xli25u" />
-    <bpmn:exclusiveGateway id="Gateway_1bs65wg">
-      <bpmn:incoming>Flow_0h9h1jj</bpmn:incoming>
-      <bpmn:incoming>Flow_1ytp4go</bpmn:incoming>
-      <bpmn:outgoing>Flow_09is580</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:userTask id="Activity_0hqc3es" name="Dokument prüfen" camunda:formRef="validateEstateDocumentForm" camunda:formRefBinding="latest" camunda:assignee="demo">
       <bpmn:extensionElements />
-      <bpmn:incoming>Flow_09is580</bpmn:incoming>
+      <bpmn:incoming>Flow_1s14xi6</bpmn:incoming>
       <bpmn:outgoing>Flow_06njirw</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="Gateway_154umow" name="Zugriffsinformationen notwendig?" default="Flow_1ufj2yl">
@@ -94,7 +85,7 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
     <bpmn:exclusiveGateway id="Gateway_0cw2e7h" name="Dokument valide?">
       <bpmn:incoming>Flow_06njirw</bpmn:incoming>
       <bpmn:outgoing>Flow_0fu8d44</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0h9h1jj</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13jcg9w</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="Event_0xli25u" name="Erbschaftsgegenstand angelegt">
       <bpmn:incoming>Flow_09hyad5</bpmn:incoming>
@@ -108,6 +99,23 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
       <bpmn:incoming>Flow_0y5nat4</bpmn:incoming>
       <bpmn:outgoing>Flow_09hyad5</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_1s14xi6" sourceRef="StartEvent_1" targetRef="Activity_0hqc3es" />
+    <bpmn:sequenceFlow id="Flow_13jcg9w" name="Nein" sourceRef="Gateway_0cw2e7h" targetRef="Activity_01wqncg">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isDocuentValid == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sendTask id="Activity_01wqncg" name="Invaliditätsbestätigung senden" camunda:expression="${1}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="JavaScript">print("Your document " + title + " is not valid");</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13jcg9w</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ajdrp2</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_0ajdrp2" sourceRef="Activity_01wqncg" targetRef="Event_0ipuw3h" />
+    <bpmn:endEvent id="Event_0ipuw3h" name="Erbschaftsgegenstandsdokument invalide">
+      <bpmn:incoming>Flow_0ajdrp2</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmn:message id="Message_2sqc66p" name="estateDocument" />
   <bpmn:message id="Message_0gnc8rv" name="accessInformation" />
@@ -115,11 +123,11 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1fabmpg">
       <bpmndi:BPMNShape id="Participant_0191ftt_di" bpmnElement="Participant_0191ftt" isHorizontal="true">
-        <dc:Bounds x="130" y="160" width="1688" height="370" />
+        <dc:Bounds x="130" y="160" width="1688" height="490" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0onnnql_di" bpmnElement="Lane_0onnnql" isHorizontal="true">
-        <dc:Bounds x="160" y="160" width="1658" height="370" />
+        <dc:Bounds x="160" y="160" width="1658" height="490" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
@@ -127,9 +135,6 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
         <bpmndi:BPMNLabel>
           <dc:Bounds x="222" y="408" width="78" height="40" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1bs65wg_di" bpmnElement="Gateway_1bs65wg" isMarkerVisible="true">
-        <dc:Bounds x="365" y="355" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16mumjw_di" bpmnElement="Activity_0hqc3es">
         <dc:Bounds x="460" y="340" width="100" height="80" />
@@ -169,6 +174,16 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
       <bpmndi:BPMNShape id="Activity_1nkbhj8_di" bpmnElement="Activity_0m4m26y">
         <dc:Bounds x="1520" y="340" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08tditj_di" bpmnElement="Activity_01wqncg">
+        <dc:Bounds x="800" y="530" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ipuw3h_di" bpmnElement="Event_0ipuw3h">
+        <dc:Bounds x="1682" y="552" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1656" y="595" width="89" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0a13uze_di" bpmnElement="Flow_0a13uze">
         <di:waypoint x="845" y="380" />
         <di:waypoint x="950" y="380" />
@@ -201,26 +216,9 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
           <dc:Bounds x="719" y="362" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0h9h1jj_di" bpmnElement="Flow_0h9h1jj">
-        <di:waypoint x="630" y="405" />
-        <di:waypoint x="630" y="480" />
-        <di:waypoint x="390" y="480" />
-        <di:waypoint x="390" y="405" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="648" y="425" width="23" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06njirw_di" bpmnElement="Flow_06njirw">
         <di:waypoint x="560" y="380" />
         <di:waypoint x="605" y="380" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ytp4go_di" bpmnElement="Flow_1ytp4go">
-        <di:waypoint x="278" y="380" />
-        <di:waypoint x="365" y="380" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09is580_di" bpmnElement="Flow_09is580">
-        <di:waypoint x="415" y="380" />
-        <di:waypoint x="460" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y5nat4_di" bpmnElement="Flow_0y5nat4">
         <di:waypoint x="1460" y="380" />
@@ -229,6 +227,22 @@ execution.setVariable("estateList", S(JSON.stringify(estateListRaw)));</bpmn:scr
       <bpmndi:BPMNEdge id="Flow_09hyad5_di" bpmnElement="Flow_09hyad5">
         <di:waypoint x="1620" y="380" />
         <di:waypoint x="1682" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1s14xi6_di" bpmnElement="Flow_1s14xi6">
+        <di:waypoint x="278" y="380" />
+        <di:waypoint x="460" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13jcg9w_di" bpmnElement="Flow_13jcg9w">
+        <di:waypoint x="630" y="405" />
+        <di:waypoint x="630" y="570" />
+        <di:waypoint x="800" y="570" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="634" y="485" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ajdrp2_di" bpmnElement="Flow_0ajdrp2">
+        <di:waypoint x="900" y="570" />
+        <di:waypoint x="1682" y="570" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0swl27k_di" bpmnElement="Participant_0gzbno1" isHorizontal="true">
         <dc:Bounds x="900" y="90" width="700" height="60" />
