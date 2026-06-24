@@ -13,14 +13,14 @@
           <text></text>
         </inputExpression>
       </input>
-      <output id="OutputClause_0004" label="Servicepaket" name="serviceLevel" typeRef="string" biodi:width="192">
+      <output id="OutputClause_0004" label="Servicepaket" typeRef="string" biodi:width="192">
         <outputValues id="UnaryTests_06fiz6g">
-          <text>"premium","comfort","standard","basic"</text>
+          <text></text>
         </outputValues>
       </output>
       <rule id="DecisionRule_0005">
         <inputEntry id="UnaryTests_0006">
-          <text>[0..2500[</text>
+          <text>&lt;= 2500</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0007">
           <text>"basic"</text>
@@ -28,7 +28,7 @@
       </rule>
       <rule id="DecisionRule_0008">
         <inputEntry id="UnaryTests_0009">
-          <text>[2500..5000[</text>
+          <text>[2501..5000]</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0010">
           <text>"standard"</text>
@@ -36,7 +36,7 @@
       </rule>
       <rule id="DecisionRule_0011">
         <inputEntry id="UnaryTests_0012">
-          <text>[5000..8000[  </text>
+          <text>[5001..8000]</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0013">
           <text>"comfort"</text>
@@ -44,7 +44,7 @@
       </rule>
       <rule id="DecisionRule_0014">
         <inputEntry id="UnaryTests_0015">
-          <text>&gt;= 8000  </text>
+          <text>&gt;=10000</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0016">
           <text>"premium"</text>
