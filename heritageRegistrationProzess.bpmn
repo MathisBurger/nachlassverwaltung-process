@@ -87,7 +87,7 @@ execution.setVariable("selectedAdvanceDirectives", S(JSON.stringify(list)));</ca
           <camunda:out source="documentContent" target="documentContent" />
           <camunda:executionListener event="end">
             <camunda:script scriptFormat="JavaScript">const advanceDirectiveContentsRaw = JSON.parse(advanceDirectiveContents.toString());
-advanceDirectiveContentsRaw[documentId] = documentContent;
+advanceDirectiveContentsRaw[documentIdRaw.stringValue()] = documentContent;
 
 execution.setVariable("advanceDirectiveContents", S(JSON.stringify(advanceDirectiveContentsRaw)));</camunda:script>
           </camunda:executionListener>
