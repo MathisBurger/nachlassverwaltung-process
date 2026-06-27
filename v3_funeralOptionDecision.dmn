@@ -10,7 +10,7 @@
     <decisionTable id="DecisionTable_ServiceLevel">
       <input id="InputClause_0002" label="Budget" biodi:width="192" camunda:inputVariable="budget">
         <inputExpression id="InputExpression_0003" typeRef="integer">
-          <text></text>
+          <text>budget</text>
         </inputExpression>
       </input>
       <output id="OutputClause_0004" label="Servicepaket" typeRef="string" biodi:width="192">
@@ -59,7 +59,7 @@
     <decisionTable id="DecisionTable_Ceremony">
       <input id="InputClause_0018" label="Anzahl der Trauergäste" camunda:inputVariable="maxAmountGuests">
         <inputExpression id="InputExpression_0019" typeRef="integer">
-          <text></text>
+          <text>maxAmountGuests</text>
         </inputExpression>
       </input>
       <output id="OutputClause_0020" label="Art der Trauerfeier" name="ceremonyType" typeRef="string" />
@@ -113,22 +113,22 @@
     <decisionTable id="DecisionTable_FinalFuneralOrder">
       <input id="InputClause_0111" label="Bestattungsart" camunda:inputVariable="funeralType">
         <inputExpression id="InputExpression_0112" typeRef="string">
-          <text></text>
+          <text>funeralType</text>
         </inputExpression>
       </input>
       <input id="InputClause_0113" label="Servicepaket" camunda:inputVariable="serviceLevel">
         <inputExpression id="InputExpression_0114" typeRef="string">
-          <text></text>
+          <text>serviceLevel</text>
         </inputExpression>
       </input>
       <input id="InputClause_0115" label="Art der Trauerfeier" camunda:inputVariable="ceremonyType">
         <inputExpression id="InputExpression_0116" typeRef="string">
-          <text></text>
+          <text>ceremonyType</text>
         </inputExpression>
       </input>
       <input id="InputClause_0gp96dy" label="Bearbeitungszeit in Minuten" biodi:width="192" camunda:inputVariable="processTimeInMinutes">
         <inputExpression id="LiteralExpression_0sqq1yf" typeRef="integer">
-          <text></text>
+          <text>processTimeInMinutes</text>
         </inputExpression>
       </input>
       <output id="OutputClause_0117" label="Bezeichnung des Bestattungsauftrags" name="funeralOrderTitle" typeRef="string" />
@@ -1717,12 +1717,12 @@
     <decisionTable id="DecisionTable_16m2ke3" hitPolicy="COLLECT" aggregation="SUM">
       <input id="InputClause_0605h55" label="Budget" biodi:width="192" camunda:inputVariable="budget">
         <inputExpression id="LiteralExpression_1ov58gl" typeRef="integer">
-          <text></text>
+          <text>budget</text>
         </inputExpression>
       </input>
       <input id="InputClause_0bmfwyy" label="Anzahl der Trauergäste" biodi:width="192" camunda:inputVariable="maxAmountGuests">
         <inputExpression id="LiteralExpression_1lbx78t" typeRef="integer">
-          <text></text>
+          <text>budget</text>
         </inputExpression>
       </input>
       <output id="OutputClause_0ehf1qw" label="Bearbeitungszeit in Minuten" name="processTimeInMinutes" typeRef="integer" />
